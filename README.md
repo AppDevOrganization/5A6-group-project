@@ -1,8 +1,7 @@
 # PROJECT NAME
-
+Bank App
 ## Goal
-A brief description of your application. Should answer, as concisely as you can: what is it? what is its purpose?
-
+To have money bank, withdraw deposit money credit (initial) (more to add)
 ## Quick-start
 How to install and launch your application. These should include instructions for:
 - (by Sprint 1) building and running your release from source code (i.e. your github repo)
