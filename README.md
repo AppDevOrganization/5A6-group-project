@@ -11,4 +11,4 @@ How to install and launch your application. These should include instructions fo
 - (by Sprint 1): Screenshots from each of the main screens of your application.
 
 ## Team members
-List each person's name and email address.
+Jeff Anderson Charriot - jeffandersoncharriot@gmail.com
