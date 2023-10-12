@@ -50,7 +50,7 @@ class WithdrawalScreen {
                 items(amounts) {
                     AmountItem(
                         amount = it,
-                        modifier = Modifier.padding(2.dp),
+                        modifier = Modifier.padding(2.dp)
                     )
                 }
             }
