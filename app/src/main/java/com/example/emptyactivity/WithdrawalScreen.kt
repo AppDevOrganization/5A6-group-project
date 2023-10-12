@@ -143,8 +143,7 @@ class WithdrawalScreen {
      */
     @Preview
     @Composable
-    fun WithdrawalScreenPreview()
-    {
+    fun WithdrawalScreenPreview() {
         EmptyActivityTheme {
             ShowWithdrawalScreen()
         }

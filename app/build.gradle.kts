@@ -56,6 +56,7 @@ ktlint {
     verbose.set(true)
     outputToConsole.set(true)
     coloredOutput.set(true)
+    disabledRules.set(setOf("experimental:package-name", "no-wildcard-imports"))
     reporters {
         reporter(ReporterType.CHECKSTYLE)
         reporter(ReporterType.JSON)
