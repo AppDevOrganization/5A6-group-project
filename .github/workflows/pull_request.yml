@@ -18,7 +18,7 @@ jobs:
           java-version: 17
           
       - name: Run Kotlin Linter
-        uses: ./gradlew ktlintFormat
+        uses: "vroy/gha-kotlin-linter@v1"
   
       - name: Run Android Linter
         run: ./gradlew lintStagingDebug
