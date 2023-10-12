@@ -18,7 +18,7 @@ jobs:
           java-version: 17
           
       - name: Run Kotlin Linter
-        uses: "block42-blockchain-company/ktlint-action@master"
+        uses: lucasnlm/ktlint-action@master
   
       - name: Run Android Linter
         run: ./gradlew lintStagingDebug
