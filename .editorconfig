@@ -32,4 +32,5 @@ google-services.json
 # Android Profiling
 *.hprof
 
+[*.{kt,kts}]
 ktlint_no-wildcard-imports = disabled

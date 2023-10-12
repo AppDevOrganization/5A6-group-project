@@ -62,8 +62,7 @@ class WithdrawalScreen {
         imageId: Int,
         text: String,
         modifier: Modifier = Modifier
-    )
-    {
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
