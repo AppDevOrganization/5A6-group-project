@@ -12,6 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 
+val SAMPLE_LIST = mutableListOf<Double>(5.01, 2.4, 6.4, 8.7, 5.9)
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
                    AccountScreen();
                    // Greeting("Android")
                     // WithdrawalScreen().ShowWithdrawalScreen()
+                    // CadenPage().MainPage(breathList = SAMPLE_LIST)
 
                 }
             }
