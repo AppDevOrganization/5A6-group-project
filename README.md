@@ -8,8 +8,8 @@ How to install and launch your application. These should include instructions fo
 
 ## Screenshots of application
 - (by Sprint 1): Screenshots from each of the main screens of your application.
-![Image](https://i.ibb.co/Tgdfsft/withdrawal-screen.png)
-![Image]([https://ibb.co/sgZSc9v](https://ibb.co/sgZSc9v))
+![Image](https://i.ibb.co/Tgdfsft/withdrawal-screen.png)<br>
+![Image](https://ibb.co/sgZSc9v)
 
 ## Team members
 Jeff Anderson Charriot - jeffandersoncharriot@gmail.com / 2133124@johnabbottcollege.net<br>
