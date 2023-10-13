@@ -24,8 +24,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Greeting("Android")
-                    CadenPage().MainPage(breathList = SAMPLE_LIST)
+                    Greeting("Android")
+                    // WithdrawalScreen().ShowWithdrawalScreen()
+                    // CadenPage().MainPage(breathList = SAMPLE_LIST)
                 }
             }
         }
