@@ -4,6 +4,7 @@ data class Account(
     val name: String,
     val number: Int,
     val balance: Double,
+    var transactions: MutableList<Transaction>,
     var dueDate: String? = null
 )
 
@@ -14,12 +15,15 @@ data class Transaction(
     val subtotal: Double
 )
 
-var chequingTransactions = listOf(
-    Transaction("2023-10-18", -23.00, "McDonald's", 1234.00),
-    Transaction("2023-10-11", -7.00, "Couche-Tard", 1257.00),
-    Transaction("2023-10-04", 500.00, "Transfer", 1264.00),
-    Transaction("2023-09-27", -14.00, "Uniprix", 764.00),
-    Transaction("2023-09-20", -46.00, "Gym", 778.00)
+var chequingAccounts = listOf(
+    Account("Chequing", 12345, 1234.00, mutableListOf(
+            Transaction("2023-10-18", -23.00, "McDonald's", 1234.00),
+            Transaction("2023-10-11", -7.00, "Couche-Tard", 1257.00),
+            Transaction("2023-10-04", 500.00, "Transfer", 1264.00),
+            Transaction("2023-09-27", -14.00, "Uniprix", 764.00),
+            Transaction("2023-09-20", -46.00, "Gym", 778.00)
+        )
+    )
 )
 
 var savingsTransactions = listOf(
