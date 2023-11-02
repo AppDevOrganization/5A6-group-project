@@ -8,7 +8,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,19 +22,25 @@ import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OverviewScreen() {
+fun OverviewScreen(
+    onClickViewChequingAccount: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .padding(13.dp)
             .semantics { contentDescription = "Overview Screen" }
             .verticalScroll(rememberScrollState())
     ) {
-        ChequingAccountCard()
+        ChequingAccountCard(
+            onClickViewAccount = onClickViewChequingAccount
+        )
     }
 }
 
 @Composable
-fun ChequingAccountCard() {
+fun ChequingAccountCard(
+    onClickViewAccount: () -> Unit
+) {
 
     val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
     val balance = chequingAccount?.balance
@@ -56,7 +61,7 @@ fun ChequingAccountCard() {
         TextButton(
             modifier = Modifier
                 .fillMaxWidth(),
-            onClick = { /*TODO*/ }
+            onClick = onClickViewAccount
         ) {
             Text(
                 text = "VIEW",
@@ -75,7 +80,7 @@ fun OverviewScreenPreview()
 
 @Preview
 @Composable
-fun ChocolateShopDarkModePreview() {
+fun OverviewScreenDarkModePreview() {
     EmptyActivityTheme(darkTheme = true) {
         OverviewScreen()
     }
