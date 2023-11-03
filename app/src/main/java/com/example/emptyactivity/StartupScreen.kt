@@ -45,6 +45,6 @@ fun LandingScreen(onTimeout: () -> Unit, modifier: Modifier = Modifier) {
             currentOnTimeout()
         }
 
-        Image(painterResource(id = R.drawable.logo), contentDescription = null)
+        Image(painterResource(id = R.drawable.cjjlogo), contentDescription = null)
     }
 }
