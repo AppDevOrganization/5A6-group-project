@@ -17,18 +17,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-val LOGIN_TEXTFIELD_PADDING = 5.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun SignupPage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Log In",
+            text = "Create an Account",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
@@ -44,6 +43,12 @@ fun LoginPage(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(LOGIN_TEXTFIELD_PADDING)
         )
+        TextField(
+            value = "Repeat Password",
+            onValueChange = {},
+            modifier = Modifier
+                .padding(LOGIN_TEXTFIELD_PADDING)
+        )
         Button(
             modifier = Modifier
                 .padding(10.dp)
@@ -52,7 +57,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
             onClick = {}
         ) {
             Text(
-                text = "Log in",
+                text = "Sign Up",
                 style = MaterialTheme.typography.titleLarge
             )
         }
@@ -61,6 +66,6 @@ fun LoginPage(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun LoginPagePreview(modifier: Modifier = Modifier) {
-    LoginPage(modifier)
+fun SignupPagePreview(modifier: Modifier = Modifier) {
+    SignupPage(modifier)
 }
