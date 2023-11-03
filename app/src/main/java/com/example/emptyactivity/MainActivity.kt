@@ -29,19 +29,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            EmptyActivityTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+            // A surface container using the 'background' color from the theme
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.background
+            ) {
 
-                   //AccountScreen();
-                   // Greeting("Android")
-                    // WithdrawalScreen().ShowWithdrawalScreen()
-                    // CadenPage().MainPage(breathList = SAMPLE_LIST)
-                    CJJBankApp()
-                }
+                //AccountScreen();
+                // Greeting("Android")
+                // WithdrawalScreen().ShowWithdrawalScreen()
+                // CadenPage().MainPage(breathList = SAMPLE_LIST)
+                CJJBankApp()
             }
         }
     }
@@ -51,27 +49,32 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CJJBankApp() {
-    val navController = rememberNavController()
-    val currentBackStack by navController.currentBackStackEntryAsState()
-    val currentDestination = currentBackStack?.destination
-    val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+    EmptyActivityTheme(
+        //useDarkTheme = true
+    ) {
+        val navController = rememberNavController()
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination
+        val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
 
-    Scaffold(
-        topBar = {
-            BankTabRow(
-                screens = bankTabRowScreens,
-                onTabSelected = { screen ->
-                    navController.navigateSingleTopTo(screen.route)
-                },
-                currentScreen = currentScreen
+        Scaffold(
+            topBar = {
+                BankTabRow(
+                    screens = bankTabRowScreens,
+                    onTabSelected = { screen ->
+                        navController.navigateSingleTopTo(screen.route)
+                    },
+                    currentScreen = currentScreen
+                )
+            }
+        ) { contentPadding ->
+            BankNavHost(
+                navController = navController,
+                modifier = Modifier.padding(contentPadding)
             )
         }
-    ) { contentPadding ->
-        BankNavHost(
-            navController = navController,
-            modifier = Modifier.padding(contentPadding)
-        )
     }
+
 }
 
 /**
@@ -93,6 +96,12 @@ fun BankNavHost(
             OverviewScreen(
                 onClickViewChequingAccount = {
                     navController.navigateSingleTopTo(Chequing.route)
+                },
+                onClickViewSavingsAccount = {
+                    navController.navigateSingleTopTo(Savings.route)
+                },
+                onClickViewCreditAccount = {
+                    navController.navigateSingleTopTo(Credit.route)
                 }
             )
         }
@@ -121,7 +130,7 @@ fun CJJBankAppPreview()
 @Composable
 fun CJJBankAppDarkModePreview()
 {
-    EmptyActivityTheme(darkTheme = true) {
+    EmptyActivityTheme(useDarkTheme = true) {
         CJJBankApp()
     }
 }
