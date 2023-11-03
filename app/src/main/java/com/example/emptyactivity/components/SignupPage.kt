@@ -1,5 +1,6 @@
 package com.example.emptyactivity.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -52,6 +53,15 @@ fun SignupPage(modifier: Modifier = Modifier) {
             Text(
                 text = "Sign Up",
                 style = MaterialTheme.typography.titleLarge
+            )
+        }
+
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
+            Text(
+                text = "Don't have an account? Sign up"
             )
         }
     }
