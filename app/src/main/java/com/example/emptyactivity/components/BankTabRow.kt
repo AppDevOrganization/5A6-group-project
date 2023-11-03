@@ -21,7 +21,7 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.emptyactivity.BankDestination
+import com.example.emptyactivity.home.BankDestination
 import java.util.Locale
 
 /**

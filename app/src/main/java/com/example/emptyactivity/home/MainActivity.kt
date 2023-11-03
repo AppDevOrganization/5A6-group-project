@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.emptyactivity.home
 
 import android.annotation.SuppressLint
 import android.os.Bundle

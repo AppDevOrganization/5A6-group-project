@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.emptyactivity.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
