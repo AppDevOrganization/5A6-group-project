@@ -14,10 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-val LOGIN_TEXTFIELD_PADDING = 5.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,17 +31,13 @@ fun LoginPage(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
-        TextField(
+        LoginTextField(
             value = "Email",
             onValueChange = {},
-            modifier = Modifier
-                .padding(LOGIN_TEXTFIELD_PADDING)
         )
-        TextField(
+        LoginTextField(
             value = "Password",
             onValueChange = {},
-            modifier = Modifier
-                .padding(LOGIN_TEXTFIELD_PADDING)
         )
         Button(
             modifier = Modifier
@@ -57,6 +52,16 @@ fun LoginPage(modifier: Modifier = Modifier) {
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoginTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.padding(5.dp)
+    )
 }
 
 @Preview

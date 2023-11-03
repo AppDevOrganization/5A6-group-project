@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignupPage(modifier: Modifier = Modifier) {
     Column(
@@ -31,23 +30,17 @@ fun SignupPage(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
-        TextField(
+        LoginTextField(
             value = "Email",
             onValueChange = {},
-            modifier = Modifier
-                .padding(LOGIN_TEXTFIELD_PADDING)
         )
-        TextField(
+        LoginTextField(
             value = "Password",
             onValueChange = {},
-            modifier = Modifier
-                .padding(LOGIN_TEXTFIELD_PADDING)
         )
-        TextField(
+        LoginTextField(
             value = "Repeat Password",
             onValueChange = {},
-            modifier = Modifier
-                .padding(LOGIN_TEXTFIELD_PADDING)
         )
         Button(
             modifier = Modifier
