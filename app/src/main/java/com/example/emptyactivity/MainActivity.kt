@@ -42,8 +42,6 @@ import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import kotlinx.coroutines.launch
 
-val SAMPLE_LIST = mutableListOf<Double>(5.01, 2.4, 6.4, 8.7, 5.9)
-
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
