@@ -4,12 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
@@ -40,9 +38,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.emptyactivity.components.BankTabRow
+import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 val SAMPLE_LIST = mutableListOf<Double>(5.01, 2.4, 6.4, 8.7, 5.9)
 
