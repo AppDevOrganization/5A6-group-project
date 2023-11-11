@@ -21,7 +21,8 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.emptyactivity.home.BankDestination
+import com.example.emptyactivity.BankDestination
+import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import java.util.Locale
 
 /**
@@ -35,21 +36,24 @@ fun BankTabRow(
     onTabSelected: (BankDestination) -> Unit,
     currentScreen: BankDestination
 ) {
-    Surface(
-        Modifier
-            .fillMaxWidth()
-            .height(64.dp)
-    ) {
-        Row(Modifier.selectableGroup()) {
-            screens.forEach { screen ->
-                BankTab(
-                    text = screen.route,
-                    onSelected = { onTabSelected(screen) },
-                    selected = currentScreen == screen
-                )
+    EmptyActivityTheme {
+        Surface(
+            Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+        ) {
+            Row(Modifier.selectableGroup()) {
+                screens.forEach { screen ->
+                    BankTab(
+                        text = screen.route,
+                        onSelected = { onTabSelected(screen) },
+                        selected = currentScreen == screen
+                    )
+                }
             }
         }
     }
+
 }
 
 @Composable
@@ -58,24 +62,27 @@ private fun BankTab(
     onSelected: () -> Unit,
     selected: Boolean
 ) {
-    Row(
-        modifier = Modifier
-            .padding(13.dp)
-            .height(64.dp)
-            .selectable(
-                selected = selected,
-                onClick = onSelected,
-                role = Role.Tab,
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(
-                    bounded = false,
-                    radius = Dp.Unspecified,
-                    color = Color.Unspecified
+    EmptyActivityTheme {
+        Row(
+            modifier = Modifier
+                .padding(13.dp)
+                .height(64.dp)
+                .selectable(
+                    selected = selected,
+                    onClick = onSelected,
+                    role = Role.Tab,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(
+                        bounded = false,
+                        radius = Dp.Unspecified,
+                        color = Color.Unspecified
+                    )
                 )
-            )
-            .clearAndSetSemantics { contentDescription = text }
-    ) {
-        Spacer(Modifier.width(10.dp))
-        Text(text.uppercase(Locale.getDefault()))
+                .clearAndSetSemantics { contentDescription = text }
+        ) {
+            Spacer(Modifier.width(10.dp))
+            Text(text.uppercase(Locale.getDefault()))
+        }
     }
+
 }
