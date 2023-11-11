@@ -1,4 +1,4 @@
-package com.example.emptyactivity.home
+package com.example.emptyactivity
 
 interface BankDestination {
     val route: String
