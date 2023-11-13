@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.emptyactivity.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.emptyactivity.R
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 
 class WithdrawalScreen {

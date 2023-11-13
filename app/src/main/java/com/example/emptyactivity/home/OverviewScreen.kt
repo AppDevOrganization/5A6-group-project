@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.emptyactivity.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.emptyactivity.R
 import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.chequingAccounts
 import com.example.emptyactivity.data.creditAccounts
