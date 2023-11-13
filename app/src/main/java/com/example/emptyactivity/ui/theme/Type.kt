@@ -14,6 +14,16 @@ val NotoSerif = FontFamily(
 
 // Set of Material typography styles to start with
 val Typography = Typography(
+    bodySmall = TextStyle(
+        fontFamily = NotoSerif,
+        fontWeight = FontWeight.Normal,
+        fontSize = 13.sp
+    ),
+    bodyMedium = TextStyle(
+        fontFamily = NotoSerif,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
     bodyLarge = TextStyle(
         fontFamily = NotoSerif,
         fontWeight = FontWeight.Normal,

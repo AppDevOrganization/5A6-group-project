@@ -20,4 +20,8 @@ object Credit : BankDestination {
     override val route = "credit"
 }
 
+object Transfer : BankDestination {
+    override val route = "transfer"
+}
+
 val bankTabRowScreens = listOf(Overview, Chequing, Savings, Credit)
