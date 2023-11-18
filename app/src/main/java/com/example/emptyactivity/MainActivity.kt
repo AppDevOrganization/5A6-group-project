@@ -27,7 +27,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,6 +83,13 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
+
+    var showStartupScreen by remember { mutableStateOf(true) }
+    if (showStartupScreen) {
+        LandingScreen(onTimeout = { showStartupScreen = false })
+    } else {
+
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -135,8 +145,9 @@ fun MainScreen() {
             }
         ) {
             it
-           CJJBankApp()
+            CJJBankApp()
         }
+    }
     }
 }
 
