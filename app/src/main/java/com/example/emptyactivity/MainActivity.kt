@@ -41,6 +41,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.emptyactivity.components.BankTabRow
+import com.example.emptyactivity.data.Account
+import com.example.emptyactivity.data.chequingAccounts
+import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import kotlinx.coroutines.launch
@@ -208,6 +211,28 @@ fun BankNavHost(
                     navController.navigateSingleTopTo(Credit.route)
                 }
             )
+        }
+        composable(route = Chequing.route) {
+            val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
+            if (chequingAccount != null) {
+                AccountScreen(
+                    account = chequingAccount,
+                    onClickTransferButton = {
+                        navController.navigateSingleTopTo(Transfer.route)
+                    }
+                )
+            }
+        }
+        composable(route = Savings.route) {
+            val savingsAccount: Account? = savingsAccounts.find { it.number == 12345 }
+            if (savingsAccount != null) {
+                AccountScreen(
+                    account = savingsAccount,
+                    onClickTransferButton = {
+                        navController.navigateSingleTopTo(Transfer.route)
+                    }
+                )
+            }
         }
     }
 }
