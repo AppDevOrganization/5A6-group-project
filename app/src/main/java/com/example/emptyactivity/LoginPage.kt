@@ -69,5 +69,5 @@ fun LoginTextField(value: String, onValueChange: (String) -> Unit, modifier: Mod
 @Preview
 @Composable
 fun LoginPagePreview(modifier: Modifier = Modifier) {
-    LoginPage(modifier)
+    LoginPage(modifier = modifier)
 }
