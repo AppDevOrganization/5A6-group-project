@@ -1,33 +1,31 @@
-package com.example.emptyactivity.components
+package com.example.emptyactivity
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun SignupPage(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Log In",
+            text = "Create an Account",
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
@@ -39,6 +37,10 @@ fun LoginPage(modifier: Modifier = Modifier) {
             value = "Password",
             onValueChange = {},
         )
+        LoginTextField(
+            value = "Repeat Password",
+            onValueChange = {},
+        )
         Button(
             modifier = Modifier
                 .padding(10.dp)
@@ -47,25 +49,24 @@ fun LoginPage(modifier: Modifier = Modifier) {
             onClick = {}
         ) {
             Text(
-                text = "Log in",
+                text = "Sign Up",
                 style = MaterialTheme.typography.titleLarge
+            )
+        }
+
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+        ) {
+            Text(
+                text = "Don't have an account? Sign up"
             )
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LoginTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
-    TextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier.padding(5.dp)
-    )
-}
-
 @Preview
 @Composable
-fun LoginPagePreview(modifier: Modifier = Modifier) {
-    LoginPage(modifier)
+fun SignupPagePreview(modifier: Modifier = Modifier) {
+    SignupPage(modifier)
 }
