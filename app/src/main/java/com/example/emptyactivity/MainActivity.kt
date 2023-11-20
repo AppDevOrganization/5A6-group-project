@@ -88,8 +88,15 @@ fun MainScreen() {
     if (showStartupScreen) {
         LandingScreen(onTimeout = { showStartupScreen = false })
     } else {
+        LoginPage()
 
 
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PreCJJApp() {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -148,7 +155,6 @@ fun MainScreen() {
             CJJBankApp()
         }
     }
-    }
 }
 
 
@@ -196,9 +202,19 @@ fun BankNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Overview.route,
+        startDestination = Login.route,
         modifier = modifier
     ) {
+        composable(route = Signup.route) {
+            SignupPage()
+        }
+        composable(route = Login.route) {
+            LoginPage(
+                onSuccess = {
+                    navController.navigateSingleTopTo(Overview.route)
+                }
+            )
+        }
         composable(route = Overview.route) {
             OverviewScreen(
                 onClickViewChequingAccount = {
