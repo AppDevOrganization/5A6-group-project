@@ -4,6 +4,15 @@ interface BankDestination {
     val route: String
 }
 
+object Signup: BankDestination {
+    override val route: String = "signup"
+}
+
+object Login: BankDestination {
+    override val route: String = "login"
+}
+
+
 object Overview : BankDestination {
     override val route = "overview"
 }
