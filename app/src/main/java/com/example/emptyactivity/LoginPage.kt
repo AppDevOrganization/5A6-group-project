@@ -19,7 +19,10 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun LoginPage(
+    onSuccess: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -43,7 +46,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
                 .padding(10.dp)
                 .width(200.dp)
                 .height(50.dp),
-            onClick = {}
+            onClick = onSuccess
         ) {
             Text(
                 text = "Log in",
