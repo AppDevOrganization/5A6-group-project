@@ -225,7 +225,7 @@ fun TransferScreen(
 
         // Transfer details
         Text(
-            text = "Transfer",
+            text = "Make a transfer",
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(vertical = 16.dp)
         )
