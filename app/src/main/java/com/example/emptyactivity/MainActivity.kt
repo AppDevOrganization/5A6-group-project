@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
@@ -32,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -84,12 +88,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
 
+
     var showStartupScreen by remember { mutableStateOf(true) }
     if (showStartupScreen) {
         LandingScreen(onTimeout = { showStartupScreen = false })
     } else {
 
-
+        val navController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -112,7 +117,12 @@ fun MainScreen() {
                     icon = { Icon(Icons.Filled.Send, contentDescription = "") },
                     label = { Text("Transfers") },
                     selected = false,
-                    onClick = { /* Handle click for "Transfers" */ }
+                    onClick = {
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigateSingleTopTo(Transfer.route)
+                        }
+                    }
                 )
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
@@ -184,6 +194,30 @@ fun CJJBankApp() {
 
 }
 
+@Composable
+fun TransferScreen(
+    onBackClick: () -> Unit
+) {
+    // Your Transfer screen UI components go here
+
+    // Back button
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .padding(top = 24.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "Back",
+            tint = Color.Black,
+            modifier = Modifier
+                .padding(4.dp)
+                .clickable { onBackClick() }
+        )
+    }
+}
+
+
 /**
  * Date of Retrieval: 2023/11/02
  * All Nav-related functions and variables are based on the ones in the Rally app from the Navigation codelab.
@@ -234,6 +268,13 @@ fun BankNavHost(
                 )
             }
         }
+
+        composable(route = Transfer.route) {
+            TransferScreen(onBackClick = {
+                navController.navigateUp()
+            })
+        }
+
     }
 }
 
