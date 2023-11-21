@@ -69,6 +69,7 @@ import com.example.emptyactivity.data.chequingAccounts
 import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
+import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -202,7 +203,7 @@ fun DrawerHeader(modifier: Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
         modifier = modifier
-            .background(MaterialTheme.colorScheme.secondary)
+            .background(md_theme_light_onPrimary)
             .padding(15.dp)
             .fillMaxWidth()
     ) {
@@ -218,10 +219,17 @@ fun DrawerHeader(modifier: Modifier) {
         Spacer(modifier = Modifier.padding(5.dp))
 
         Text(
-            text = stringResource(id = R.string.app_name),
+            text = "CJJ",
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = Color.Black,
+        )
+
+        Text(
+            text = "CJJ@gmail.com",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Black,
         )
     }
 }
