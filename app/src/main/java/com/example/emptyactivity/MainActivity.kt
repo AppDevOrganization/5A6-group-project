@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,7 @@ import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private val isDarkModeState = mutableStateOf(false)
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +68,7 @@ class MainActivity : ComponentActivity() {
                     // Greeting("Android")
                     // WithdrawalScreen().ShowWithdrawalScreen()
                     // CadenPage().MainPage(breathList = SAMPLE_LIST)
-                    MainScreen()
+                    MainScreen(isDarkModeState)
             }
         }
     }
@@ -82,7 +85,7 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(isDarkModeState : MutableState<Boolean>) {
 
     var showStartupScreen by remember { mutableStateOf(true) }
     if (showStartupScreen) {
@@ -121,6 +124,14 @@ fun MainScreen() {
                     onClick = { /* Handle click for "Settings" */ }
                 )
                 NavigationDrawerItem(
+                    icon = { Icon(Icons.Filled.Star, contentDescription = "") },
+                    label = {
+                        Text("Dark Mode")
+                            },
+                    selected = false,
+                    onClick = {  isDarkModeState.value = !isDarkModeState.value }
+                )
+                NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
                     label = { Text("Logout") },
                     selected = false,
@@ -145,7 +156,7 @@ fun MainScreen() {
             }
         ) {
             it
-            CJJBankApp()
+            CJJBankApp(isDarkMode = isDarkModeState.value)
         }
     }
     }
@@ -155,9 +166,9 @@ fun MainScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp() {
+fun CJJBankApp(isDarkMode: Boolean) {
     EmptyActivityTheme(
-        //useDarkTheme = true
+        useDarkTheme = isDarkMode
     ) {
         val navController = rememberNavController()
         val currentBackStack by navController.currentBackStackEntryAsState()
@@ -171,7 +182,8 @@ fun CJJBankApp() {
                     onTabSelected = { screen ->
                         navController.navigateSingleTopTo(screen.route)
                     },
-                    currentScreen = currentScreen
+                    currentScreen = currentScreen,
+
                 )
             }
         ) { contentPadding ->
@@ -251,7 +263,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 @Preview
 @Composable
 fun CJJBankAppPreview() {
-    CJJBankApp()
+    CJJBankApp(false)
 }
 
 @Preview
@@ -260,6 +272,6 @@ fun CJJBankAppDarkModePreview()
 {
     EmptyActivityTheme(useDarkTheme = true) {
 
-        CJJBankApp()
+        CJJBankApp(true)
     }
 }

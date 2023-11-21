@@ -34,13 +34,15 @@ import java.util.Locale
 fun BankTabRow(
     screens: List<BankDestination>,
     onTabSelected: (BankDestination) -> Unit,
-    currentScreen: BankDestination
+    currentScreen: BankDestination,
+    backgroundColor: Color = Color.White
 ) {
     EmptyActivityTheme {
         Surface(
             Modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(64.dp),
+            color =backgroundColor
         ) {
             Row(Modifier.selectableGroup()) {
                 screens.forEach { screen ->
