@@ -4,12 +4,18 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -41,8 +47,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -76,7 +88,7 @@ class MainActivity : ComponentActivity() {
                     // Greeting("Android")
                     // WithdrawalScreen().ShowWithdrawalScreen()
                     // CadenPage().MainPage(breathList = SAMPLE_LIST)
-                    MainScreen()
+                    MainScreen(modifier = Modifier)
             }
         }
     }
@@ -93,7 +105,7 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(modifier : Modifier) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -107,10 +119,11 @@ fun MainScreen() {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        modifier = Modifier,
         drawerContent = {
             ModalDrawerSheet {
-                // Title of the drawer
-                Text("Hey CJJ!", modifier = Modifier.padding(16.dp))
+                DrawerHeader(modifier)
+
                 Divider()
 
                 // Navigation drawer items
@@ -182,6 +195,37 @@ fun MainScreen() {
     }
     }
 }
+
+@Composable
+fun DrawerHeader(modifier: Modifier) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.secondary)
+            .padding(15.dp)
+            .fillMaxWidth()
+    ) {
+
+        Image(
+            painterResource(id = R.drawable.cjjlogo),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(70.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.padding(5.dp))
+
+        Text(
+            text = stringResource(id = R.string.app_name),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimary,
+        )
+    }
+}
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
