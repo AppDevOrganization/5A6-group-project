@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -34,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -48,6 +50,9 @@ import com.example.emptyactivity.data.chequingAccounts
 import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
+import com.example.emptyactivity.ui.theme.md_theme_dark_background
+import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
+import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -98,6 +103,7 @@ fun MainScreen(isDarkModeState : MutableState<Boolean>) {
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+
         drawerContent = {
             ModalDrawerSheet {
                 // Title of the drawer
@@ -175,6 +181,12 @@ fun CJJBankApp(isDarkMode: Boolean) {
         val currentDestination = currentBackStack?.destination
         val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
 
+        var useDarkMode: Color = if(!isDarkMode) {
+                    md_theme_light_onPrimary
+                } else {
+                    md_theme_dark_onPrimary
+                }
+
         Scaffold(
             topBar = {
                 BankTabRow(
@@ -183,13 +195,14 @@ fun CJJBankApp(isDarkMode: Boolean) {
                         navController.navigateSingleTopTo(screen.route)
                     },
                     currentScreen = currentScreen,
-
+                    backgroundColor = useDarkMode,
+                    isDarkMode=  isDarkMode
                 )
             }
         ) { contentPadding ->
             BankNavHost(
                 navController = navController,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
             )
         }
     }
