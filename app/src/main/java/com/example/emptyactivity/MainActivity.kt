@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -20,6 +21,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -27,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -227,12 +230,70 @@ fun TransferScreen(
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
+        // "From" account dropdown
+        var fromAccount by remember { mutableStateOf("Chequing") }
+        DropdownMenu(
+            expanded = false, // Use a state variable to control the expanded state
+            onDismissRequest = { /* Handle dismiss request if needed */ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            // Populate the dropdown menu with account options
+            listOf("Chequing", "Savings").forEach { accountType ->
+                DropdownMenuItem(
+                    onClick = {
+                        fromAccount = accountType
+                    }
+                ) {
+                    Text(text = accountType)
+                }
+            }
+        }
+        OutlinedTextField(
+            value = fromAccount,
+            onValueChange = {},
+            label = { Text("From Account") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
 
+        // "To" account dropdown
+        var toAccount by remember { mutableStateOf("Savings") }
+        DropdownMenu(
+            expanded = false, // Use a state variable to control the expanded state
+            onDismissRequest = { /* Handle dismiss request if needed */ },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            // Populate the dropdown menu with account options
+            listOf("Chequing", "Savings").forEach { accountType ->
+                androidx.compose.material.DropdownMenuItem(
+                    onClick = {
+                        toAccount = accountType
+                    },
+
+                    modifier = Modifier.fillMaxWidth() // Add this line to fill the width of the menu item
+                ) {
+                    Text(accountType)
+                }
+            }
+
+        }
+        OutlinedTextField(
+            value = toAccount,
+            onValueChange = {},
+            label = { Text("To Account") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
+
+        // Transfer amount input field
         var transferAmount by remember { mutableStateOf(0.0) }
-
-
-
-        TextField(
+        OutlinedTextField(
             value = transferAmount.toString(),
             onValueChange = {
                 // Handle value change and update the transferAmount variable
@@ -244,13 +305,11 @@ fun TransferScreen(
                 .padding(vertical = 8.dp)
         )
 
-        // Add other input fields as needed
-
         // Transfer button
         Button(
             onClick = {
                 // Implement transfer logic here
-
+                // You may want to validate input, perform the transfer, etc.
             },
             modifier = Modifier
                 .fillMaxWidth()
