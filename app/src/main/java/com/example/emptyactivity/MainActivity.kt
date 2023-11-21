@@ -6,7 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,6 +30,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -118,10 +122,7 @@ fun MainScreen() {
                     label = { Text("Transfers") },
                     selected = false,
                     onClick = {
-                        scope.launch {
-                            drawerState.close()
-                            navController.navigateSingleTopTo(Transfer.route)
-                        }
+
                     }
                 )
                 NavigationDrawerItem(
@@ -194,28 +195,72 @@ fun CJJBankApp() {
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
     onBackClick: () -> Unit
 ) {
-    // Your Transfer screen UI components go here
-
-    // Back button
-    Box(
+    Column(
         modifier = Modifier
+            .fillMaxSize()
             .padding(16.dp)
-            .padding(top = 24.dp)
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBack,
-            contentDescription = "Back",
-            tint = Color.Black,
+        // Back button
+        Box(
             modifier = Modifier
-                .padding(4.dp)
+                .padding(top = 16.dp)
                 .clickable { onBackClick() }
+        ) {
+            Icon(
+                imageVector = Icons.Default.ArrowBack,
+                contentDescription = "Back",
+                tint = Color.Black,
+                modifier = Modifier
+                    .padding(4.dp)
+            )
+        }
+
+        // Transfer details
+        Text(
+            text = "Transfer",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(vertical = 16.dp)
         )
+
+
+        var transferAmount by remember { mutableStateOf(0.0) }
+
+
+
+        TextField(
+            value = transferAmount.toString(),
+            onValueChange = {
+                // Handle value change and update the transferAmount variable
+                transferAmount = it.toDoubleOrNull() ?: 0.0
+            },
+            label = { Text("Amount") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        )
+
+        // Add other input fields as needed
+
+        // Transfer button
+        Button(
+            onClick = {
+                // Implement transfer logic here
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp)
+        ) {
+            Text(text = "Transfer")
+        }
     }
 }
+
 
 
 /**
