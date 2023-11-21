@@ -110,7 +110,7 @@ fun MainScreen() {
         drawerContent = {
             ModalDrawerSheet {
                 // Title of the drawer
-                Text("NAME HERE", modifier = Modifier.padding(16.dp))
+                Text("Hey CJJ!", modifier = Modifier.padding(16.dp))
                 Divider()
 
                 // Navigation drawer items
@@ -118,14 +118,32 @@ fun MainScreen() {
                     icon = { Icon(Icons.Filled.Home, contentDescription = "") },
                     label = { Text("Home") },
                     selected = false,
-                    onClick = { /* Handle click for "Home" */ }
+                    onClick = {
+                        navController.navigateSingleTopTo(Overview.route)
+                        scope.launch {
+                            if (drawerState.isClosed) {
+                                drawerState.open()
+                            } else {
+                                drawerState.close()
+                            }
+                        }
+                    }
                 )
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Send, contentDescription = "") },
                     label = { Text("Transfers") },
                     selected = false,
                     onClick = {
+                        navController.navigateSingleTopTo(Transfer.route)
+                        scope.launch {
+                            if (drawerState.isClosed) {
+                                drawerState.open()
+                            } else {
+                                drawerState.close()
+                            }
 
+
+                        }
                     }
                 )
                 NavigationDrawerItem(
@@ -159,7 +177,7 @@ fun MainScreen() {
             }
         ) {
             it
-            CJJBankApp()
+            CJJBankApp(navController = navController)
         }
     }
     }
@@ -169,11 +187,11 @@ fun MainScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp() {
+fun CJJBankApp( navController: NavHostController) {
     EmptyActivityTheme(
         //useDarkTheme = true
     ) {
-        val navController = rememberNavController()
+
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
@@ -396,7 +414,8 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 @Preview
 @Composable
 fun CJJBankAppPreview() {
-    CJJBankApp()
+    val navController = rememberNavController()
+    CJJBankApp(navController = navController)
 }
 
 @Preview
@@ -405,6 +424,7 @@ fun CJJBankAppDarkModePreview()
 {
     EmptyActivityTheme(useDarkTheme = true) {
 
-        CJJBankApp()
+        val navController = rememberNavController()
+        CJJBankApp(navController = navController)
     }
 }
