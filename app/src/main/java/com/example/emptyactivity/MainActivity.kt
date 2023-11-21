@@ -246,7 +246,7 @@ fun TransferScreen(
                         fromAccount = accountType
                     }
                 ) {
-                    Text(text = accountType)
+                    Text(accountType)
                 }
             }
         }
@@ -270,17 +270,15 @@ fun TransferScreen(
         ) {
             // Populate the dropdown menu with account options
             listOf("Chequing", "Savings").forEach { accountType ->
-                androidx.compose.material.DropdownMenuItem(
+                DropdownMenuItem(
                     onClick = {
                         toAccount = accountType
                     },
-
                     modifier = Modifier.fillMaxWidth() // Add this line to fill the width of the menu item
                 ) {
                     Text(accountType)
                 }
             }
-
         }
         OutlinedTextField(
             value = toAccount,
@@ -309,7 +307,8 @@ fun TransferScreen(
         Button(
             onClick = {
                 // Implement transfer logic here
-                // You may want to validate input, perform the transfer, etc.
+                // validate input, perform the transfer, etc.
+
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -319,6 +318,7 @@ fun TransferScreen(
         }
     }
 }
+
 
 
 
