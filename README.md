@@ -1,5 +1,5 @@
 # PROJECT NAME
-Bank App
+CJJ
 ## Goal
 To create a bank application for users to manage their money. It will feature an account for users to hold their money and a withdrawal feature to take out money.
 ## Quick-start
