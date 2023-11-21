@@ -132,7 +132,15 @@ fun MainScreen(isDarkModeState : MutableState<Boolean>) {
                 NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Star, contentDescription = "") },
                     label = {
-                        Text("Dark Mode")
+                        if(isDarkModeState.value)
+                        {
+                            Text("Light Mode")
+                        }
+                        else
+                        {
+                            Text("Dark Mode")
+                        }
+
                             },
                     selected = false,
                     onClick = {  isDarkModeState.value = !isDarkModeState.value }
