@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import kotlinx.coroutines.delay
 
-private const val SplashWaitTime: Long = 2000
+private const val SplashWaitTime: Long = 1000
 
 @Composable
 fun LandingScreen(onTimeout: () -> Unit, modifier: Modifier = Modifier) {

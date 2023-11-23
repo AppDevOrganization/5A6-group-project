@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,6 +25,7 @@ import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
@@ -42,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,8 +52,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,10 +72,15 @@ import com.example.emptyactivity.data.chequingAccounts
 import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
+import com.example.emptyactivity.ui.theme.md_theme_dark_background
+import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
+import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    private val isDarkModeState = mutableStateOf(false)
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,14 +90,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-
-
-              
-                    //AccountScreen();
-                    // Greeting("Android")
-                    // WithdrawalScreen().ShowWithdrawalScreen()
-                    // CadenPage().MainPage(breathList = SAMPLE_LIST)
-                    MainScreen(modifier = Modifier)
+                MainScreen(modifier = Modifier, isDarkModeState)
             }
         }
     }
@@ -106,7 +107,7 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier : Modifier) {
+fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -115,95 +116,116 @@ fun MainScreen(modifier : Modifier) {
     } else {
 
         val navController = rememberNavController()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+        val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        modifier = Modifier,
-        drawerContent = {
-            ModalDrawerSheet {
-                DrawerHeader(modifier)
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            modifier = Modifier,
+            drawerContent = {
+                ModalDrawerSheet {
+                    DrawerHeader(modifier, isDarkModeState.value)
 
-                Divider()
+                    Divider()
 
-                // Navigation drawer items
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = {
-                        navController.navigateSingleTopTo(Overview.route)
-                        scope.launch {
-                            if (drawerState.isClosed) {
-                                drawerState.open()
+                    // Navigation drawer items
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Home, contentDescription = "") },
+                        label = { Text("Home") },
+                        selected = false,
+                        onClick = {
+                            navController.navigateSingleTopTo(Overview.route)
+                            scope.launch {
+                                if (drawerState.isClosed) {
+                                    drawerState.open()
+                                } else {
+                                    drawerState.close()
+                                }
+                            }
+                        }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Send, contentDescription = "") },
+                        label = { Text("Transfers") },
+                        selected = false,
+                        onClick = {
+                            navController.navigateSingleTopTo(Transfer.route)
+                            scope.launch {
+                                if (drawerState.isClosed) {
+                                    drawerState.open()
+                                } else {
+                                    drawerState.close()
+                                }
+
+
+                            }
+                        }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Star, contentDescription = "") },
+                        label = {
+                            if (isDarkModeState.value) {
+                                Text("Light Mode")
                             } else {
-                                drawerState.close()
-                            }
-                        }
-                    }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Send, contentDescription = "") },
-                    label = { Text("Transfers") },
-                    selected = false,
-                    onClick = {
-                        navController.navigateSingleTopTo(Transfer.route)
-                        scope.launch {
-                            if (drawerState.isClosed) {
-                                drawerState.open()
-                            } else {
-                                drawerState.close()
+                                Text("Dark Mode")
                             }
 
-
-                        }
-                    }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
-                    label = { Text("Settings") },
-                    selected = false,
-                    onClick = { /* Handle click for "Settings" */ }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
-                    label = { Text("Logout") },
-                    selected = false,
-                    onClick = { /* Handle click for "Logout" */ }
-                )
-            }
-        },
-    ) {
-        Scaffold(
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    text = { Text("More") },
-                    icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
-                    onClick = {
-                        scope.launch {
-                            drawerState.apply {
-                                if (isClosed) open() else close()
-                            }
-                        }
-                    }
-                )
-            }
+                        },
+                        selected = false,
+                        onClick = { isDarkModeState.value = !isDarkModeState.value }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
+                        label = { Text("Settings") },
+                        selected = false,
+                        onClick = { /* Handle click for "Settings" */ }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
+                        label = { Text("Logout") },
+                        selected = false,
+                        onClick = { /* Handle click for "Logout" */ }
+                    )
+                }
+            },
         ) {
-            it
-            CJJBankApp(navController = navController)
+            Scaffold(
+                floatingActionButton = {
+                    ExtendedFloatingActionButton(
+                        text = { Text("More") },
+                        icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
+                        onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
+                            }
+                        }
+                    )
+                }
+            ) {
+                it
+                CJJBankApp(navController = navController, isDarkMode = isDarkModeState.value)
+            }
         }
-    }
     }
 }
 
 @Composable
-fun DrawerHeader(modifier: Modifier) {
+fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
+
+    var headerColor: Color = if (isDarkMode) {
+        md_theme_dark_onPrimary
+    } else {
+        md_theme_light_onPrimary
+
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
         modifier = modifier
-            .background(md_theme_light_onPrimary)
+            .background(headerColor)
             .padding(15.dp)
             .fillMaxWidth()
     ) {
@@ -235,18 +257,24 @@ fun DrawerHeader(modifier: Modifier) {
 }
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp( navController: NavHostController) {
+fun CJJBankApp(navController: NavHostController, isDarkMode: Boolean) {
     EmptyActivityTheme(
-        //useDarkTheme = true
+        useDarkTheme = isDarkMode
     ) {
 
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
-        val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+        val currentScreen =
+            bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+
+        var useDarkMode: Color = if (!isDarkMode) {
+            md_theme_light_onPrimary
+        } else {
+            md_theme_dark_onPrimary
+        }
 
         Scaffold(
             topBar = {
@@ -255,13 +283,15 @@ fun CJJBankApp( navController: NavHostController) {
                     onTabSelected = { screen ->
                         navController.navigateSingleTopTo(screen.route)
                     },
-                    currentScreen = currentScreen
+                    currentScreen = currentScreen,
+                    backgroundColor = useDarkMode,
+                    isDarkMode = isDarkMode
                 )
             }
         ) { contentPadding ->
             BankNavHost(
                 navController = navController,
-                modifier = Modifier.padding(contentPadding)
+                modifier = Modifier.padding(contentPadding),
             )
         }
     }
@@ -390,8 +420,6 @@ fun TransferScreen(
 }
 
 
-
-
 /**
  * Date of Retrieval: 2023/11/02
  * All Nav-related functions and variables are based on the ones in the Rally app from the Navigation codelab.
@@ -467,16 +495,15 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 @Composable
 fun CJJBankAppPreview() {
     val navController = rememberNavController()
-    CJJBankApp(navController = navController)
+    CJJBankApp(navController = navController, false)
 }
 
 @Preview
 @Composable
-fun CJJBankAppDarkModePreview()
-{
+fun CJJBankAppDarkModePreview() {
     EmptyActivityTheme(useDarkTheme = true) {
 
         val navController = rememberNavController()
-        CJJBankApp(navController = navController)
+        CJJBankApp(navController = navController, true)
     }
 }

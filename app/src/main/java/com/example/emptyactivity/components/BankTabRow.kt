@@ -23,6 +23,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.BankDestination
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
+import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
+import com.example.emptyactivity.ui.theme.md_theme_dark_onSecondary
+import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
+import com.example.emptyactivity.ui.theme.md_theme_light_onPrimaryContainer
+import com.example.emptyactivity.ui.theme.md_theme_light_onSecondary
+import com.example.emptyactivity.ui.theme.md_theme_light_primaryContainer
 import java.util.Locale
 
 /**
@@ -34,13 +40,18 @@ import java.util.Locale
 fun BankTabRow(
     screens: List<BankDestination>,
     onTabSelected: (BankDestination) -> Unit,
-    currentScreen: BankDestination
+    currentScreen: BankDestination,
+    backgroundColor: Color = md_theme_light_onPrimary,
+    isDarkMode : Boolean
 ) {
-    EmptyActivityTheme {
+    EmptyActivityTheme(
+        useDarkTheme = isDarkMode
+    ) {
         Surface(
             Modifier
                 .fillMaxWidth()
-                .height(64.dp)
+                .height(64.dp),
+            color = backgroundColor
         ) {
             Row(Modifier.selectableGroup()) {
                 screens.forEach { screen ->
