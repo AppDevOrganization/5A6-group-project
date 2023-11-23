@@ -44,6 +44,13 @@ fun AccountScreen(
             balance = account.balance,
             onClickTransferButton = onClickTransferButton
         )
+        if (account.name == "Credit") {
+            Text(
+                text = "Due date: " + account.dueDate,
+                modifier = Modifier.padding(13.dp),
+                style = MaterialTheme.typography.displaySmall
+            )
+        }
         TransactionsLazyColumn(transactions = account.transactions)
     }
 }
@@ -122,7 +129,7 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = "$" + transaction.amount.toString()
+                text = "$" + String.format("%.2f", transaction.amount)
             )
             Text(
                 modifier = modifier.weight(1f),
@@ -162,16 +169,23 @@ fun AccountTopCard(
                     style = MaterialTheme.typography.displayMedium
                 )
                 Text(
-                    text = "$$balance",
+                    text = "$" + String.format("%.2f", balance),
                     style = MaterialTheme.typography.displayLarge
                 )
                 Button(
                     onClick = onClickTransferButton
                 ) {
-                    Text(
-                        text = "Transfer",
-                        style = MaterialTheme.typography.titleLarge
-                    )
+                    if (accountType == "Credit") {
+                        Text(
+                            text = "Pay",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    } else {
+                        Text(
+                            text = "Transfer",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
                 }
             }
             Column(
@@ -194,6 +208,12 @@ fun AccountTopCard(
                      * https://www.flaticon.com/free-icons/piggy-bank
                      */
                     imageId = R.drawable.piggy_bank
+                } else if (accountType == "Credit") {
+                    /**
+                     * Credit card icons created by Freepik - Flaticon
+                     * https://www.flaticon.com/free-icons/credit-card
+                     */
+                    imageId = R.drawable.credit_card
                 }
 
                 Image(

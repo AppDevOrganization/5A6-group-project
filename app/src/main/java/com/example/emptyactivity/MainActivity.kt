@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -66,9 +68,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.emptyactivity.components.BankTabRow
+import com.example.emptyactivity.components.Constants
 import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.chequingAccounts
+import com.example.emptyactivity.data.creditAccounts
 import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
@@ -278,15 +281,7 @@ fun CJJBankApp(navController: NavHostController, isDarkMode: Boolean) {
 
         Scaffold(
             topBar = {
-                BankTabRow(
-                    screens = bankTabRowScreens,
-                    onTabSelected = { screen ->
-                        navController.navigateSingleTopTo(screen.route)
-                    },
-                    currentScreen = currentScreen,
-                    backgroundColor = useDarkMode,
-                    isDarkMode = isDarkMode
-                )
+                NavigationBar(navController = navController)
             }
         ) { contentPadding ->
             BankNavHost(
@@ -295,7 +290,38 @@ fun CJJBankApp(navController: NavHostController, isDarkMode: Boolean) {
             )
         }
     }
+}
 
+/**
+ * Date of retrieval: 2023/11/22
+ * This function is based on this GeeksForGeeks tutorial.
+ * https://www.geeksforgeeks.org/bottom-navigation-bar-in-android-jetpack-compose/
+ */
+@Composable
+fun NavigationBar(
+    navController: NavHostController
+) {
+    BottomNavigation(
+        backgroundColor = Color(android.graphics.Color.rgb(51, 153, 102))
+    ) {
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentRoute = currentBackStack?.destination?.route
+
+        Constants.NavItems.forEach { item ->
+            BottomNavigationItem(
+                selected = currentRoute == item.route,
+                onClick = {
+                    navController.navigateSingleTopTo(item.route)
+                },
+                icon = {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.label
+                    )
+                }
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -464,6 +490,17 @@ fun BankNavHost(
             if (savingsAccount != null) {
                 AccountScreen(
                     account = savingsAccount,
+                    onClickTransferButton = {
+                        navController.navigateSingleTopTo(Transfer.route)
+                    }
+                )
+            }
+        }
+        composable(route = Credit.route) {
+            val creditAccount: Account? = creditAccounts.find { it.number == 12345 }
+            if (creditAccount != null) {
+                AccountScreen(
+                    account = creditAccount,
                     onClickTransferButton = {
                         navController.navigateSingleTopTo(Transfer.route)
                     }
