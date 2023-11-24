@@ -53,7 +53,7 @@ fun SignupPage(
                 .padding(10.dp)
                 .width(200.dp)
                 .height(50.dp),
-            onClick = {}
+            onClick = onSuccess
         ) {
             Text(
                 text = "Sign Up",
