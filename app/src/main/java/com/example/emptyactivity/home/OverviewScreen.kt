@@ -53,7 +53,7 @@ fun OverviewScreen(
                 painter = painterResource(id = R.drawable.accounts),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(76.dp)
+                    .size(91.dp)
                     .padding(8.dp)
             )
         }
@@ -118,23 +118,27 @@ fun OverviewCard(
             .padding(13.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = accountType,
-            style = MaterialTheme.typography.displayMedium
-        )
-        Text(
-            text = "$$balance",
-            style = MaterialTheme.typography.displayLarge
-        )
-        TextButton(
-            modifier = Modifier
-                .fillMaxWidth(),
-            onClick = onClickViewAccount
+        Column(
+            modifier = Modifier.padding(13.dp)
         ) {
             Text(
-                text = "SEE MORE",
-                style = MaterialTheme.typography.titleLarge
+                text = accountType,
+                style = MaterialTheme.typography.displayMedium
             )
+            Text(
+                text = "$" + String.format("%.2f", balance),
+                style = MaterialTheme.typography.displayLarge
+            )
+            TextButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                onClick = onClickViewAccount
+            ) {
+                Text(
+                    text = "SEE MORE",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
     }
 }
