@@ -88,13 +88,13 @@ fun MainScreen() {
     if (showStartupScreen) {
         LandingScreen(onTimeout = { showStartupScreen = false })
     } else {
-        PreCJJApp()
+        CJJBankApp()
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreCJJApp() {
+fun PreCJJApp(navController: NavHostController, mainPage: @Composable () -> Unit) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -136,21 +136,23 @@ fun PreCJJApp() {
     ) {
         Scaffold(
             floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    text = { Text("More") },
-                    icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
-                    onClick = {
-                        scope.launch {
-                            drawerState.apply {
-                                if (isClosed) open() else close()
+                if (isOnLoginOrSignupPage(navController)) {
+                    ExtendedFloatingActionButton(
+                        text = { Text("More") },
+                        icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
+                        onClick = {
+                            scope.launch {
+                                drawerState.apply {
+                                    if (isClosed) open() else close()
+                                }
                             }
                         }
-                    }
-                )
+                    )
+                }
             }
         ) {
             it
-            CJJBankApp()
+            mainPage()
         }
     }
 }
@@ -167,26 +169,29 @@ fun CJJBankApp() {
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
-        val isOnLoginOrSignupPage = navController.currentDestination?.route != Login.route &&
-                navController.currentDestination?.route != Signup.route
+        val isOnLoginOrSignupPage = isOnLoginOrSignupPage(navController)
 
-        Scaffold(
-            topBar = {
-                if (isOnLoginOrSignupPage) {
-                    BankTabRow(
-                        screens = bankTabRowScreens,
-                        onTabSelected = { screen ->
-                            navController.navigateSingleTopTo(screen.route)
-                        },
-                        currentScreen = currentScreen
-                    )
+        PreCJJApp(
+            navController = navController
+        ) {
+            Scaffold(
+                topBar = {
+                    if (isOnLoginOrSignupPage) {
+                        BankTabRow(
+                            screens = bankTabRowScreens,
+                            onTabSelected = { screen ->
+                                navController.navigateSingleTopTo(screen.route)
+                            },
+                            currentScreen = currentScreen
+                        )
+                    }
                 }
+            ) { contentPadding ->
+                BankNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(contentPadding)
+                )
             }
-        ) { contentPadding ->
-            BankNavHost(
-                navController = navController,
-                modifier = Modifier.padding(contentPadding)
-            )
         }
     }
 
@@ -253,6 +258,11 @@ fun BankNavHost(
             }
         }
     }
+}
+
+fun isOnLoginOrSignupPage(navController: NavHostController): Boolean {
+    return navController.currentDestination?.route != Login.route &&
+            navController.currentDestination?.route != Signup.route
 }
 
 fun NavHostController.navigateSingleTopTo(route: String) =
