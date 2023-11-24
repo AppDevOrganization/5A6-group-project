@@ -229,6 +229,9 @@ fun BankNavHost(
             LoginPage(
                 onSuccess = {
                     navController.navigateSingleTopTo(Overview.route)
+                },
+                onSignup = {
+                    navController.navigateSingleTopTo(Signup.route)
                 }
             )
         }
