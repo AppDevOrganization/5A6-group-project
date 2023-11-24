@@ -223,7 +223,14 @@ fun BankNavHost(
         modifier = modifier
     ) {
         composable(route = Signup.route) {
-            SignupPage()
+            SignupPage(
+                onSuccess = {
+                    navController.navigateSingleTopTo(Overview.route)
+                },
+                onLogin = {
+                    navController.navigateSingleTopTo(Login.route)
+                }
+            )
         }
         composable(route = Login.route) {
             LoginPage(
