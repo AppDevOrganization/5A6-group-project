@@ -106,31 +106,41 @@ fun PreCJJApp(navController: NavHostController, mainPage: @Composable () -> Unit
                 Text("NAME HERE", modifier = Modifier.padding(16.dp))
                 Divider()
 
-                // Navigation drawer items
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Home, contentDescription = "") },
-                    label = { Text("Home") },
-                    selected = false,
-                    onClick = { /* Handle click for "Home" */ }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Send, contentDescription = "") },
-                    label = { Text("Transfers") },
-                    selected = false,
-                    onClick = { /* Handle click for "Transfers" */ }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
-                    label = { Text("Settings") },
-                    selected = false,
-                    onClick = { /* Handle click for "Settings" */ }
-                )
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
-                    label = { Text("Logout") },
-                    selected = false,
-                    onClick = { /* Handle click for "Logout" */ }
-                )
+                if (isOnLoginOrSignupPage(navController)) {
+                    // Navigation drawer items
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Home, contentDescription = "") },
+                        label = { Text("Home") },
+                        selected = false,
+                        onClick = { /* Handle click for "Home" */ }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Send, contentDescription = "") },
+                        label = { Text("Transfers") },
+                        selected = false,
+                        onClick = { /* Handle click for "Transfers" */ }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
+                        label = { Text("Settings") },
+                        selected = false,
+                        onClick = { /* Handle click for "Settings" */ }
+                    )
+                    NavigationDrawerItem(
+                        icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
+                        label = { Text("Logout") },
+                        selected = false,
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
+                            }
+                            navController.navigateSingleTopTo(Login.route)
+                        }
+                    )
+                }
+                else {
+                    Text("Log in to see your options.")
+                }
             }
         },
     ) {
