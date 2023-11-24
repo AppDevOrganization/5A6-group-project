@@ -88,9 +88,7 @@ fun MainScreen() {
     if (showStartupScreen) {
         LandingScreen(onTimeout = { showStartupScreen = false })
     } else {
-        LoginPage()
-
-
+        PreCJJApp()
     }
 }
 
@@ -169,16 +167,20 @@ fun CJJBankApp() {
         val currentBackStack by navController.currentBackStackEntryAsState()
         val currentDestination = currentBackStack?.destination
         val currentScreen = bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+        val isOnLoginOrSignupPage = navController.currentDestination?.route != Login.route &&
+                navController.currentDestination?.route != Signup.route
 
         Scaffold(
             topBar = {
-                BankTabRow(
-                    screens = bankTabRowScreens,
-                    onTabSelected = { screen ->
-                        navController.navigateSingleTopTo(screen.route)
-                    },
-                    currentScreen = currentScreen
-                )
+                if (isOnLoginOrSignupPage) {
+                    BankTabRow(
+                        screens = bankTabRowScreens,
+                        onTabSelected = { screen ->
+                            navController.navigateSingleTopTo(screen.route)
+                        },
+                        currentScreen = currentScreen
+                    )
+                }
             }
         ) { contentPadding ->
             BankNavHost(
