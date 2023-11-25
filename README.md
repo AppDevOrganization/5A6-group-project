@@ -2,6 +2,7 @@
 CJJ
 ## Goal
 To create a bank application for users to manage their money. It will feature an account for users to hold their money and a withdrawal feature to take out money.
+More description here [Documentation](https://github.com/AppDevOrganization/5A6-group-project/wiki/Bank-App-Proposal)
 ## Quick-start
 1) In the main branch of the 5A6-group-project repo, click the green 'Code' button.
 2) Press 'Download ZIP', and afterwards unzip wherever you wish (but remember where).
