@@ -2,6 +2,7 @@ package com.example.emptyactivity.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -61,7 +63,13 @@ fun LoginPage(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
+fun LoginSignupTextField(
+    label: String,
+    placeholder: String,
+    onValueChange: (newValue: String) -> Unit,
+    isPasswordField: Boolean = false,
+    modifier: Modifier = Modifier
+) {
     var inputText by remember { mutableStateOf(placeholder) }
 
     OutlinedTextField(
@@ -69,7 +77,11 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
         placeholder = { Text(placeholder) },
         onValueChange = { inputText = it; onValueChange(inputText) },
         label = { Text(label) },
-        modifier = modifier.padding(5.dp)
+        singleLine = true,
+//        visualTransformation = { if (isPasswordField) VisualTransformation. },
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(5.dp),
     )
 }
 
