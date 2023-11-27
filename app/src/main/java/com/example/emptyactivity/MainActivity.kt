@@ -548,6 +548,11 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         restoreState = true
     }
 
+fun isOnStandalonePage(navController: NavHostController): Boolean {
+    val currentRoute: String? = navController.currentDestination?.route
+    return currentRoute == Login.route || currentRoute == Signup.route
+}
+
 @Preview
 @Composable
 fun CJJBankAppPreview() {
