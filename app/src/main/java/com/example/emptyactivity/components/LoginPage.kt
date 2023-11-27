@@ -35,11 +35,13 @@ fun LoginPage(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold,
         )
         LoginSignupTextField(
-            placeholder = "Email",
+            label = "Email",
+            placeholder = "example@email.com",
             onValueChange = {},
         )
         LoginSignupTextField(
-            placeholder = "Password",
+            label = "Password",
+            placeholder = "password",
             onValueChange = {},
         )
         Button(
@@ -59,12 +61,14 @@ fun LoginPage(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginSignupTextField(placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
+fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
     var inputText by remember { mutableStateOf(placeholder) }
 
     OutlinedTextField(
         value = inputText,
+        placeholder = { Text(placeholder) },
         onValueChange = { inputText = it; onValueChange(inputText) },
+        label = { Text(label) },
         modifier = modifier.padding(5.dp)
     )
 }

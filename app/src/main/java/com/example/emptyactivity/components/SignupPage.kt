@@ -30,15 +30,18 @@ fun SignupPage(modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold,
         )
         LoginSignupTextField(
-            placeholder = "Email",
+            label = "Email",
+            placeholder = "example@email.com",
             onValueChange = {},
         )
         LoginSignupTextField(
-            placeholder = "Password",
+            label = "Password",
+            placeholder = "password",
             onValueChange = {},
         )
         LoginSignupTextField(
-            placeholder = "Repeat Password",
+            label = "Repeat Password",
+            placeholder = "password",
             onValueChange = {},
         )
         Button(
