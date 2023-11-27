@@ -60,12 +60,12 @@ fun SignupPage(
         Button(
             modifier = Modifier
                 .padding(10.dp)
-                .width(200.dp)
-                .height(50.dp),
+                .width(240.dp)
+                .height(100.dp),
             onClick = onClickLogin
         ) {
             Text(
-                text = "Create an account",
+                text = "Log in with an existing account",
                 style = MaterialTheme.typography.titleLarge
             )
         }

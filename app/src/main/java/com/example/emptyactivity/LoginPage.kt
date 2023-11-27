@@ -62,7 +62,7 @@ fun LoginPage(
         Button(
             modifier = Modifier
                 .padding(10.dp)
-                .width(200.dp)
+                .width(240.dp)
                 .height(50.dp),
             onClick = onClickSignup
         ) {
