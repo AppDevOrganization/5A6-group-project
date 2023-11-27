@@ -6,17 +6,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,12 +39,12 @@ fun LoginPage(
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
-        LoginTextField(
-            value = "Email",
+        LoginSignupTextField(
+            placeholder = "Email",
             onValueChange = {},
         )
-        LoginTextField(
-            value = "Password",
+        LoginSignupTextField(
+            placeholder = "Password",
             onValueChange = {},
         )
         Button(
@@ -75,10 +76,24 @@ fun LoginPage(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginTextField(value: String, onValueChange: (String) -> Unit, modifier: Modifier = Modifier) {
+        /**
+         * A text field for a user's email, password, etc. As the name implies, it should only be used for the
+         * login and signup pages.
+         * @param placeholder The text field's placeholder text.
+         * @param onValueChange The function that will be called with the new value passed in after
+         * the text field's value gets changed.
+         */
+fun LoginSignupTextField(placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
+    var inputText by remember { mutableStateOf("") }
+
     TextField(
-        value = value,
-        onValueChange = onValueChange,
+        value = inputText,
+        onValueChange = { inputText = it; onValueChange(inputText) },
+        placeholder = @Composable {
+            Text(
+                text = placeholder
+            )
+        },
         modifier = modifier.padding(5.dp)
     )
 }
