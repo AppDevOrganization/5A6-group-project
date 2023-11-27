@@ -90,6 +90,7 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
     var inputText by remember { mutableStateOf("") }
 
     OutlinedTextField(
+        label = { Text(label) },
         value = inputText,
         onValueChange = { inputText = it; onValueChange(inputText) },
         placeholder = @Composable {
