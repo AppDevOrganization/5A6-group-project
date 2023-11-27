@@ -41,11 +41,13 @@ fun LoginPage(
             fontWeight = FontWeight.Bold,
         )
         LoginSignupTextField(
-            placeholder = "Email",
+            label = "Email",
+            placeholder = "example@email.com",
             onValueChange = {},
         )
         LoginSignupTextField(
-            placeholder = "Password",
+            label = "Password",
+            placeholder = "password",
             onValueChange = {},
         )
         Button(
@@ -84,7 +86,7 @@ fun LoginPage(
          * @param onValueChange The function that will be called with the new value passed in after
          * the text field's value gets changed.
          */
-fun LoginSignupTextField(placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
+fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
     var inputText by remember { mutableStateOf("") }
 
     OutlinedTextField(
