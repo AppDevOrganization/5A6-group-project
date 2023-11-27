@@ -474,6 +474,16 @@ fun BankNavHost(
                 }
             )
         }
+        composable(route = Login.route) {
+            LoginPage(
+                onClickSignup = {
+                    navController.navigateSingleTopTo(Signup.route)
+                },
+                onSuccess = {
+                    navController.navigateSingleTopTo(Overview.route)
+                }
+            )
+        }
         composable(route = Chequing.route) {
             val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
             if (chequingAccount != null) {
