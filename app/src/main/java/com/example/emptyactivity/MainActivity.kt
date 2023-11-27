@@ -187,7 +187,7 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
                         icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
                         label = { Text("Logout") },
                         selected = false,
-                        onClick = { /* Handle click for "Logout" */ }
+                        onClick = { navController.navigateSingleTopTo(Login.route) }
                     )
                 }
             },
