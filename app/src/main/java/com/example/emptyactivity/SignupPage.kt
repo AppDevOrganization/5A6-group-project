@@ -61,14 +61,18 @@ fun SignupPage(
                 style = MaterialTheme.typography.titleLarge
             )
         }
-        ClickableText(
-            text = buildAnnotatedString { Text(
-                text = "Already have an account?",
-                color = Color.Blue,
+        Button(
+            modifier = Modifier
+                .padding(10.dp)
+                .width(200.dp)
+                .height(50.dp),
+            onClick = onLogin
+        ) {
+            Text(
+                text = "Create an account",
                 style = MaterialTheme.typography.titleLarge
-            ) },
-            onClick = { onLogin() }
-        )
+            )
+        }
     }
 }
 
