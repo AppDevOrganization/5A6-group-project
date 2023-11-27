@@ -3,6 +3,7 @@ package com.example.emptyactivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -90,6 +91,7 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
     var inputText by remember { mutableStateOf("") }
 
     OutlinedTextField(
+        singleLine = true,
         label = { Text(label) },
         value = inputText,
         onValueChange = { inputText = it; onValueChange(inputText) },
@@ -98,7 +100,9 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
                 text = placeholder
             )
         },
-        modifier = modifier.padding(5.dp)
+        modifier = modifier
+            .width(120.dp)
+            .padding(5.dp)
     )
 }
 
