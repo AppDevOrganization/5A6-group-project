@@ -101,7 +101,7 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
             )
         },
         modifier = modifier
-            .width(120.dp)
+            .width(300.dp)
             .padding(5.dp)
     )
 }
