@@ -458,7 +458,7 @@ fun BankNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Overview.route,
+        startDestination = Login.route,
         modifier = modifier
     ) {
         composable(route = Overview.route) {
