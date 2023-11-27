@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -86,7 +87,7 @@ fun LoginPage(
 fun LoginSignupTextField(placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
     var inputText by remember { mutableStateOf("") }
 
-    TextField(
+    OutlinedTextField(
         value = inputText,
         onValueChange = { inputText = it; onValueChange(inputText) },
         placeholder = @Composable {
