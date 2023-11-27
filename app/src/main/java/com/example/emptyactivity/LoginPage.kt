@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun LoginPage(
     onSuccess: () -> Unit = {},
-    onSignup: () -> Unit = {},
+    onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -64,7 +64,7 @@ fun LoginPage(
                 .padding(10.dp)
                 .width(200.dp)
                 .height(50.dp),
-            onClick = onSignup
+            onClick = onClickSignup
         ) {
             Text(
                 text = "Create an account",
