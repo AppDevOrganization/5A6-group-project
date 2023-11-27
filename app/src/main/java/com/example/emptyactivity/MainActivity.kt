@@ -32,6 +32,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -126,85 +127,92 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
             drawerState = drawerState,
             modifier = Modifier,
             drawerContent = {
-                ModalDrawerSheet {
-                    DrawerHeader(modifier, isDarkModeState.value)
+                    ModalDrawerSheet {
+                        DrawerHeader(modifier, isDarkModeState.value)
 
-                    Divider()
+                        Divider()
 
-                    // Navigation drawer items
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.Home, contentDescription = "") },
-                        label = { Text("Home") },
-                        selected = false,
-                        onClick = {
-                            navController.navigateSingleTopTo(Overview.route)
-                            scope.launch {
-                                if (drawerState.isClosed) {
-                                    drawerState.open()
-                                } else {
-                                    drawerState.close()
+                        if (!isOnStandalonePage(navController)) {
+                            // Navigation drawer items
+                            NavigationDrawerItem(
+                                icon = { Icon(Icons.Filled.Home, contentDescription = "") },
+                                label = { Text("Home") },
+                                selected = false,
+                                onClick = {
+                                    navController.navigateSingleTopTo(Overview.route)
+                                    scope.launch {
+                                        if (drawerState.isClosed) {
+                                            drawerState.open()
+                                        } else {
+                                            drawerState.close()
+                                        }
+                                    }
                                 }
-                            }
-                        }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.Send, contentDescription = "") },
-                        label = { Text("Transfers") },
-                        selected = false,
-                        onClick = {
-                            navController.navigateSingleTopTo(Transfer.route)
-                            scope.launch {
-                                if (drawerState.isClosed) {
-                                    drawerState.open()
-                                } else {
-                                    drawerState.close()
+                            )
+                            NavigationDrawerItem(
+                                icon = { Icon(Icons.Filled.Send, contentDescription = "") },
+                                label = { Text("Transfers") },
+                                selected = false,
+                                onClick = {
+                                    navController.navigateSingleTopTo(Transfer.route)
+                                    scope.launch {
+                                        if (drawerState.isClosed) {
+                                            drawerState.open()
+                                        } else {
+                                            drawerState.close()
+                                        }
+
+
+                                    }
                                 }
+                            )
+                            NavigationDrawerItem(
+                                icon = { Icon(Icons.Filled.Star, contentDescription = "") },
+                                label = {
+                                    if (isDarkModeState.value) {
+                                        Text("Light Mode")
+                                    } else {
+                                        Text("Dark Mode")
+                                    }
 
-
-                            }
+                                },
+                                selected = false,
+                                onClick = { isDarkModeState.value = !isDarkModeState.value }
+                            )
+                            NavigationDrawerItem(
+                                icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
+                                label = { Text("Settings") },
+                                selected = false,
+                                onClick = { /* Handle click for "Settings" */ }
+                            )
+                            NavigationDrawerItem(
+                                icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
+                                label = { Text("Logout") },
+                                selected = false,
+                                onClick = { navController.navigateSingleTopTo(Login.route) }
+                            )
+                        } else {
+                            Text("Log in to see")
                         }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.Star, contentDescription = "") },
-                        label = {
-                            if (isDarkModeState.value) {
-                                Text("Light Mode")
-                            } else {
-                                Text("Dark Mode")
-                            }
-
-                        },
-                        selected = false,
-                        onClick = { isDarkModeState.value = !isDarkModeState.value }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
-                        label = { Text("Settings") },
-                        selected = false,
-                        onClick = { /* Handle click for "Settings" */ }
-                    )
-                    NavigationDrawerItem(
-                        icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
-                        label = { Text("Logout") },
-                        selected = false,
-                        onClick = { navController.navigateSingleTopTo(Login.route) }
-                    )
+                    }
                 }
-            },
         ) {
             Scaffold(
                 floatingActionButton = {
-                    ExtendedFloatingActionButton(
-                        text = { Text("More") },
-                        icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
-                        onClick = {
-                            scope.launch {
-                                drawerState.apply {
-                                    if (isClosed) open() else close()
+                        ExtendedFloatingActionButton(
+                            text = { Text("More") },
+                            icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
+                            onClick = {
+                                if (!isOnStandalonePage(navController)) {
+                                    scope.launch {
+                                        drawerState.apply {
+                                            if (isClosed) open() else close()
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+
                 }
             ) {
                 it
@@ -281,7 +289,9 @@ fun CJJBankApp(navController: NavHostController, isDarkMode: Boolean) {
 
         Scaffold(
             topBar = {
-                NavigationBar(navController = navController)
+                if (!isOnStandalonePage(navController)) {
+                    NavigationBar(navController = navController)
+                }
             }
         ) { contentPadding ->
             BankNavHost(
@@ -549,8 +559,8 @@ fun NavHostController.navigateSingleTopTo(route: String) =
     }
 
 fun isOnStandalonePage(navController: NavHostController): Boolean {
-    val currentRoute: String? = navController.currentDestination?.route
-    return currentRoute == Login.route || currentRoute == Signup.route
+    val currentRoute = navController.currentDestination?.route
+    return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route)
 }
 
 @Preview
