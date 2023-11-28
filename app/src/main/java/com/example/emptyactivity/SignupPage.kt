@@ -1,16 +1,14 @@
-package com.example.emptyactivity.components
+package com.example.emptyactivity
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +18,13 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun SignupPage(modifier: Modifier = Modifier) {
+fun SignupPage(
+    onSuccess: () -> Unit = {},
+    onClickLogin: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = modifier,
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -31,16 +33,19 @@ fun SignupPage(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
         )
-        LoginTextField(
-            value = "Email",
+        LoginSignupTextField(
+            label = "Email",
+            placeholder = "example@email.com",
             onValueChange = {},
         )
-        LoginTextField(
-            value = "Password",
+        LoginSignupTextField(
+            label = "Password",
+            placeholder = "password",
             onValueChange = {},
         )
-        LoginTextField(
-            value = "Repeat Password",
+        LoginSignupTextField(
+            label = "Repeat Password",
+            placeholder = "password",
             onValueChange = {},
         )
         Button(
@@ -48,20 +53,23 @@ fun SignupPage(modifier: Modifier = Modifier) {
                 .padding(10.dp)
                 .width(200.dp)
                 .height(50.dp),
-            onClick = {}
+            onClick = onSuccess
         ) {
             Text(
                 text = "Sign Up",
                 style = MaterialTheme.typography.titleLarge
             )
         }
-
         Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
+            modifier = Modifier
+                .padding(10.dp)
+                .width(300.dp)
+                .height(50.dp),
+            onClick = onClickLogin
         ) {
             Text(
-                text = "Don't have an account? Sign up"
+                text = "Log in with an existing account",
+                style = MaterialTheme.typography.titleMedium
             )
         }
     }
@@ -70,5 +78,5 @@ fun SignupPage(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun SignupPagePreview(modifier: Modifier = Modifier) {
-    SignupPage(modifier)
+    SignupPage(modifier = modifier)
 }

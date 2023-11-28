@@ -8,6 +8,14 @@ object Overview : BankDestination {
     override val route = "overview"
 }
 
+object Login : BankDestination {
+    override val route = "login"
+}
+
+object Signup : BankDestination {
+    override val route = "signup"
+}
+
 object Chequing : BankDestination {
     override val route = "chequing"
 }
