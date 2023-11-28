@@ -118,15 +118,104 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
     if (showStartupScreen) {
         LandingScreen(onTimeout = { showStartupScreen = false })
     } else {
-
         val navController = rememberNavController()
+
+       CJJBankApp(
+           navController = navController,
+           isDarkModeState = isDarkModeState,
+           modifier = modifier
+           )
+    }
+}
+
+@Composable
+fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
+
+    var headerColor: Color = if (isDarkMode) {
+        md_theme_dark_onPrimary
+    } else {
+        md_theme_light_onPrimary
+
+    }
+
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start,
+        modifier = modifier
+            .background(headerColor)
+            .padding(15.dp)
+            .fillMaxWidth()
+    ) {
+
+        Image(
+            painterResource(id = R.drawable.cjjlogo),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .size(70.dp)
+                .clip(CircleShape)
+        )
+        Spacer(modifier = Modifier.padding(5.dp))
+
+        Text(
+            text = "CJJ",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Black,
+        )
+
+        Text(
+            text = "CJJ@gmail.com",
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Black,
+        )
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier) {
+    EmptyActivityTheme(
+        useDarkTheme = isDarkModeState.value
+    ) {
+
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
+        val currentBackStack by navController.currentBackStackEntryAsState()
+        val currentDestination = currentBackStack?.destination
+        val currentScreen =
+            bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
 
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            modifier = Modifier,
-            drawerContent = {
+        var useDarkMode: Color = if (!isDarkModeState.value) {
+            md_theme_light_onPrimary
+        } else {
+            md_theme_dark_onPrimary
+        }
+
+        val mainScaffold = @Composable {
+            Scaffold(
+                topBar = {
+                    if (!isOnStandalonePage(navController)) {
+                        NavigationBar(navController = navController)
+                    }
+                }
+            ) { contentPadding ->
+                BankNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(contentPadding),
+                )
+            }
+        }
+
+
+        if (!isOnStandalonePage(navController)) {
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                modifier = Modifier,
+                drawerContent = {
                     ModalDrawerSheet {
                         DrawerHeader(modifier, isDarkModeState.value)
 
@@ -192,9 +281,9 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
                         )
                     }
                 }
-        ) {
-            Scaffold(
-                floatingActionButton = {
+            ) {
+                Scaffold(
+                    floatingActionButton = {
                         ExtendedFloatingActionButton(
                             text = { Text("More") },
                             icon = { Icon(Icons.Filled.AccountCircle, contentDescription = "") },
@@ -208,92 +297,15 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
                                 }
                             }
                         )
-
+                    }
+                ) {
+                    it
+//                CJJBankApp(navController = navController, isDarkMode = isDarkModeState.value)
+                    mainScaffold()
                 }
-            ) {
-                it
-                CJJBankApp(navController = navController, isDarkMode = isDarkModeState.value)
             }
-        }
-    }
-}
-
-@Composable
-fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
-
-    var headerColor: Color = if (isDarkMode) {
-        md_theme_dark_onPrimary
-    } else {
-        md_theme_light_onPrimary
-
-    }
-
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.Start,
-        modifier = modifier
-            .background(headerColor)
-            .padding(15.dp)
-            .fillMaxWidth()
-    ) {
-
-        Image(
-            painterResource(id = R.drawable.cjjlogo),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = modifier
-                .size(70.dp)
-                .clip(CircleShape)
-        )
-        Spacer(modifier = Modifier.padding(5.dp))
-
-        Text(
-            text = "CJJ",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.Black,
-        )
-
-        Text(
-            text = "CJJ@gmail.com",
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.Black,
-        )
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-fun CJJBankApp(navController: NavHostController, isDarkMode: Boolean) {
-    EmptyActivityTheme(
-        useDarkTheme = isDarkMode
-    ) {
-
-        val currentBackStack by navController.currentBackStackEntryAsState()
-        val currentDestination = currentBackStack?.destination
-        val currentScreen =
-            bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
-
-        var useDarkMode: Color = if (!isDarkMode) {
-            md_theme_light_onPrimary
         } else {
-            md_theme_dark_onPrimary
-        }
-
-        Scaffold(
-            topBar = {
-                if (!isOnStandalonePage(navController)) {
-                    NavigationBar(navController = navController)
-                }
-            }
-        ) { contentPadding ->
-            BankNavHost(
-                navController = navController,
-                modifier = Modifier.padding(contentPadding),
-            )
+            mainScaffold()
         }
     }
 }
@@ -559,19 +571,19 @@ fun isOnStandalonePage(navController: NavHostController): Boolean {
     return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route)
 }
 
-@Preview
-@Composable
-fun CJJBankAppPreview() {
-    val navController = rememberNavController()
-    CJJBankApp(navController = navController, false)
-}
-
-@Preview
-@Composable
-fun CJJBankAppDarkModePreview() {
-    EmptyActivityTheme(useDarkTheme = true) {
-
-        val navController = rememberNavController()
-        CJJBankApp(navController = navController, true)
-    }
-}
+//@Preview
+//@Composable
+//fun CJJBankAppPreview() {
+//    val navController = rememberNavController()
+//    CJJBankApp(navController = navController, false)
+//}
+//
+//@Preview
+//@Composable
+//fun CJJBankAppDarkModePreview() {
+//    EmptyActivityTheme(useDarkTheme = true) {
+//
+//        val navController = rememberNavController()
+//        CJJBankApp(navController = navController, true)
+//    }
+//}
