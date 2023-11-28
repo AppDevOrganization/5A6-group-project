@@ -132,68 +132,64 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
 
                         Divider()
 
-                        if (!isOnStandalonePage(navController)) {
-                            // Navigation drawer items
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Filled.Home, contentDescription = "") },
-                                label = { Text("Home") },
-                                selected = false,
-                                onClick = {
-                                    navController.navigateSingleTopTo(Overview.route)
-                                    scope.launch {
-                                        if (drawerState.isClosed) {
-                                            drawerState.open()
-                                        } else {
-                                            drawerState.close()
-                                        }
-                                    }
-                                }
-                            )
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Filled.Send, contentDescription = "") },
-                                label = { Text("Transfers") },
-                                selected = false,
-                                onClick = {
-                                    navController.navigateSingleTopTo(Transfer.route)
-                                    scope.launch {
-                                        if (drawerState.isClosed) {
-                                            drawerState.open()
-                                        } else {
-                                            drawerState.close()
-                                        }
-
-
-                                    }
-                                }
-                            )
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Filled.Star, contentDescription = "") },
-                                label = {
-                                    if (isDarkModeState.value) {
-                                        Text("Light Mode")
+                        // Navigation drawer items
+                        NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.Home, contentDescription = "") },
+                            label = { Text("Home") },
+                            selected = false,
+                            onClick = {
+                                navController.navigateSingleTopTo(Overview.route)
+                                scope.launch {
+                                    if (drawerState.isClosed) {
+                                        drawerState.open()
                                     } else {
-                                        Text("Dark Mode")
+                                        drawerState.close()
+                                    }
+                                }
+                            }
+                        )
+                        NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.Send, contentDescription = "") },
+                            label = { Text("Transfers") },
+                            selected = false,
+                            onClick = {
+                                navController.navigateSingleTopTo(Transfer.route)
+                                scope.launch {
+                                    if (drawerState.isClosed) {
+                                        drawerState.open()
+                                    } else {
+                                        drawerState.close()
                                     }
 
-                                },
-                                selected = false,
-                                onClick = { isDarkModeState.value = !isDarkModeState.value }
-                            )
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
-                                label = { Text("Settings") },
-                                selected = false,
-                                onClick = { /* Handle click for "Settings" */ }
-                            )
-                            NavigationDrawerItem(
-                                icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
-                                label = { Text("Logout") },
-                                selected = false,
-                                onClick = { navController.navigateSingleTopTo(Login.route) }
-                            )
-                        } else {
-                            Text("Log in to see")
-                        }
+
+                                }
+                            }
+                        )
+                        NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.Star, contentDescription = "") },
+                            label = {
+                                if (isDarkModeState.value) {
+                                    Text("Light Mode")
+                                } else {
+                                    Text("Dark Mode")
+                                }
+
+                            },
+                            selected = false,
+                            onClick = { isDarkModeState.value = !isDarkModeState.value }
+                        )
+                        NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.Settings, contentDescription = "") },
+                            label = { Text("Settings") },
+                            selected = false,
+                            onClick = { /* Handle click for "Settings" */ }
+                        )
+                        NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
+                            label = { Text("Logout") },
+                            selected = false,
+                            onClick = { navController.navigateSingleTopTo(Login.route) }
+                        )
                     }
                 }
         ) {
