@@ -548,7 +548,7 @@ fun BankNavHost(
 
         composable(route = Transfer.route) {
             TransferScreen(onBackClick = {
-                navController.navigateUp()
+                navController.navigateSingleTopTo(Overview.route)
             })
         }
 
