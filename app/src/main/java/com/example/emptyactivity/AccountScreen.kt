@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,10 +36,18 @@ fun AccountScreen(
     account: Account,
     onClickTransferButton: () -> Unit = {}
 ) {
+    val balance = "$" + String.format("%.2f", account.balance)
+
+    var screenDescription = "${account.name} screen, balance of $balance"
+
+    if (account.name == "Credit") {
+        screenDescription = "${account.name} screen, balance of $balance, due on ${account.dueDate}"
+    }
+
     Column(
         modifier = Modifier
             .padding(13.dp)
-            .semantics { contentDescription = "Account Screen" }
+            .semantics { contentDescription = screenDescription }
     ) {
         AccountTopCard(
             accountType = account.name,
@@ -112,11 +122,16 @@ fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
+    val description = "${transaction.date}, ${transaction.amount} ${transaction.detail}, subtotal of ${transaction.subtotal}"
+
+    Card {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(24.dp),
+                .height(48.dp)
+                .semantics {
+                    contentDescription = description
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(7.dp)
 
@@ -138,10 +153,11 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = "$" + transaction.subtotal.toString()
+                text = "$" + String.format("%.2f", transaction.subtotal)
             )
         }
     }
+    Spacer(modifier = modifier.size(1.dp))
 }
 
 @Composable
@@ -150,6 +166,14 @@ fun AccountTopCard(
     balance: Double,
     onClickTransferButton: () -> Unit
 ) {
+    var buttonText = "Transfer"
+    var buttonOnClickLabel = "transfer funds"
+
+    if (accountType == "Credit") {
+        buttonText = "Pay"
+        buttonOnClickLabel = "pay balance"
+    }
+
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -164,28 +188,27 @@ fun AccountTopCard(
                     .fillMaxHeight()
                     .padding(7.dp)
             ) {
-                Text(
-                    text = accountType,
-                    style = MaterialTheme.typography.displayMedium
-                )
-                Text(
-                    text = "$" + String.format("%.2f", balance),
-                    style = MaterialTheme.typography.displayLarge
-                )
+                Column(Modifier.semantics(mergeDescendants = true) {}) {
+                    Text(
+                        text = accountType,
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                    Text(
+                        text = "$" + String.format("%.2f", balance),
+                        style = MaterialTheme.typography.displayLarge
+                    )
+                }
                 Button(
+                    modifier = Modifier
+                        .semantics {
+                            onClick(label = buttonOnClickLabel, action = null)
+                        },
                     onClick = onClickTransferButton
                 ) {
-                    if (accountType == "Credit") {
-                        Text(
-                            text = "Pay",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    } else {
-                        Text(
-                            text = "Transfer",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    }
+                    Text(
+                        text = buttonText,
+                        style = MaterialTheme.typography.titleLarge
+                    )
                 }
             }
             Column(

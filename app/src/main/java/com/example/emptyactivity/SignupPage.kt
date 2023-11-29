@@ -12,6 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -52,7 +54,10 @@ fun SignupPage(
             modifier = Modifier
                 .padding(10.dp)
                 .width(200.dp)
-                .height(50.dp),
+                .height(50.dp)
+                .semantics {
+                    onClick(label = "sign up for an account", action = null)
+                },
             onClick = onSuccess
         ) {
             Text(
@@ -64,7 +69,10 @@ fun SignupPage(
             modifier = Modifier
                 .padding(10.dp)
                 .width(300.dp)
-                .height(50.dp),
+                .height(50.dp)
+                .semantics {
+                    onClick(label = "return to the log in screen", action = null)
+                },
             onClick = onClickLogin
         ) {
             Text(
