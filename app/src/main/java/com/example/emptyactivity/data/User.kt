@@ -1,4 +1,3 @@
 package com.example.emptyactivity.data
 
-class User {
-}
+data class User(var email: String)
