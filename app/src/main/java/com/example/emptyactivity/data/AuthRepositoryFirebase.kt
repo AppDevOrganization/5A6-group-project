@@ -1,8 +1,13 @@
 package com.example.emptyactivity.data
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class AuthRepositoryFirebase: AuthRepository {
+class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
+    private val currentUserStateFlow = MutableStateFlow(auth.currentUser?.toUser())
+
     override fun currentUser(): StateFlow<User> {
         TODO("Not yet implemented")
     }
@@ -23,4 +28,15 @@ class AuthRepositoryFirebase: AuthRepository {
         TODO("Not yet implemented")
     }
 
+    // Convert from FirebaseUser to User
+    private fun FirebaseUser?.toUser(): User? {
+        return this?.let {
+            if (it.email == null)
+                null
+            else
+                User(
+                    email = it.email!!,
+                )
+        }
+    }
 }
