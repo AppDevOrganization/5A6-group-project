@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "329045748974",
-    "project_id": "cjj-bank",
-    "storage_bucket": "cjj-bank.appspot.com"
+    "project_number": "664588851254",
+    "project_id": "cjj-bank-app",
+    "storage_bucket": "cjj-bank-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:329045748974:android:26c037b8437d738129d7ff",
+        "mobilesdk_app_id": "1:664588851254:android:ee01ed244b46e41f102097",
         "android_client_info": {
-          "package_name": "com.cjj.bankapp"
+          "package_name": "com.example.emptyactivity"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCOPEwRJORD-QcHz-WbcrO5cxXLppoXh30"
+          "current_key": "AIzaSyClX7p72sb9fh_pstnIh04c3Cgg5B6jC7Q"
         }
       ],
       "services": {
