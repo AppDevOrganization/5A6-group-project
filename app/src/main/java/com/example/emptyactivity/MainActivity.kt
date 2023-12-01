@@ -217,6 +217,7 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
         val currentScreen =
             bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
         val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory())
+        val userState = authViewModel.currentUser().collectAsState()
 
         var useDarkMode: Color = if (!isDarkModeState.value) {
             md_theme_light_onPrimary
@@ -243,6 +244,10 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
 
 
         if (!isOnStandalonePage(navController)) {
+            if (userState.value == null) {
+                navController.navigateSingleTopTo(Login.route)
+            }
+
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 modifier = Modifier,
