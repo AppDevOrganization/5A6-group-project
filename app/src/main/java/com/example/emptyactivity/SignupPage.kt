@@ -17,10 +17,12 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.emptyactivity.data.AuthViewModel
 
 
 @Composable
 fun SignupPage(
+    authViewModel: AuthViewModel,
     onSuccess: () -> Unit = {},
     onClickLogin: () -> Unit = {},
     modifier: Modifier = Modifier
@@ -83,8 +85,8 @@ fun SignupPage(
     }
 }
 
-@Preview
-@Composable
-fun SignupPagePreview(modifier: Modifier = Modifier) {
-    SignupPage(modifier = modifier)
-}
+//@Preview
+//@Composable
+//fun SignupPagePreview(modifier: Modifier = Modifier) {
+//    SignupPage(modifier = modifier)
+//}
