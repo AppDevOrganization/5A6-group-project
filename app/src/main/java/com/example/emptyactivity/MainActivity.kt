@@ -412,10 +412,11 @@ fun TransferScreen(
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
+        var options = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
+
         // "From" account dropdown
         var fromAccount by remember { mutableStateOf(AccountType.NONE) }
         var isFromExpanded by remember { mutableStateOf(false) }
-        var fromOptions = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
         var fromSelectedText by remember { mutableStateOf("") }
         var fromTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -451,7 +452,7 @@ fun TransferScreen(
                     })
                     .padding(vertical = 8.dp)
             ) {
-                fromOptions.forEach { label ->
+                options.forEach { label ->
                     DropdownMenuItem(onClick = {
                         fromSelectedText = label.name
                         fromAccount = label
@@ -466,7 +467,6 @@ fun TransferScreen(
         // "To" account dropdown
         var toAccount by remember { mutableStateOf(AccountType.NONE) }
         var isToExpanded by remember { mutableStateOf(false) }
-        var toOptions = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
         var toSelectedText by remember { mutableStateOf("") }
         var toTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -502,13 +502,14 @@ fun TransferScreen(
                     })
                     .padding(vertical = 8.dp)
             ) {
-                toOptions.forEach { account ->
+                options.forEach { account ->
                     DropdownMenuItem(onClick = {
                         toSelectedText = account.name
                         isToExpanded = false
+                        toAccount = account
                     }) {
                         Text(text = account.name)
-                        toAccount = account
+
                     }
                 }
             }
