@@ -26,8 +26,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.Account
+import com.example.emptyactivity.data.AccountType
 import com.example.emptyactivity.data.Transaction
-import com.example.emptyactivity.data.chequingAccounts
 
 @Composable
 fun AccountScreen(
@@ -40,11 +40,11 @@ fun AccountScreen(
             .semantics { contentDescription = "Account Screen" }
     ) {
         AccountTopCard(
-            accountType = account.name,
+            accountType = account.type,
             balance = account.balance,
             onClickTransferButton = onClickTransferButton
         )
-        if (account.name == "Credit") {
+        if (account.type == AccountType.CREDIT) {
             Text(
                 text = "Due date: " + account.dueDate,
                 modifier = Modifier.padding(13.dp),
@@ -146,7 +146,7 @@ fun TransactionItem(
 
 @Composable
 fun AccountTopCard(
-    accountType: String,
+    accountType: AccountType,
     balance: Double,
     onClickTransferButton: () -> Unit
 ) {
@@ -165,7 +165,7 @@ fun AccountTopCard(
                     .padding(7.dp)
             ) {
                 Text(
-                    text = accountType,
+                    text = accountType.name,
                     style = MaterialTheme.typography.displayMedium
                 )
                 Text(
@@ -175,7 +175,7 @@ fun AccountTopCard(
                 Button(
                     onClick = onClickTransferButton
                 ) {
-                    if (accountType == "Credit") {
+                    if (accountType == AccountType.CREDIT) {
                         Text(
                             text = "Pay",
                             style = MaterialTheme.typography.titleLarge
@@ -196,19 +196,19 @@ fun AccountTopCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 var imageId = R.drawable.accounts
-                if (accountType == "Chequing") {
+                if (accountType == AccountType.CHEQUING) {
                     /**
                      * Cheque icons created by srip - Flaticon
                      * https://www.flaticon.com/free-icons/cheque
                      */
                     imageId = R.drawable.cheque
-                } else if (accountType == "Savings") {
+                } else if (accountType == AccountType.SAVINGS) {
                     /**
                      * Piggy bank icons created by Freepik - Flaticon
                      * https://www.flaticon.com/free-icons/piggy-bank
                      */
                     imageId = R.drawable.piggy_bank
-                } else if (accountType == "Credit") {
+                } else if (accountType == AccountType.CREDIT) {
                     /**
                      * Credit card icons created by Freepik - Flaticon
                      * https://www.flaticon.com/free-icons/credit-card
@@ -228,6 +228,7 @@ fun AccountTopCard(
     }
 }
 
+/*
 @Preview
 @Composable
 fun AccountScreenPreview()
@@ -237,3 +238,5 @@ fun AccountScreenPreview()
         AccountScreen(account = chequingAccount)
     }
 }
+
+ */

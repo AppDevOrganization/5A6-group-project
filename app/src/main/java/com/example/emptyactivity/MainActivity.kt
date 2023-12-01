@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -33,7 +32,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material3.DrawerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -45,7 +43,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -60,9 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
@@ -77,18 +72,13 @@ import com.example.emptyactivity.components.Constants
 import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.AccountsRepository
 import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.data.chequingAccounts
-import com.example.emptyactivity.data.creditAccounts
-import com.example.emptyactivity.data.savingsAccounts
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
-import com.example.emptyactivity.ui.theme.md_theme_dark_background
 import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
-import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.*
-import androidx.compose.runtime.collectAsState
+import com.example.emptyactivity.data.AccountType
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
@@ -517,6 +507,7 @@ fun BankNavHost(
     ) {
         composable(route = Overview.route) {
             OverviewScreen(
+                viewModel,
                 onClickViewChequingAccount = {
                     navController.navigateSingleTopTo(Chequing.route)
                 },
@@ -549,7 +540,7 @@ fun BankNavHost(
             )
         }
         composable(route = Chequing.route) {
-            val chequingAccount= viewModel.getAccountByType("Chequing")
+            val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
 
             if (chequingAccount != null) {
                     AccountScreen(
@@ -562,7 +553,7 @@ fun BankNavHost(
             }
         }
         composable(route = Savings.route) {
-            val savingsAccount: Account? = savingsAccounts.find { it.number == 12345 }
+            val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
             if (savingsAccount != null) {
                 AccountScreen(
                     account = savingsAccount,
@@ -573,7 +564,7 @@ fun BankNavHost(
             }
         }
         composable(route = Credit.route) {
-            val creditAccount: Account? = creditAccounts.find { it.number == 12345 }
+            val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
             if (creditAccount != null) {
                 AccountScreen(
                     account = creditAccount,

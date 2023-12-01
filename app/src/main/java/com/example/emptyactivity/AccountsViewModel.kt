@@ -1,6 +1,5 @@
 package com.example.emptyactivity
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.emptyactivity.data.SortOrder
@@ -9,11 +8,10 @@ import com.example.emptyactivity.data.UserPreferencesRepository
 import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.AccountsRepository
 import kotlinx.coroutines.flow.combine
-import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewModelScope
+import com.example.emptyactivity.data.AccountType
 import kotlinx.coroutines.flow.launchIn
 
 
@@ -66,8 +64,8 @@ class AccountsViewModel(
 
     }
 
-    fun getAccountByType(accountName: String): Account? {
-        return accountsUiModel.value?.accounts?.find { it.name == accountName }
+    fun getAccountByType(accountType: AccountType): Account? {
+        return accountsUiModel.value?.accounts?.find { it.type == accountType }
     }
 
 
