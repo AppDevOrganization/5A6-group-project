@@ -1,6 +1,7 @@
 package com.example.emptyactivity.data
 
 import android.content.Context
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class AppModule(
