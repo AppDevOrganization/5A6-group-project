@@ -14,7 +14,6 @@ class AppModule(
         UserPreferencesRepository(context = appContext)
     }
     val authRepository : AuthRepository by lazy {
-        FirebaseApp.initializeApp(appContext)
         AuthRepositoryFirebase(Firebase.auth)
     }
 }

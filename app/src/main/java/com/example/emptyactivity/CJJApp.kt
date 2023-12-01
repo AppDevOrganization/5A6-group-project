@@ -13,6 +13,7 @@ class CJJApp: Application() {
     /* Called only once at beginning of application's lifetime */
     override fun onCreate() {
         super.onCreate()
+        FirebaseApp.initializeApp(this)
         appModule = AppModule(this)
     }
 }
