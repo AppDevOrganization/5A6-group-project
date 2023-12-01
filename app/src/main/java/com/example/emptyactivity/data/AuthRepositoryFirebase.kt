@@ -13,6 +13,12 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Creates a new user acount with a given email and password.
+     * @param email The email of the user.
+     * @param password The password of the user.
+     * @return Whether the new user account was created or not.
+     */
     override suspend fun signUp(email: String, password: String): Boolean {
         return try {
             auth.createUserWithEmailAndPassword(email, password).await()
