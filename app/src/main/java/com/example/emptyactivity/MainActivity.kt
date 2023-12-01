@@ -79,6 +79,7 @@ import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.*
 import com.example.emptyactivity.data.AccountType
+import com.google.firebase.FirebaseApp
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
@@ -101,11 +102,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
       viewModel = ViewModelProvider(
             this,
             AccountsViewModelFactory(
                 AccountsRepository,
-                UserPreferencesRepository(dataStore, this)
+                UserPreferencesRepository(dataStore = dataStore, context = this)
             )
         ).get(AccountsViewModel::class.java)
 

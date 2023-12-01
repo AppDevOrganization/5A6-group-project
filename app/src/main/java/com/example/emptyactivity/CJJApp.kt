@@ -2,6 +2,7 @@ package com.example.emptyactivity
 
 import android.app.Application
 import com.example.emptyactivity.data.AppModule
+import com.google.firebase.FirebaseApp
 
 class CJJApp: Application() {
     /* Always be able to access the module ("static") */

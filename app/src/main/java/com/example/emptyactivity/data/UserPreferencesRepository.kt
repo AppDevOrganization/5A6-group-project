@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,12 +39,15 @@ enum class SortOrder {
     NONE
 }
 
+const val PROFILE_DATASTORE ="profile_datastore"
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PROFILE_DATASTORE)
+
 /**
  * Class that handles saving and retrieving user preferences
  */
 class UserPreferencesRepository(
-    private val dataStore: DataStore<Preferences>,
-    context: Context
+    context: Context,
+    private val dataStore: DataStore<Preferences> = context.dataStore,
 ) {
     val userPreferencesFlow: Flow<UserPreferences> = dataStore.data
         .catch { exception ->
