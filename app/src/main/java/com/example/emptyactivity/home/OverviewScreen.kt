@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -128,21 +129,31 @@ fun OverviewCard(
         modifier = Modifier
             .padding(13.dp)
             .fillMaxWidth()
+            .semantics {
+                onClick(label = "$accountType $balance", action = null)
+            }
     ) {
         Column(
             modifier = Modifier.padding(13.dp)
         ) {
-            Text(
-                text = accountType,
-                style = MaterialTheme.typography.displayMedium
-            )
-            Text(
-                text = "$" + String.format("%.2f", balance),
-                style = MaterialTheme.typography.displayLarge
-            )
+            Column(Modifier
+                .fillMaxWidth()
+                .semantics(mergeDescendants = true) {}) {
+                Text(
+                    text = accountType,
+                    style = MaterialTheme.typography.displayMedium
+                )
+                Text(
+                    text = "$" + String.format("%.2f", balance),
+                    style = MaterialTheme.typography.displayLarge
+                )
+            }
             TextButton(
                 modifier = Modifier
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .semantics {
+                        onClick(label = "navigate to the $accountType screen", action = null)
+                    },
                 onClick = onClickViewAccount
             ) {
                 Text(
