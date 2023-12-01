@@ -216,6 +216,7 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
         val currentDestination = currentBackStack?.destination
         val currentScreen =
             bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+        val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory())
 
         var useDarkMode: Color = if (!isDarkModeState.value) {
             md_theme_light_onPrimary
@@ -234,7 +235,8 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                 BankNavHost(
                     navController = navController,
                     modifier = Modifier.padding(contentPadding),
-                    viewModel=viewModel
+                    viewModel=viewModel,
+                    authViewModel = authViewModel
                 )
             }
         }
@@ -306,7 +308,10 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                             icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
                             label = { Text("Logout") },
                             selected = false,
-                            onClick = { navController.navigateSingleTopTo(Login.route) }
+                            onClick = {
+                                authViewModel.signOut()
+                                navController.navigateSingleTopTo(Login.route)
+                            }
                         )
                     }
                 }
@@ -502,10 +507,9 @@ fun TransferScreen(
 fun BankNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    viewModel: AccountsViewModel
+    viewModel: AccountsViewModel,
+    authViewModel: AuthViewModel
 ) {
-    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory())
-
     NavHost(
         navController = navController,
         startDestination = Login.route,
