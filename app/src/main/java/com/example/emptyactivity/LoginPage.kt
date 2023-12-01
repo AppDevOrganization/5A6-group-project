@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,56 +36,67 @@ fun LoginPage(
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = "Log In",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-        )
-        LoginSignupTextField(
-            label = "Email",
-            placeholder = "example@email.com",
-            onValueChange = {},
-        )
-        LoginSignupTextField(
-            label = "Password",
-            placeholder = "password",
-            onValueChange = {},
-        )
-        Button(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(200.dp)
-                .height(50.dp)
-                .semantics {
-                    onClick(label = "log in to your account", action = null)
-                },
-            onClick = onSuccess
+    val userState = authViewModel.currentUser().collectAsState()
+    var emailText by remember { mutableStateOf("") }
+    var passwordText by remember { mutableStateOf("") }
+
+    if (userState.value == null) {
+        Column(
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = "Log in",
-                style = MaterialTheme.typography.titleLarge
+                text = "Log In",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
             )
-        }
-        Button(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(240.dp)
-                .height(50.dp)
-                .semantics {
-                    onClick(label = "create an account", action = null)
-                },
-            onClick = onClickSignup
-        ) {
-            Text(
-                text = "Create an account",
-                style = MaterialTheme.typography.titleLarge
+            LoginSignupTextField(
+                label = "Email",
+                placeholder = "example@email.com",
+                onValueChange = { emailText = it },
             )
+            LoginSignupTextField(
+                label = "Password",
+                placeholder = "password",
+                onValueChange = { passwordText = it },
+            )
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(200.dp)
+                    .height(50.dp)
+                    .semantics {
+                        onClick(label = "log in to your account", action = null)
+                    },
+                onClick = {
+                    authViewModel.signIn(emailText, passwordText)
+                }
+            ) {
+                Text(
+                    text = "Log in",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(240.dp)
+                    .height(50.dp)
+                    .semantics {
+                        onClick(label = "create an account", action = null)
+                    },
+                onClick = onClickSignup
+            ) {
+                Text(
+                    text = "Create an account",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
+    }
+    else {
+        onSuccess()
     }
 }
 
