@@ -24,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -38,7 +39,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -52,19 +52,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -84,6 +77,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.emptyactivity.components.Constants
 import com.example.emptyactivity.data.Account
+import com.example.emptyactivity.data.AccountType
 import com.example.emptyactivity.data.AccountsRepository
 import com.example.emptyactivity.data.UserPreferencesRepository
 import com.example.emptyactivity.home.OverviewScreen
@@ -91,8 +85,6 @@ import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
-import com.example.emptyactivity.data.AccountType
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
@@ -390,6 +382,7 @@ fun NavigationBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
+    viewModel:AccountsViewModel,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -553,15 +546,15 @@ fun TransferScreen(
             onClick = {
                 // Implement transfer logic here
                 // validate input, perform the transfer, etc.
-                var account : Account? = chequingAccounts.find { it.number == 12345 }
+                var account : Account? = viewModel.getAccountByType(AccountType.CHEQUING)
 
                 if (fromAccount == "Chequing") {
                     // for demo 4a
                     // to be replaced for final implementation 4b
                 } else if (fromAccount == "Savings") {
-                    account = savingsAccounts.find { it.number == 12345 }
+                    account = viewModel.getAccountByType(AccountType.SAVINGS)
                 } else if (fromAccount == "Credit") {
-                    account = creditAccounts.find { it.number == 12345 }
+                   account = viewModel.getAccountByType(AccountType.CREDIT)
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
@@ -755,7 +748,8 @@ fun BankNavHost(
         }
 
         composable(route = Transfer.route) {
-            TransferScreen(onBackClick = {
+            TransferScreen(viewModel=viewModel,
+                onBackClick = {
                 navController.navigateSingleTopTo(Overview.route)
             })
         }
