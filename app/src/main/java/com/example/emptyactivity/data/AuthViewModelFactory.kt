@@ -1,4 +1,10 @@
 package com.example.emptyactivity.data
 
-class AuthViewModelFactory {
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+
+class AuthViewModelFactory : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return AuthViewModel(CJJApp.appModule.authRepository) as T
+    }
 }
