@@ -62,6 +62,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -368,6 +370,9 @@ fun NavigationBar(
                         imageVector = item.icon,
                         contentDescription = item.label
                     )
+                },
+                modifier = Modifier.semantics {
+                    onClick(label = "navigate to the ${item.route} screen", action = null)
                 }
             )
         }

@@ -20,18 +20,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.emptyactivity.AccountsViewModel
-import com.example.emptyactivity.AccountsViewModelFactory
 import com.example.emptyactivity.R
-import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.AccountsRepository
-import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,7 +69,6 @@ fun OverviewScreen(
         )
     }
 }
-
 @Composable
 fun ChequingAccountCard(
     viewModel: AccountsViewModel,
