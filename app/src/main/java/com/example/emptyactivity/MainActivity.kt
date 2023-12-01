@@ -413,9 +413,9 @@ fun TransferScreen(
         )
 
         // "From" account dropdown
-        var fromAccount by remember { mutableStateOf("") }
+        var fromAccount by remember { mutableStateOf(AccountType.NONE) }
         var isFromExpanded by remember { mutableStateOf(false) }
-        var fromOptions = listOf(AccountType.CREDIT,AccountType.SAVINGS,AccountType.CHEQUING)
+        var fromOptions = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
         var fromSelectedText by remember { mutableStateOf("") }
         var fromTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -454,7 +454,7 @@ fun TransferScreen(
                 fromOptions.forEach { label ->
                     DropdownMenuItem(onClick = {
                         fromSelectedText = label.name
-                        fromAccount = label.name
+                        fromAccount = label
                         isFromExpanded = false
                     }) {
                         Text(text = label.name)
@@ -464,9 +464,9 @@ fun TransferScreen(
         }
 
         // "To" account dropdown
-        var toAccount by remember { mutableStateOf("") }
+        var toAccount by remember { mutableStateOf(AccountType.NONE) }
         var isToExpanded by remember { mutableStateOf(false) }
-        var toOptions = listOf(AccountType.CHEQUING,AccountType.CHEQUING,AccountType.CREDIT)
+        var toOptions = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
         var toSelectedText by remember { mutableStateOf("") }
         var toTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -508,7 +508,7 @@ fun TransferScreen(
                         isToExpanded = false
                     }) {
                         Text(text = account.name)
-                        toAccount = account.name
+                        toAccount = account
                     }
                 }
             }
@@ -548,26 +548,26 @@ fun TransferScreen(
                 // validate input, perform the transfer, etc.
                 var account : Account? = viewModel.getAccountByType(AccountType.CHEQUING)
 
-                if (fromAccount == "Chequing") {
+                if (fromAccount == AccountType.CHEQUING) {
                     // for demo 4a
                     // to be replaced for final implementation 4b
-                } else if (fromAccount == "Savings") {
+                } else if (fromAccount == AccountType.SAVINGS) {
                     account = viewModel.getAccountByType(AccountType.SAVINGS)
-                } else if (fromAccount == "Credit") {
+                } else if (fromAccount == AccountType.CREDIT) {
                    account = viewModel.getAccountByType(AccountType.CREDIT)
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
 
-                if (fromAccount == "") {
+                if (fromAccount == AccountType.NONE) {
                     messageType = "Error"
                     transferMessage = "Please select the account to transfer from."
                     shouldShowMessage = true
-                } else if (toAccount == "") {
+                } else if (toAccount == AccountType.NONE) {
                     messageType = "Error"
                     transferMessage = "Please select the account to transfer to."
                     shouldShowMessage = true
-                } else if (fromAccount.length == toAccount.length) {
+                } else if (fromAccount == toAccount) {
                     messageType = "Error"
                     transferMessage = "Cannot transfer funds to the same account."
                     shouldShowMessage = true
