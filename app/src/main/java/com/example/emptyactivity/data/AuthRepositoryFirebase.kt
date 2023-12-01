@@ -16,8 +16,8 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     }
 
     /**
-     * Returns the current logged in user.
-     * @return The current logged in user.
+     * Returns a StateFlow of the current logged in user.
+     * @return A StateFlow of the current logged in user.
      */
     override fun currentUser(): StateFlow<User?> {
         return currentUserStateFlow
