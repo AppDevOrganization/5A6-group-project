@@ -9,7 +9,7 @@ import kotlinx.coroutines.tasks.await
 class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     private val currentUserStateFlow = MutableStateFlow(auth.currentUser?.toUser())
 
-    override suspend fun currentUser(): StateFlow<User> {
+    override fun currentUser(): StateFlow<User> {
         TODO("Not yet implemented")
     }
 
