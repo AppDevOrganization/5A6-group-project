@@ -35,7 +35,7 @@ fun LoginPage(
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-//    val userState = authViewModel.currentUser().collectAsState()
+    val userState = authViewModel.currentUser().collectAsState()
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
 
@@ -45,7 +45,7 @@ fun LoginPage(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        if (true) {
+        if (userState.value == null) {
             Text(
                 text = "Log In",
                 style = MaterialTheme.typography.headlineMedium,
@@ -70,7 +70,7 @@ fun LoginPage(
                         onClick(label = "log in to your account", action = null)
                     },
                 onClick = {
-//                    authViewModel.signIn(emailText, passwordText)
+                    authViewModel.signIn(emailText, passwordText)
                 }
             ) {
                 Text(
@@ -94,7 +94,7 @@ fun LoginPage(
                 )
             }
         } else {
-//            onSuccess()
+            onSuccess()
         }
     }
 }
