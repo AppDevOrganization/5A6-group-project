@@ -15,8 +15,12 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         }
     }
 
-    override fun currentUser(): StateFlow<User> {
-        TODO("Not yet implemented")
+    /**
+     * Returns the current logged in user.
+     * @return The current logged in user.
+     */
+    override fun currentUser(): StateFlow<User?> {
+        return currentUserStateFlow
     }
 
     /**
