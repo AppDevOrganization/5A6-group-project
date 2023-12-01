@@ -22,7 +22,7 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         }
     }
 
-    override fun signIn(email: String, password: String): Boolean {
+    override suspend fun signIn(email: String, password: String): Boolean {
         TODO("Not yet implemented")
     }
 
