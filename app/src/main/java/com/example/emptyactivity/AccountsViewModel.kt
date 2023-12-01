@@ -1,5 +1,6 @@
 package com.example.emptyactivity
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.emptyactivity.data.SortOrder
@@ -9,6 +10,12 @@ import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.AccountsRepository
 import kotlinx.coroutines.flow.combine
 import androidx.lifecycle.asLiveData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.launchIn
+
 
 data class AccountsUiModel(
     val accounts: List<Account>,
@@ -37,7 +44,32 @@ class AccountsViewModel(
         )
     }
 
-    val accountsUiModel = accountsUiModelFlow.asLiveData()
+
+    private val _accountsUiModelFlow = MutableStateFlow(AccountsUiModel(emptyList(), false, SortOrder.NONE))
+    val accountsUiModel = _accountsUiModelFlow.asStateFlow()
+    init {
+        combine(
+            repository.accounts,
+            userPreferencesFlow
+        ) { accounts: List<Account>, userPreferences: UserPreferences ->
+            _accountsUiModelFlow.value = AccountsUiModel(
+                accounts = filterSortAccounts(
+                    accounts,
+                    userPreferences.showCompleted,
+                    userPreferences.sortOrder
+                ),
+                showCompleted = userPreferences.showCompleted,
+                sortOrder = userPreferences.sortOrder
+            )
+        }.launchIn(viewModelScope)
+
+
+    }
+
+    fun getAccountByType(accountName: String): Account? {
+        return accountsUiModel.value?.accounts?.find { it.name == accountName }
+    }
+
 
     private fun filterSortAccounts(
         accounts: List<Account>,
@@ -56,6 +88,7 @@ class AccountsViewModel(
             SortOrder.NONE -> filteredAccounts
         }
     }
+
 
 
 }

@@ -87,7 +87,12 @@ import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+
 private const val USER_PREFERENCES_NAME = "user_preferences"
+
+
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
@@ -105,7 +110,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel = ViewModelProvider(
+      viewModel = ViewModelProvider(
             this,
             AccountsViewModelFactory(
                 AccountsRepository,
@@ -113,13 +118,16 @@ class MainActivity : ComponentActivity() {
             )
         ).get(AccountsViewModel::class.java)
 
+
+
         setContent {
+
             // A surface container using the 'background' color from the theme
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState)
+                MainScreen(modifier = Modifier, isDarkModeState,viewModel)
             }
         }
     }
@@ -136,7 +144,7 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
+fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -148,7 +156,8 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
        CJJBankApp(
            navController = navController,
            isDarkModeState = isDarkModeState,
-           modifier = modifier
+           modifier = modifier,
+           viewModel=viewModel
            )
     }
 }
@@ -202,7 +211,7 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier) {
+fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier,viewModel: AccountsViewModel) {
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
@@ -231,6 +240,7 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                 BankNavHost(
                     navController = navController,
                     modifier = Modifier.padding(contentPadding),
+                    viewModel=viewModel
                 )
             }
         }
@@ -497,7 +507,8 @@ fun TransferScreen(
 @Composable
 fun BankNavHost(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: AccountsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -538,14 +549,16 @@ fun BankNavHost(
             )
         }
         composable(route = Chequing.route) {
-            val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
+            val chequingAccount= viewModel.accountsUiModel.collectAsState().value.accounts.find { it.name=="Chequing" }
+
             if (chequingAccount != null) {
-                AccountScreen(
-                    account = chequingAccount,
-                    onClickTransferButton = {
-                        navController.navigateSingleTopTo(Transfer.route)
-                    }
-                )
+                    AccountScreen(
+                        account = chequingAccount,
+                        onClickTransferButton = {
+                            navController.navigateSingleTopTo(Transfer.route)
+                        }
+                    )
+
             }
         }
         composable(route = Savings.route) {
