@@ -78,11 +78,12 @@ import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.emptyactivity.data.AccountType
-import com.google.firebase.FirebaseApp
+import com.example.emptyactivity.data.AuthViewModel
+import com.example.emptyactivity.data.AuthViewModelFactory
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
-
 
 
 class MainActivity : ComponentActivity() {
@@ -503,6 +504,8 @@ fun BankNavHost(
     modifier: Modifier,
     viewModel: AccountsViewModel
 ) {
+    val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory())
+
     NavHost(
         navController = navController,
         startDestination = Login.route,
@@ -524,6 +527,7 @@ fun BankNavHost(
         }
         composable(route = Login.route) {
             LoginPage(
+                authViewModel = authViewModel,
                 onClickSignup = {
                     navController.navigateSingleTopTo(Signup.route)
                 },
@@ -534,6 +538,7 @@ fun BankNavHost(
         }
         composable(route = Signup.route) {
             SignupPage(
+                authViewModel = authViewModel,
                 onClickLogin = {
                     navController.navigateSingleTopTo(Login.route)
                 },
