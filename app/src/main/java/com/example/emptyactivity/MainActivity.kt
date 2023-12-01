@@ -415,7 +415,7 @@ fun TransferScreen(
         // "From" account dropdown
         var fromAccount by remember { mutableStateOf("") }
         var isFromExpanded by remember { mutableStateOf(false) }
-        var fromOptions = listOf("Chequing", "Savings", "Credit")
+        var fromOptions = listOf(AccountType.CREDIT,AccountType.SAVINGS,AccountType.CHEQUING)
         var fromSelectedText by remember { mutableStateOf("") }
         var fromTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -453,11 +453,11 @@ fun TransferScreen(
             ) {
                 fromOptions.forEach { label ->
                     DropdownMenuItem(onClick = {
-                        fromSelectedText = label
-                        fromAccount = label
+                        fromSelectedText = label.name
+                        fromAccount = label.name
                         isFromExpanded = false
                     }) {
-                        Text(text = label)
+                        Text(text = label.name)
                     }
                 }
             }
@@ -466,7 +466,7 @@ fun TransferScreen(
         // "To" account dropdown
         var toAccount by remember { mutableStateOf("") }
         var isToExpanded by remember { mutableStateOf(false) }
-        var toOptions = listOf("Chequing", "Savings", "Credit")
+        var toOptions = listOf(AccountType.CHEQUING,AccountType.CHEQUING,AccountType.CREDIT)
         var toSelectedText by remember { mutableStateOf("") }
         var toTextFieldSize by remember { mutableStateOf(Size.Zero) }
 
@@ -502,13 +502,13 @@ fun TransferScreen(
                     })
                     .padding(vertical = 8.dp)
             ) {
-                toOptions.forEach { label ->
+                toOptions.forEach { account ->
                     DropdownMenuItem(onClick = {
-                        toSelectedText = label
+                        toSelectedText = account.name
                         isToExpanded = false
                     }) {
-                        Text(text = label)
-                        toAccount = label
+                        Text(text = account.name)
+                        toAccount = account.name
                     }
                 }
             }
