@@ -1,6 +1,7 @@
 package com.example.emptyactivity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -63,6 +64,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -71,6 +75,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.emptyactivity.components.Constants
 import com.example.emptyactivity.data.Account
+import com.example.emptyactivity.data.AccountsRepository
+import com.example.emptyactivity.data.UserPreferencesRepository
 import com.example.emptyactivity.data.chequingAccounts
 import com.example.emptyactivity.data.creditAccounts
 import com.example.emptyactivity.data.savingsAccounts
@@ -81,13 +87,32 @@ import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
+private const val USER_PREFERENCES_NAME = "user_preferences"
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
+    private lateinit var viewModel: AccountsViewModel
+    private val Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME,
+        produceMigrations = { context ->
+            // Since we're migrating from SharedPreferences, add a migration based on the
+            // SharedPreferences name
+            listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME))
+        }
+    )
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(
+            this,
+            AccountsViewModelFactory(
+                AccountsRepository,
+                UserPreferencesRepository(dataStore, this)
+            )
+        ).get(AccountsViewModel::class.java)
+
         setContent {
             // A surface container using the 'background' color from the theme
             Surface(

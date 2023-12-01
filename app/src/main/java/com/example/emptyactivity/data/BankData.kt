@@ -1,5 +1,9 @@
 package com.example.emptyactivity.data
 
+enum class TaskPriority {
+    HIGH, MEDIUM, LOW
+}
+
 data class Account(
     val name: String,
     val number: Int,
@@ -7,7 +11,6 @@ data class Account(
     var transactions: MutableList<Transaction>,
     var dueDate: String? = null
 )
-
 data class Transaction(
     val date: String,
     val amount: Double,
