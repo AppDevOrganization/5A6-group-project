@@ -549,7 +549,7 @@ fun BankNavHost(
             )
         }
         composable(route = Chequing.route) {
-            val chequingAccount= viewModel.accountsUiModel.collectAsState().value.accounts.find { it.name=="Chequing" }
+            val chequingAccount= viewModel.getAccountByType("Chequing")
 
             if (chequingAccount != null) {
                     AccountScreen(

@@ -1,7 +1,10 @@
 package com.example.emptyactivity.data
 
-enum class TaskPriority {
-    HIGH, MEDIUM, LOW
+enum class AccountType
+{
+    CHEQUING,
+    SAVINGS,
+    CREDIT
 }
 
 data class Account(
