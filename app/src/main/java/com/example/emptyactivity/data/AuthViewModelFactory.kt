@@ -5,6 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 
 class AuthViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return AuthViewModel(CJJApp.appModule.authRepository) as T
+        return AuthViewModel(MyApp.appModule.authRepository) as T
     }
 }
