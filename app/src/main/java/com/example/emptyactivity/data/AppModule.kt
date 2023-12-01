@@ -9,9 +9,9 @@ class AppModule(
 ) {
     /* Create appropriate repository (backed by a DataStore) on first use.
     Only one copy will be created during lifetime of the application. */
-//    val userPreferencesRepository : UserPreferencesRepository by lazy {
-//        UserPreferencesRepositoryDataStore(context = appContext)
-//    }
+    val userPreferencesRepository : UserPreferencesRepository by lazy {
+        UserPreferencesRepositoryDataStore(context = appContext)
+    }
     val authRepository : AuthRepository by lazy {
         AuthRepositoryFirebase(Firebase.auth)
     }
