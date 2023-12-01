@@ -38,8 +38,19 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         }
     }
 
+    /**
+     * Signs in a user if the given email and password are correct.
+     * @param email The email of the user.
+     * @param password The password of the user.
+     * @return Whether the sign-in attempt was successful.
+     */
     override suspend fun signIn(email: String, password: String): Boolean {
-        TODO("Not yet implemented")
+        try {
+            auth.signInWithEmailAndPassword(email, password).await()
+            return true
+        } catch(e: Exception) {
+            return false
+        }
     }
 
     override fun signOut() {
