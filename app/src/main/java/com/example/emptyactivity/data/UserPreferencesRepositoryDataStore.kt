@@ -4,11 +4,11 @@ import android.content.Context
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
-class UserPreferencesRepositoryDataStore(private val context: Context) : UserPreferencesRepository {
-    companion object {
-        val NAME = stringPreferencesKey("NAME")
-        val COUNTER = intPreferencesKey("COUNTER")
-    }
+//class UserPreferencesRepositoryDataStore(private val context: Context) : UserPreferencesRepository {
+//    companion object {
+//        val NAME = stringPreferencesKey("NAME")
+//        val COUNTER = intPreferencesKey("COUNTER")
+//    }
 //
 //    /** Update the values in the DataStore. */
 //    override suspend fun saveProfile(profileData: BankData) {
@@ -32,4 +32,4 @@ class UserPreferencesRepositoryDataStore(private val context: Context) : UserPre
 //            it.clear()
 //        }
 //    }
-}
+//}
