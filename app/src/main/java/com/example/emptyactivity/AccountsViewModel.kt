@@ -27,6 +27,7 @@ class AccountsViewModel(
 
     private val userPreferencesFlow = userPreferencesRepository.userPreferencesFlow
 
+    /*
     private val accountsUiModelFlow = combine(
         repository.accounts,
         userPreferencesFlow
@@ -41,7 +42,7 @@ class AccountsViewModel(
             sortOrder = userPreferences.sortOrder
         )
     }
-
+*/
 
     private val _accountsUiModelFlow = MutableStateFlow(AccountsUiModel(emptyList(), false, SortOrder.NONE))
     val accountsUiModel = _accountsUiModelFlow.asStateFlow()
