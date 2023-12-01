@@ -53,12 +53,20 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         }
     }
 
+    /**
+     * Signs out the current user.
+     */
     override fun signOut() {
-        TODO("Not yet implemented")
+        return auth.signOut()
     }
 
+    /**
+     * Deletes the current user.
+     */
     override suspend fun delete() {
-        TODO("Not yet implemented")
+        if (auth.currentUser != null) {
+            auth.currentUser!!.delete()
+        }
     }
 
     // Convert from FirebaseUser to User
