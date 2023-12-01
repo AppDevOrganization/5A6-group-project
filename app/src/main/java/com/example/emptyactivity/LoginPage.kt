@@ -28,7 +28,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(
     authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory()),
@@ -36,16 +35,17 @@ fun LoginPage(
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val userState = authViewModel.currentUser().collectAsState()
+//    val userState = authViewModel.currentUser().collectAsState()
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
 
-    if (userState.value == null) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        if (true) {
             Text(
                 text = "Log In",
                 style = MaterialTheme.typography.headlineMedium,
@@ -70,7 +70,7 @@ fun LoginPage(
                         onClick(label = "log in to your account", action = null)
                     },
                 onClick = {
-                    authViewModel.signIn(emailText, passwordText)
+//                    authViewModel.signIn(emailText, passwordText)
                 }
             ) {
                 Text(
@@ -93,10 +93,9 @@ fun LoginPage(
                     style = MaterialTheme.typography.titleLarge
                 )
             }
+        } else {
+//            onSuccess()
         }
-    }
-    else {
-        onSuccess()
     }
 }
 
@@ -128,8 +127,8 @@ fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (new
     )
 }
 
-@Preview
-@Composable
-fun LoginPagePreview(modifier: Modifier = Modifier) {
-    LoginPage(modifier = modifier)
-}
+//@Preview
+//@Composable
+//fun LoginPagePreview(modifier: Modifier = Modifier) {
+//    LoginPage(modifier = modifier)
+//}
