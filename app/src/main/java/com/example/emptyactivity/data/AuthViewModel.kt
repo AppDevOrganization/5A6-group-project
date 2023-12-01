@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.emptyactivity.data
 
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
