@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,38 +22,29 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.Account
+import com.example.emptyactivity.data.AccountType
 import com.example.emptyactivity.data.Transaction
-import com.example.emptyactivity.data.chequingAccounts
 
 @Composable
 fun AccountScreen(
     account: Account,
     onClickTransferButton: () -> Unit = {}
 ) {
-    val balance = "$" + String.format("%.2f", account.balance)
-
-    var screenDescription = "${account.name} screen, balance of $balance"
-
-    if (account.name == "Credit") {
-        screenDescription = "${account.name} screen, balance of $balance, due on ${account.dueDate}"
-    }
-
     Column(
         modifier = Modifier
             .padding(13.dp)
-            .semantics { contentDescription = screenDescription }
+            .semantics { contentDescription = "Account Screen" }
     ) {
         AccountTopCard(
-            accountType = account.name,
+            accountType = account.type,
             balance = account.balance,
             onClickTransferButton = onClickTransferButton
         )
-        if (account.name == "Credit") {
+        if (account.type == AccountType.CREDIT) {
             Text(
                 text = "Due date: " + account.dueDate,
                 modifier = Modifier.padding(13.dp),
@@ -122,16 +112,11 @@ fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier
 ) {
-    val description = "${transaction.date}, ${transaction.amount} ${transaction.detail}, subtotal of ${transaction.subtotal}"
-
-    Card {
+    Card(modifier = modifier) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(48.dp)
-                .semantics {
-                    contentDescription = description
-                },
+                .height(24.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(7.dp)
 
@@ -153,27 +138,18 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = "$" + String.format("%.2f", transaction.subtotal)
+                text = "$" + transaction.subtotal.toString()
             )
         }
     }
-    Spacer(modifier = modifier.size(1.dp))
 }
 
 @Composable
 fun AccountTopCard(
-    accountType: String,
+    accountType: AccountType,
     balance: Double,
     onClickTransferButton: () -> Unit
 ) {
-    var buttonText = "Transfer"
-    var buttonOnClickLabel = "transfer funds"
-
-    if (accountType == "Credit") {
-        buttonText = "Pay"
-        buttonOnClickLabel = "pay balance"
-    }
-
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -188,27 +164,28 @@ fun AccountTopCard(
                     .fillMaxHeight()
                     .padding(7.dp)
             ) {
-                Column(Modifier.semantics(mergeDescendants = true) {}) {
-                    Text(
-                        text = accountType,
-                        style = MaterialTheme.typography.displayMedium
-                    )
-                    Text(
-                        text = "$" + String.format("%.2f", balance),
-                        style = MaterialTheme.typography.displayLarge
-                    )
-                }
+                Text(
+                    text = accountType.name,
+                    style = MaterialTheme.typography.displayMedium
+                )
+                Text(
+                    text = "$" + String.format("%.2f", balance),
+                    style = MaterialTheme.typography.displayLarge
+                )
                 Button(
-                    modifier = Modifier
-                        .semantics {
-                            onClick(label = buttonOnClickLabel, action = null)
-                        },
                     onClick = onClickTransferButton
                 ) {
-                    Text(
-                        text = buttonText,
-                        style = MaterialTheme.typography.titleLarge
-                    )
+                    if (accountType == AccountType.CREDIT) {
+                        Text(
+                            text = "Pay",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    } else {
+                        Text(
+                            text = "Transfer",
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                    }
                 }
             }
             Column(
@@ -219,19 +196,19 @@ fun AccountTopCard(
                 verticalArrangement = Arrangement.Center
             ) {
                 var imageId = R.drawable.accounts
-                if (accountType == "Chequing") {
+                if (accountType == AccountType.CHEQUING) {
                     /**
                      * Cheque icons created by srip - Flaticon
                      * https://www.flaticon.com/free-icons/cheque
                      */
                     imageId = R.drawable.cheque
-                } else if (accountType == "Savings") {
+                } else if (accountType == AccountType.SAVINGS) {
                     /**
                      * Piggy bank icons created by Freepik - Flaticon
                      * https://www.flaticon.com/free-icons/piggy-bank
                      */
                     imageId = R.drawable.piggy_bank
-                } else if (accountType == "Credit") {
+                } else if (accountType == AccountType.CREDIT) {
                     /**
                      * Credit card icons created by Freepik - Flaticon
                      * https://www.flaticon.com/free-icons/credit-card
@@ -251,6 +228,7 @@ fun AccountTopCard(
     }
 }
 
+/*
 @Preview
 @Composable
 fun AccountScreenPreview()
@@ -260,3 +238,5 @@ fun AccountScreenPreview()
         AccountScreen(account = chequingAccount)
     }
 }
+
+ */

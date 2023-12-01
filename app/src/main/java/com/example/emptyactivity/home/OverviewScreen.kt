@@ -22,16 +22,21 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.emptyactivity.AccountsViewModel
+import com.example.emptyactivity.AccountsViewModelFactory
 import com.example.emptyactivity.R
 import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.chequingAccounts
-import com.example.emptyactivity.data.creditAccounts
-import com.example.emptyactivity.data.savingsAccounts
+import com.example.emptyactivity.data.AccountType
+import com.example.emptyactivity.data.AccountsRepository
+import com.example.emptyactivity.data.UserPreferencesRepository
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
+    viewModel: AccountsViewModel,
     onClickViewChequingAccount: () -> Unit = {},
     onClickViewSavingsAccount: () -> Unit = {},
     onClickViewCreditAccount: () -> Unit = {}
@@ -59,12 +64,15 @@ fun OverviewScreen(
             )
         }
         ChequingAccountCard(
+            viewModel,
             onClickViewAccount = onClickViewChequingAccount
         )
         SavingsAccountCard(
+            viewModel,
             onClickViewAccount = onClickViewSavingsAccount
         )
         CreditAccountCard(
+            viewModel,
             onClickViewAccount = onClickViewCreditAccount
         )
     }
@@ -72,10 +80,11 @@ fun OverviewScreen(
 
 @Composable
 fun ChequingAccountCard(
+    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
 
-    val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
+    val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
     val balance = chequingAccount?.balance
 
     if (balance != null) {
@@ -85,9 +94,10 @@ fun ChequingAccountCard(
 
 @Composable
 fun SavingsAccountCard(
+    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val savingsAccount: Account? = savingsAccounts.find { it.number == 12345 }
+    val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
     val balance = savingsAccount?.balance
 
     if (balance != null) {
@@ -97,9 +107,10 @@ fun SavingsAccountCard(
 
 @Composable
 fun CreditAccountCard(
+    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val creditAccount: Account? = creditAccounts.find { it.number == 12345 }
+    val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
     val balance = creditAccount?.balance
 
     if (balance != null) {
@@ -154,11 +165,14 @@ fun OverviewCard(
     }
 }
 
+/*
 @Preview
 @Composable
 fun OverviewScreenPreview()
 {
-    OverviewScreen()
+   var viewModel :AccountsViewModel
+
+    OverviewScreen(viewModel)
 }
 
 @Preview
@@ -168,3 +182,5 @@ fun OverviewScreenDarkModePreview() {
         OverviewScreen()
     }
 }
+
+ */

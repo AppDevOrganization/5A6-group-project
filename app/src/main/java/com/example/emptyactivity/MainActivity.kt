@@ -1,6 +1,7 @@
 package com.example.emptyactivity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -38,6 +38,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
@@ -63,16 +64,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.onClick
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.Dialog
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -81,28 +84,55 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.emptyactivity.components.Constants
 import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.chequingAccounts
-import com.example.emptyactivity.data.creditAccounts
-import com.example.emptyactivity.data.savingsAccounts
+import com.example.emptyactivity.data.AccountsRepository
+import com.example.emptyactivity.data.UserPreferencesRepository
 import com.example.emptyactivity.home.OverviewScreen
 import com.example.emptyactivity.ui.theme.EmptyActivityTheme
 import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
 import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
+import com.example.emptyactivity.data.AccountType
+
+private const val USER_PREFERENCES_NAME = "user_preferences"
+
+
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
+    private lateinit var viewModel: AccountsViewModel
+    private val Context.dataStore by preferencesDataStore(
+        name = USER_PREFERENCES_NAME,
+        produceMigrations = { context ->
+            // Since we're migrating from SharedPreferences, add a migration based on the
+            // SharedPreferences name
+            listOf(SharedPreferencesMigration(context, USER_PREFERENCES_NAME))
+        }
+    )
 
+    @SuppressLint("SuspiciousIndentation")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+      viewModel = ViewModelProvider(
+            this,
+            AccountsViewModelFactory(
+                AccountsRepository,
+                UserPreferencesRepository(dataStore, this)
+            )
+        ).get(AccountsViewModel::class.java)
+
+
+
         setContent {
+
             // A surface container using the 'background' color from the theme
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState)
+                MainScreen(modifier = Modifier, isDarkModeState,viewModel)
             }
         }
     }
@@ -119,7 +149,7 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
+fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -131,7 +161,8 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>) {
        CJJBankApp(
            navController = navController,
            isDarkModeState = isDarkModeState,
-           modifier = modifier
+           modifier = modifier,
+           viewModel=viewModel
            )
     }
 }
@@ -185,7 +216,7 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier) {
+fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier,viewModel: AccountsViewModel) {
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
@@ -214,6 +245,7 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                 BankNavHost(
                     navController = navController,
                     modifier = Modifier.padding(contentPadding),
+                    viewModel=viewModel
                 )
             }
         }
@@ -344,9 +376,6 @@ fun NavigationBar(
                         imageVector = item.icon,
                         contentDescription = item.label
                     )
-                },
-                modifier = Modifier.semantics {
-                    onClick(label = "navigate to the ${item.route} screen", action = null)
                 }
             )
         }
@@ -647,7 +676,8 @@ fun TransferMessage(
 @Composable
 fun BankNavHost(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    viewModel: AccountsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -656,6 +686,7 @@ fun BankNavHost(
     ) {
         composable(route = Overview.route) {
             OverviewScreen(
+                viewModel,
                 onClickViewChequingAccount = {
                     navController.navigateSingleTopTo(Chequing.route)
                 },
@@ -688,18 +719,20 @@ fun BankNavHost(
             )
         }
         composable(route = Chequing.route) {
-            val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
+            val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
+
             if (chequingAccount != null) {
-                AccountScreen(
-                    account = chequingAccount,
-                    onClickTransferButton = {
-                        navController.navigateSingleTopTo(Transfer.route)
-                    }
-                )
+                    AccountScreen(
+                        account = chequingAccount,
+                        onClickTransferButton = {
+                            navController.navigateSingleTopTo(Transfer.route)
+                        }
+                    )
+
             }
         }
         composable(route = Savings.route) {
-            val savingsAccount: Account? = savingsAccounts.find { it.number == 12345 }
+            val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
             if (savingsAccount != null) {
                 AccountScreen(
                     account = savingsAccount,
@@ -710,7 +743,7 @@ fun BankNavHost(
             }
         }
         composable(route = Credit.route) {
-            val creditAccount: Account? = creditAccounts.find { it.number == 12345 }
+            val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
             if (creditAccount != null) {
                 AccountScreen(
                     account = creditAccount,
