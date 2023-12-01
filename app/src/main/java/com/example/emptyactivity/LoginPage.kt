@@ -30,7 +30,7 @@ import com.example.emptyactivity.data.AuthViewModelFactory
 
 @Composable
 fun LoginPage(
-    authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory()),
+    authViewModel: AuthViewModel,
     onSuccess: () -> Unit = {},
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
