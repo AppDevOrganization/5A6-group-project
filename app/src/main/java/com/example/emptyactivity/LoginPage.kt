@@ -23,10 +23,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.emptyactivity.data.AuthViewModel
+import com.example.emptyactivity.data.AuthViewModelFactory
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(
+    authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory()),
     onSuccess: () -> Unit = {},
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
