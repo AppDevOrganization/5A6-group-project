@@ -2,6 +2,7 @@ package com.example.emptyactivity.data
 
 enum class AccountType
 {
+    NONE,
     CHEQUING,
     SAVINGS,
     CREDIT
