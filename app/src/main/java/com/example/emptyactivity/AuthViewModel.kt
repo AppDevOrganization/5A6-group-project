@@ -18,5 +18,21 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             authRepository.signUp(email, password)
         }
     }
+
+    fun signIn(email: String, password: String) {
+        viewModelScope.launch {
+            authRepository.signIn(email, password)
+        }
+    }
+
+    fun signOut() {
+        authRepository.signOut()
+    }
+
+    fun delete() {
+        viewModelScope.launch {
+            authRepository.delete()
+        }
+    }
 }
 
