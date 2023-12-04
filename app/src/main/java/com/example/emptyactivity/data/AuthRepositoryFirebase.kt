@@ -60,6 +60,11 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         return auth.signOut()
     }
 
+    override fun validate(email: String, password: String): Pair<Boolean, String?> {
+
+        return Pair(true, null)
+    }
+
     /**
      * Deletes the current user.
      */
