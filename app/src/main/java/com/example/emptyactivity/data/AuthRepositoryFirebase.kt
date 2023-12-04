@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
+    private val MIN_PSWD_LENGTH = 8
+
     private val currentUserStateFlow = MutableStateFlow(auth.currentUser?.toUser())
 
     init {
@@ -61,7 +63,9 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     }
 
     override fun validate(email: String, password: String): Pair<Boolean, String?> {
-
+        if (password.length < MIN_PSWD_LENGTH)
+            return Pair(false, "Password length is too short (must be at least ${MIN_PSWD_LENGTH} characters).")
+        
         return Pair(true, null)
     }
 
