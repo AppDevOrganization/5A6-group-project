@@ -88,6 +88,8 @@ private const val USER_PREFERENCES_NAME = "user_preferences"
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
+    private val authViewModelFactory = AuthViewModelFactory()
+
     private lateinit var viewModel: AccountsViewModel
     private val Context.dataStore by preferencesDataStore(
         name = USER_PREFERENCES_NAME,
@@ -121,7 +123,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState,viewModel)
+                MainScreen(modifier = Modifier, isDarkModeState, viewModel, authViewModelFactory)
             }
         }
     }
@@ -138,7 +140,12 @@ class MainActivity : ComponentActivity() {
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
+fun MainScreen(
+    modifier: Modifier,
+    isDarkModeState: MutableState<Boolean>,
+    viewModel: AccountsViewModel,
+    authViewModelFactory: AuthViewModelFactory
+) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -151,7 +158,8 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewMo
            navController = navController,
            isDarkModeState = isDarkModeState,
            modifier = modifier,
-           viewModel=viewModel
+           viewModel=viewModel,
+           authViewModelFactory = authViewModelFactory
            )
     }
 }
@@ -205,7 +213,13 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier,viewModel: AccountsViewModel) {
+fun CJJBankApp(
+    navController: NavHostController,
+    isDarkModeState: MutableState<Boolean>,
+    modifier: Modifier = Modifier,
+    viewModel: AccountsViewModel,
+    authViewModelFactory: AuthViewModelFactory
+    ) {
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
@@ -216,7 +230,7 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
         val currentDestination = currentBackStack?.destination
         val currentScreen =
             bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
-        val authViewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory())
+        val authViewModel: AuthViewModel = viewModel(factory = authViewModelFactory)
         val userState = authViewModel.currentUser().collectAsState()
 
         var useDarkMode: Color = if (!isDarkModeState.value) {
