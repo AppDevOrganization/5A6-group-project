@@ -19,12 +19,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.emptyactivity.data.AuthRepositoryFirebase
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
 
@@ -108,22 +110,34 @@ fun LoginPage(
          * @param onValueChange The function that will be called with the new value passed in after
          * the text field's value gets changed.
          */
-fun LoginSignupTextField(label: String, placeholder: String, onValueChange: (newValue: String) -> Unit, modifier: Modifier = Modifier) {
+fun LoginSignupTextField(
+    label: String,
+    placeholder: String,
+    onValueChange: (newValue: String) -> Unit,
+    validate: (String) -> Pair<Boolean, String?>,
+    modifier: Modifier = Modifier
+) {
     var inputText by remember { mutableStateOf("") }
+    var validationStatus by remember { mutableStateOf(Pair<Boolean, String?>(false, null)) }
 
     OutlinedTextField(
         singleLine = true,
         label = { Text(label) },
         value = inputText,
-        onValueChange = { inputText = it; onValueChange(inputText) },
+        onValueChange = { inputText = it; validationStatus = validate(inputText); onValueChange(inputText) },
         placeholder = @Composable {
             Text(
                 text = placeholder
             )
         },
+        isError = inputText.isNotEmpty() && validationStatus.first,
         modifier = modifier
             .width(300.dp)
             .padding(5.dp)
+    )
+    Text(
+        text = if (!validationStatus.first) validationStatus.second.toString() else "",
+        color = Color.Red
     )
 }
 
