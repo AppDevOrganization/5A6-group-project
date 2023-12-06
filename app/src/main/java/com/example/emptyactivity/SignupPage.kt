@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 
@@ -37,6 +36,7 @@ fun SignupPage(
     var passwordText by remember { mutableStateOf("") }
     var passwordRepeatText by remember { mutableStateOf("") }
 
+
     Column(
         modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -51,20 +51,22 @@ fun SignupPage(
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
-                onValueChange = { emailText = it },
-                validate = { authViewModel.validateEmail(emailText) }
-            )
+                onValueChange = { emailText = it }
+            ) { authViewModel.validateEmail(emailText) }
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
-                onValueChange = { passwordText = it },
-            )
+                onValueChange = { passwordText = it }
+            ) { authViewModel.validatePassword(passwordText) }
             LoginSignupTextField(
                 label = "Repeat Password",
                 placeholder = "password",
                 onValueChange = { passwordRepeatText = it },
-                validate = { authViewModel.validatePassword(passwordText) }
-            )
+                validate = {
+                    val arePasswordsEqual = passwordText == passwordRepeatText
+                    Pair<Boolean, String?>(arePasswordsEqual, if (arePasswordsEqual) null else "Passwords must be the same.")
+                }
+            ) { authViewModel.validatePassword(passwordText) }
             Button(
                 modifier = Modifier
                     .padding(10.dp)
