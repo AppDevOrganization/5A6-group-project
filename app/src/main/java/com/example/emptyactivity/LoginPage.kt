@@ -23,12 +23,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.emptyactivity.data.AuthRepositoryFirebase
 import com.example.emptyactivity.data.AuthViewModel
-import com.example.emptyactivity.data.AuthViewModelFactory
 
 @Composable
 fun LoginPage(
@@ -115,10 +111,10 @@ fun LoginSignupTextField(
     placeholder: String,
     onValueChange: (newValue: String) -> Unit,
     modifier: Modifier = Modifier,
-    validate: (String) -> Pair<Boolean, String?> = { Pair<Boolean, String?>(false, null) },
+    validate: ((String) -> Pair<Boolean, String?>)? = null,
 ) {
     var inputText by remember { mutableStateOf("") }
-    var validationStatus by remember { mutableStateOf(Pair<Boolean, String?>(false, null)) }
+    var validationStatus by remember { mutableStateOf(Pair<Boolean, String?>(true, null)) }
 
     OutlinedTextField(
         singleLine = true,
@@ -140,10 +136,12 @@ fun LoginSignupTextField(
             .width(300.dp)
             .padding(5.dp)
     )
-    Text(
-        text = if (!validationStatus.first) validationStatus.second.toString() else "",
-        color = Color.Red
-    )
+    if (!validationStatus.first) {
+        Text(
+            text = validationStatus.second.toString(),
+            color = Color.Red,
+        )
+    }
 }
 
 //@Preview
