@@ -7,7 +7,7 @@ interface AuthRepository {
     suspend fun signUp(email: String, password: String): Boolean
     suspend fun signIn(email: String, password: String): Boolean
     fun signOut()
-    fun validateEmail(email: String): Pair<Boolean, String?>
-    fun validatePassword(password: String): Pair<Boolean, String?>
+    fun isEmailValid(email: String): Boolean
+    fun isPasswordValid(password: String): Boolean
     suspend fun delete()
 }

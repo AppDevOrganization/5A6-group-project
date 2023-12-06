@@ -34,11 +34,7 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      */
     override suspend fun signUp(email: String, password: String): Boolean {
         return try {
-            val emailValidationResult = validateEmail(email)
-            val passwordValidationResult = validatePassword(password)
-
-            // If the email and/or password validation fails, return false.
-            if (!emailValidationResult.first || !passwordValidationResult.first)
+            if (!isEmailValid(email) || !isPasswordValid(password))
                 return false
 
             auth.createUserWithEmailAndPassword(email, password).await()
@@ -74,22 +70,22 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      * Validates a given email and returns whether it's valid AND an error message if any.
      * @return Whether the email is valid AND an error message (could be null).
      */
-    override fun validateEmail(email: String): Pair<Boolean, String?> {
+    override fun isEmailValid(email: String): Boolean {
         if (!Pattern.matches("/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$/g", email))
-            return Pair(false, "Email is not in the correct format.")
+            return false
 
-        return Pair(true, null)
+        return true
     }
 
     /**
      * Validates a given password and returns whether it's valid AND an error message if any.
      * @return Whether the password is valid AND an error message (could be null).
      */
-    override fun validatePassword(password: String): Pair<Boolean, String?> {
-//        if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
-//            return Pair(false, "Password must contain at least ${MIN_PSWD_LENGTH} characters, 1 uppercase, 1 lowercase, and 1 number.")
+    override fun isPasswordValid(password: String): Boolean {
+        if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
+            return false
 
-        return Pair(true, null)
+        return true
     }
 
     /**

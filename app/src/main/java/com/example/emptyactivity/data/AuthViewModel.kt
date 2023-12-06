@@ -27,11 +27,11 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     }
 
     fun validateEmail(email: String): Pair<Boolean, String?> {
-        return authRepository.validateEmail(email)
+        return authRepository.isEmailValid(email)
     }
 
     fun validatePassword(password: String): Pair<Boolean, String?> {
-        return authRepository.validatePassword(password)
+        return authRepository.isPasswordValid(password)
     }
 
     fun delete() {
