@@ -34,6 +34,13 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      */
     override suspend fun signUp(email: String, password: String): Boolean {
         return try {
+            val emailValidationResult = validateEmail(email)
+            val passwordValidationResult = validatePassword(password)
+
+            // If the email and/or password validation fails, return false.
+            if (!emailValidationResult.first || !passwordValidationResult.first)
+                return false
+
             auth.createUserWithEmailAndPassword(email, password).await()
             return true
         } catch(e: Exception) {
