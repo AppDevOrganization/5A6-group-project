@@ -52,6 +52,7 @@ fun SignupPage(
                 label = "Email",
                 placeholder = "example@email.com",
                 onValueChange = { emailText = it },
+                validate = { authViewModel.validateEmail(emailText) }
             )
             LoginSignupTextField(
                 label = "Password",
@@ -62,6 +63,7 @@ fun SignupPage(
                 label = "Repeat Password",
                 placeholder = "password",
                 onValueChange = { passwordRepeatText = it },
+                validate = { authViewModel.validatePassword(passwordText) }
             )
             Button(
                 modifier = Modifier
