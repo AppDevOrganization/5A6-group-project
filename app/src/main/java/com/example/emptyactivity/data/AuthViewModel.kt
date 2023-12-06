@@ -1,10 +1,7 @@
 package com.example.emptyactivity.data
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.emptyactivity.data.AuthRepository
-import com.example.emptyactivity.data.User
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -27,6 +24,14 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
 
     fun signOut() {
         authRepository.signOut()
+    }
+
+    fun validateEmail(email: String): Pair<Boolean, String?> {
+        return authRepository.validateEmail(email)
+    }
+
+    fun validatePassword(password: String): Pair<Boolean, String?> {
+        return authRepository.validatePassword(password)
     }
 
     fun delete() {
