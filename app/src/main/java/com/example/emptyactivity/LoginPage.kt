@@ -131,7 +131,7 @@ fun LoginSignupTextField(
                 text = placeholder
             )
         },
-        isError = inputText.isNotEmpty() && isValid,
+        isError = inputText.isEmpty() || !isValid,
         modifier = modifier
             .width(300.dp)
             .padding(5.dp)
