@@ -86,8 +86,8 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      * @return Whether the password is valid AND an error message (could be null).
      */
     override fun validatePassword(password: String): Pair<Boolean, String?> {
-        if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
-            return Pair(false, "Password must contain at least ${MIN_PSWD_LENGTH} characters, 1 uppercase, 1 lowercase, and 1 number.")
+//        if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
+//            return Pair(false, "Password must contain at least ${MIN_PSWD_LENGTH} characters, 1 uppercase, 1 lowercase, and 1 number.")
 
         return Pair(true, null)
     }

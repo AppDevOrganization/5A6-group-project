@@ -35,7 +35,7 @@ fun SignupPage(
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
     var passwordRepeatText by remember { mutableStateOf("") }
-
+    val arePasswordsEqual = passwordText == passwordRepeatText
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -51,22 +51,23 @@ fun SignupPage(
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
-                onValueChange = { emailText = it }
-            ) { authViewModel.validateEmail(emailText) }
+                onValueChange = { emailText = it },
+                validate = { authViewModel.validateEmail(emailText) }
+            )
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
-                onValueChange = { passwordText = it }
-            ) { authViewModel.validatePassword(passwordText) }
+                onValueChange = { passwordText = it },
+                validate = { authViewModel.validatePassword(passwordText) }
+            )
             LoginSignupTextField(
                 label = "Repeat Password",
                 placeholder = "password",
                 onValueChange = { passwordRepeatText = it },
                 validate = {
-                    val arePasswordsEqual = passwordText == passwordRepeatText
-                    Pair<Boolean, String?>(arePasswordsEqual, if (arePasswordsEqual) null else "Passwords must be the same.")
+                    Pair(arePasswordsEqual, if (arePasswordsEqual) null else "Passwords must be the same.")
                 }
-            ) { authViewModel.validatePassword(passwordText) }
+            )
             Button(
                 modifier = Modifier
                     .padding(10.dp)
