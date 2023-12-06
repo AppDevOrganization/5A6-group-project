@@ -114,8 +114,8 @@ fun LoginSignupTextField(
     label: String,
     placeholder: String,
     onValueChange: (newValue: String) -> Unit,
-    validate: (String) -> Pair<Boolean, String?>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    validate: (String) -> Pair<Boolean, String?> = { Pair<Boolean, String?>(false, null) },
 ) {
     var inputText by remember { mutableStateOf("") }
     var validationStatus by remember { mutableStateOf(Pair<Boolean, String?>(false, null)) }
@@ -124,7 +124,12 @@ fun LoginSignupTextField(
         singleLine = true,
         label = { Text(label) },
         value = inputText,
-        onValueChange = { inputText = it; validationStatus = validate(inputText); onValueChange(inputText) },
+        onValueChange = {
+            inputText = it
+
+            if (validate != null)
+                validationStatus = validate(inputText)
+            onValueChange(inputText) },
         placeholder = @Composable {
             Text(
                 text = placeholder
