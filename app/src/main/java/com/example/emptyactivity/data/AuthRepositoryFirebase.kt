@@ -64,17 +64,24 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     }
 
     /**
-     * Validates an email and password and returns the result of whether they're valid (and an error message if not).
-     * @param email The email to validate.
-     * @param password The password to validate.
-     * @return Whether the email and password are valid and an error message if not.
+     * Validates a given email and returns whether it's valid AND an error message if any.
+     * @return Whether the email is valid AND an error message (could be null).
      */
-    override fun validate(email: String, password: String): Pair<Boolean, String?> {
+    override fun validateEmail(email: String): Pair<Boolean, String?> {
         if (!Pattern.matches("/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$/g", email))
             return Pair(false, "Email is not in the correct format.")
+
+        return Pair(true, null)
+    }
+
+    /**
+     * Validates a given password and returns whether it's valid AND an error message if any.
+     * @return Whether the password is valid AND an error message (could be null).
+     */
+    override fun validatePassword(password: String): Pair<Boolean, String?> {
         if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
             return Pair(false, "Password must contain at least ${MIN_PSWD_LENGTH} characters, 1 uppercase, 1 lowercase, and 1 number.")
-        
+
         return Pair(true, null)
     }
 
