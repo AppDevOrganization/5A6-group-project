@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
+import com.google.android.play.integrity.internal.t
 
 
 @Composable
@@ -35,7 +36,14 @@ fun SignupPage(
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
     var passwordRepeatText by remember { mutableStateOf("") }
-    val arePasswordsEqual = passwordText == passwordRepeatText
+    val repeatPasswordField = @Composable { LoginSignupTextField(
+        label = "Repeat Password",
+        placeholder = "password",
+        onValueChange = { passwordRepeatText = it },
+        validate = {
+            it == passwordText
+        }
+    ) }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -52,22 +60,15 @@ fun SignupPage(
                 label = "Email",
                 placeholder = "example@email.com",
                 onValueChange = { emailText = it },
-                validate = { authViewModel.validateEmail(emailText) }
+                validate = { authViewModel.validateEmail(it) }
             )
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
                 onValueChange = { passwordText = it },
-                validate = { authViewModel.validatePassword(passwordText) }
+                validate = { authViewModel.validatePassword(it) }
             )
-            LoginSignupTextField(
-                label = "Repeat Password",
-                placeholder = "password",
-                onValueChange = { passwordRepeatText = it },
-                validate = {
-                    arePasswordsEqual
-                }
-            )
+            repeatPasswordField()
             Button(
                 modifier = Modifier
                     .padding(10.dp)

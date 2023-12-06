@@ -115,6 +115,7 @@ fun LoginSignupTextField(
 ) {
     var inputText by remember { mutableStateOf("") }
     var isValid by remember { mutableStateOf(true) }
+    var tmp = inputText
 
     OutlinedTextField(
         singleLine = true,
@@ -122,10 +123,11 @@ fun LoginSignupTextField(
         value = inputText,
         onValueChange = {
             inputText = it
-
+            onValueChange(inputText)
+            tmp = it
             if (validate != null)
                 isValid = validate(inputText)
-            onValueChange(inputText) },
+             },
         placeholder = @Composable {
             Text(
                 text = placeholder
