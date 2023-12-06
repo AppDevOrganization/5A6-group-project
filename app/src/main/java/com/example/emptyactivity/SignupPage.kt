@@ -65,7 +65,7 @@ fun SignupPage(
                 placeholder = "password",
                 onValueChange = { passwordRepeatText = it },
                 validate = {
-                    Pair(arePasswordsEqual, if (arePasswordsEqual) null else "Passwords must be the same.")
+                    arePasswordsEqual
                 }
             )
             Button(
