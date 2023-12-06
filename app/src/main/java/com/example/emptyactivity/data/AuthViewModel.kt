@@ -26,11 +26,11 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
         authRepository.signOut()
     }
 
-    fun validateEmail(email: String): Pair<Boolean, String?> {
+    fun validateEmail(email: String): Boolean {
         return authRepository.isEmailValid(email)
     }
 
-    fun validatePassword(password: String): Pair<Boolean, String?> {
+    fun validatePassword(password: String): Boolean {
         return authRepository.isPasswordValid(password)
     }
 

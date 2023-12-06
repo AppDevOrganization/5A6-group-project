@@ -111,10 +111,10 @@ fun LoginSignupTextField(
     placeholder: String,
     onValueChange: (newValue: String) -> Unit,
     modifier: Modifier = Modifier,
-    validate: ((String) -> Pair<Boolean, String?>)? = null,
+    validate: ((String) -> Boolean)? = null,
 ) {
     var inputText by remember { mutableStateOf("") }
-    var validationStatus by remember { mutableStateOf(Pair<Boolean, String?>(true, null)) }
+    var isValid by remember { mutableStateOf(true) }
 
     OutlinedTextField(
         singleLine = true,
@@ -124,21 +124,21 @@ fun LoginSignupTextField(
             inputText = it
 
             if (validate != null)
-                validationStatus = validate(inputText)
+                isValid = validate(inputText)
             onValueChange(inputText) },
         placeholder = @Composable {
             Text(
                 text = placeholder
             )
         },
-        isError = inputText.isNotEmpty() && validationStatus.first,
+        isError = inputText.isNotEmpty() && isValid,
         modifier = modifier
             .width(300.dp)
             .padding(5.dp)
     )
-    if (!validationStatus.first) {
+    if (!isValid) {
         Text(
-            text = validationStatus.second.toString(),
+            text = "Error!",
             color = Color.Red,
         )
     }
