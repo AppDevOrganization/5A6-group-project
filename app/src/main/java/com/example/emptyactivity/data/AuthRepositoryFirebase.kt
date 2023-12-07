@@ -9,7 +9,10 @@ import java.util.regex.Pattern
 
 class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     private val MIN_PSWD_LENGTH = 8
-
+    //https://www.regexlib.com/Search.aspx?k=email&c=-1&m=-1&ps=20
+    private val EMAIL_REGEX = Regex("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}\$")
+    //https://www.regexlib.com/Search.aspx?k=password&c=-1&m=-1&ps=20
+    private val PASSWORD_REGEX = Regex("^[a-zA-Z]\\w{3,14}\$")
     private val currentUserStateFlow = MutableStateFlow(auth.currentUser?.toUser())
 
     init {
@@ -71,7 +74,7 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      * @return Whether the email is valid AND an error message (could be null).
      */
     override fun isEmailValid(email: String): Boolean {
-        if (!Pattern.matches("/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$/g", email))
+        if (!EMAIL_REGEX.matches(email))
             return false
 
         return true
@@ -82,7 +85,7 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
      * @return Whether the password is valid AND an error message (could be null).
      */
     override fun isPasswordValid(password: String): Boolean {
-        if (!Pattern.matches("/^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{${MIN_PSWD_LENGTH},}\$/gm", password))
+        if (!PASSWORD_REGEX.matches(password))
             return false
 
         return true
