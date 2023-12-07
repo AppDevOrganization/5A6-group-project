@@ -5,7 +5,6 @@ import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
-import java.util.regex.Pattern
 
 class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     private val MIN_PSWD_LENGTH = 8
