@@ -1,9 +1,8 @@
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
+
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jlleitschuh.gradle.ktlint")
 }
 
 android {
@@ -52,19 +51,7 @@ android {
     }
 }
 
-ktlint {
-    verbose.set(true)
-    outputToConsole.set(true)
-    coloredOutput.set(true)
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-        reporter(ReporterType.JSON)
-        reporter(ReporterType.HTML)
-    }
-    filter {
-        exclude("**/style-violations.kt")
-    }
-}
+
 
 dependencies {
     implementation("androidx.compose.runtime:runtime:1.0.0")
