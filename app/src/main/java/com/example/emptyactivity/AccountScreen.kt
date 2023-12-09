@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.Account
 import com.example.emptyactivity.data.AccountType
@@ -34,10 +34,18 @@ fun AccountScreen(
     account: Account,
     onClickTransferButton: () -> Unit = {}
 ) {
+    val balance = "$" + String.format("%.2f", account.balance)
+
+    var screenDescription = "${account.type} screen, balance of $balance"
+
+    if (account.type == AccountType.CREDIT) {
+        screenDescription = "${account.type} screen, balance of $balance, due on ${account.dueDate}"
+    }
+
     Column(
         modifier = Modifier
             .padding(13.dp)
-            .semantics { contentDescription = "Account Screen" }
+            .semantics { contentDescription = screenDescription }
     ) {
         AccountTopCard(
             accountType = account.type,
@@ -54,6 +62,7 @@ fun AccountScreen(
         TransactionsLazyColumn(transactions = account.transactions)
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -112,11 +121,16 @@ fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
+    val description = "${transaction.date}, ${transaction.amount} ${transaction.detail}, subtotal of ${transaction.subtotal}"
+
+    Card {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(24.dp),
+                .height(48.dp)
+                .semantics {
+                    contentDescription = description
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(7.dp)
 
@@ -138,11 +152,13 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = "$" + transaction.subtotal.toString()
+                text = "$" + String.format("%.2f", transaction.subtotal)
             )
         }
     }
+    Spacer(modifier = modifier.size(1.dp))
 }
+
 
 @Composable
 fun AccountTopCard(
