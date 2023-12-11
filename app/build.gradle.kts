@@ -3,11 +3,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-<<<<<<< HEAD
     id("org.jlleitschuh.gradle.ktlint")
     id("com.google.gms.google-services")
-=======
->>>>>>> main
 }
 
 
