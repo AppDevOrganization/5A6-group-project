@@ -98,7 +98,7 @@ private const val USER_PREFERENCES_NAME = "user_preferences"
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
     private lateinit var accountsViewModel: AccountsViewModel
-    private lateinit var transactionaViewModel: TransactionsViewModel
+    private lateinit var transactionsViewModel: TransactionsViewModel
     private val Context.dataStore by preferencesDataStore(
         name = USER_PREFERENCES_NAME,
         produceMigrations = { context ->
@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
             )
         ).get(AccountsViewModel::class.java)
 
-        transactionaViewModel = ViewModelProvider(
+        transactionsViewModel = ViewModelProvider(
             this,
             TransactionsViewModelFactory(
                 TransactionsRepository,
@@ -137,7 +137,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState, accountsViewModel, transactionaViewModel)
+                MainScreen(modifier = Modifier, isDarkModeState, accountsViewModel, transactionsViewModel)
             }
         }
     }
