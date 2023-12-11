@@ -1,18 +1,16 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-parcelize")
     id("com.diffplug.spotless") version "6.23.3"
 }
 
-
-val bundleId = "com.example.cjj"
-
 android {
-    namespace = bundleId
+    namespace = "com.example.cjj"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = bundleId
+        applicationId = "com.example.cjj"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -41,7 +39,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -68,7 +65,6 @@ android {
             diktat()
         }
     }
-
 }
 
 
@@ -98,5 +94,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
 }
