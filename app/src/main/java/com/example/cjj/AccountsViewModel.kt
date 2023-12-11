@@ -4,19 +4,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.cjj.data.SortOrder
-import com.example.cjj.data.UserPreferences
-import com.example.cjj.data.UserPreferencesRepository
 import com.example.cjj.data.Account
+import com.example.cjj.data.AccountType
 import com.example.cjj.data.AccountsRepository
-import kotlinx.coroutines.flow.combine
+import com.example.cjj.data.SortOrder
+import com.example.cjj.data.Transaction
+import com.example.cjj.data.UserPreferencesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import androidx.lifecycle.viewModelScope
-import com.example.cjj.data.AccountType
-import com.example.cjj.data.Transaction
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -59,38 +54,38 @@ class AccountsViewModel(
     init {
 
 
-        val chequingAccount = Account(
-            type = AccountType.CHEQUING,
-        )
-        fillChequingTransactions(chequingAccount)
-
-        val savingsAccount = Account(
-            type = AccountType.SAVINGS,
-        )
-        fillSavingsTransactions(savingsAccount)
-
-        val creditAccount = Account(
-            type = AccountType.CREDIT,
-            dueDate = "2023-11-24",
-        )
-        fillCreditTransactions(creditAccount)
-
-
-
-        combine(
-            repository.accounts,
-            userPreferencesFlow
-        ) { accounts: List<Account>, userPreferences: UserPreferences ->
-            _accountsUiModelFlow.value = AccountsUiModel(
-                accounts = filterSortAccounts(
-                    listOf(chequingAccount,savingsAccount,creditAccount),
-                    userPreferences.showCompleted,
-                    userPreferences.sortOrder
-                ),
-                showCompleted = userPreferences.showCompleted,
-                sortOrder = userPreferences.sortOrder
-            )
-        }.launchIn(viewModelScope)
+//        val chequingAccount = Account(
+//            type = AccountType.CHEQUING,
+//        )
+////        fillChequingTransactions(chequingAccount)
+//
+//        val savingsAccount = Account(
+//            type = AccountType.SAVINGS,
+//        )
+////        fillSavingsTransactions(savingsAccount)
+//
+//        val creditAccount = Account(
+//            type = AccountType.CREDIT,
+//            dueDate = "2023-11-24",
+//        )
+////        fillCreditTransactions(creditAccount)
+//
+//
+//
+//        combine(
+//            repository.accounts,
+//            userPreferencesFlow
+//        ) { accounts: List<Account>, userPreferences: UserPreferences ->
+//            _accountsUiModelFlow.value = AccountsUiModel(
+//                accounts = filterSortAccounts(
+//                    listOf(chequingAccount,savingsAccount,creditAccount),
+//                    userPreferences.showCompleted,
+//                    userPreferences.sortOrder
+//                ),
+//                showCompleted = userPreferences.showCompleted,
+//                sortOrder = userPreferences.sortOrder
+//            )
+//        }.launchIn(viewModelScope)
 
 
     }
@@ -105,31 +100,31 @@ class AccountsViewModel(
                       amount:Double)
     {
         val currentDateTime = LocalDateTime.now()
-        val formattedDateTime = currentDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
-
+        val pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formattedDateTime = currentDateTime.format(pattern)
 
         fromAccount.addTransaction(Transaction(formattedDateTime,-amount,"Transfer"))
         toAccount.addTransaction(Transaction(formattedDateTime,amount,"Transfer"))
     }
 
 
-    private fun filterSortAccounts(
-        accounts: List<Account>,
-        showCompleted: Boolean,
-        sortOrder: SortOrder
-    ): List<Account> {
-        // filter the tasks
-        val filteredAccounts = if (showCompleted) {
-           accounts
-        } else {
-            accounts
-        }
-        // sort the tasks
-
-        return when (sortOrder) {
-            SortOrder.NONE -> filteredAccounts
-        }
-    }
+//    private fun filterSortAccounts(
+//        accounts: List<Account>,
+//        showCompleted: Boolean,
+//        sortOrder: SortOrder
+//    ): List<Account> {
+//        // filter the tasks
+//        val filteredAccounts = if (showCompleted) {
+//           accounts
+//        } else {
+//            accounts
+//        }
+//        // sort the tasks
+//
+//        return when (sortOrder) {
+//            SortOrder.NONE -> filteredAccounts
+//        }
+//    }
 
 
 
@@ -153,40 +148,40 @@ class AccountsViewModelFactory(
     }
 }
 
-fun fillChequingTransactions(account: Account)
-{
-
-    account.addTransaction(Transaction("2023-11-22", 100.00, "Transfer"))
-    account.addTransaction(Transaction("2023-11-15", -13.00, "Boston Pizza"))
-    account.addTransaction(Transaction("2023-11-08", -3.00, "Depanneur 123"))
-    account.addTransaction(Transaction("2023-11-01", -14.00, "Jean Coutu"))
-    account.addTransaction(Transaction("2023-10-25", 60.00, "Transfer"))
-    account.addTransaction(Transaction("2023-10-18", -23.00, "McDonald's"))
-    account.addTransaction(Transaction("2023-10-11", -7.00, "Couche-Tard"))
-    account.addTransaction(Transaction("2023-10-04", 500.00, "Transfer"))
-    account.addTransaction(Transaction("2023-09-27", -14.00, "Uniprix"))
-    account.addTransaction(Transaction("2023-09-20", -46.00, "Gym"))
-}
-
-fun fillSavingsTransactions(account: Account)
-{
-    account.addTransaction(Transaction("2023-11-22", -100.00, "Transfer"))
-    account.addTransaction(Transaction("2023-11-15", 20.00, "Interest"))
-    account.addTransaction(Transaction("2023-11-08", 50.00, "Deposit"))
-    account.addTransaction(Transaction("2023-11-01", 20.00, "Interest"))
-    account.addTransaction(Transaction("2023-10-25", -60.00, "Transfer"))
-    account.addTransaction(Transaction("2023-10-18", 20.00, "Interest"))
-    account.addTransaction(Transaction("2023-10-11", -70.00, "Transfer"))
-    account.addTransaction(Transaction("2023-10-04", 20.00, "Interest"))
-    account.addTransaction(Transaction("2023-09-27", 400.00, "Deposit"))
-    account.addTransaction(Transaction("2023-09-20", 20.00, "Interest"))
-}
-
-
-fun fillCreditTransactions(account: Account)
-{
-    account.addTransaction(Transaction("2023-10-18", 549.00, "Rent"))
-    account.addTransaction(Transaction("2023-10-11", 50.00, "GazMetro"))
-    account.addTransaction(Transaction("2023-09-27", 400.00, "Tuition"))
-
-}
+//fun fillChequingTransactions(account: Account)
+//{
+//
+//    account.addTransaction(Transaction("2023-11-22", 100.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-11-15", -13.00, "Boston Pizza"))
+//    account.addTransaction(Transaction("2023-11-08", -3.00, "Depanneur 123"))
+//    account.addTransaction(Transaction("2023-11-01", -14.00, "Jean Coutu"))
+//    account.addTransaction(Transaction("2023-10-25", 60.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-10-18", -23.00, "McDonald's"))
+//    account.addTransaction(Transaction("2023-10-11", -7.00, "Couche-Tard"))
+//    account.addTransaction(Transaction("2023-10-04", 500.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-09-27", -14.00, "Uniprix"))
+//    account.addTransaction(Transaction("2023-09-20", -46.00, "Gym"))
+//}
+//
+//fun fillSavingsTransactions(account: Account)
+//{
+//    account.addTransaction(Transaction("2023-11-22", -100.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-11-15", 20.00, "Interest"))
+//    account.addTransaction(Transaction("2023-11-08", 50.00, "Deposit"))
+//    account.addTransaction(Transaction("2023-11-01", 20.00, "Interest"))
+//    account.addTransaction(Transaction("2023-10-25", -60.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-10-18", 20.00, "Interest"))
+//    account.addTransaction(Transaction("2023-10-11", -70.00, "Transfer"))
+//    account.addTransaction(Transaction("2023-10-04", 20.00, "Interest"))
+//    account.addTransaction(Transaction("2023-09-27", 400.00, "Deposit"))
+//    account.addTransaction(Transaction("2023-09-20", 20.00, "Interest"))
+//}
+//
+//
+//fun fillCreditTransactions(account: Account)
+//{
+//    account.addTransaction(Transaction("2023-10-18", 549.00, "Rent"))
+//    account.addTransaction(Transaction("2023-10-11", 50.00, "GazMetro"))
+//    account.addTransaction(Transaction("2023-09-27", 400.00, "Tuition"))
+//
+//}
