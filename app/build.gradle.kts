@@ -3,6 +3,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.diffplug.spotless") version "6.23.3"
 }
 
 val bundleId = "com.example.cjj"
@@ -25,12 +26,16 @@ android {
     }
 
     buildTypes {
-        release {
-            isMinifyEnabled = false
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
+        }
+        getByName("debug") {
+            isDebuggable = true
         }
     }
     compileOptions {
@@ -49,6 +54,18 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+    spotless {
+        kotlin {
+            ktfmt()
+            ktlint()
+            diktat()
+            prettier()
+        }
+        kotlinGradle {
+            ktlint()
+            diktat()
         }
     }
 }
