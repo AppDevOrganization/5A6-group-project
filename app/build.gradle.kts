@@ -4,6 +4,17 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.diffplug.spotless")
+    id("com.gradle.enterprise")
+}
+
+gradleEnterprise {
+    if (System.getenv("CI") != null) {
+        buildScan {
+            publishAlways()
+            termsOfServiceUrl = "https://gradle.com/terms-of-service"
+            termsOfServiceAgree = "yes"
+        }
+    }
 }
 
 val bundleId = "com.example.cjj"
@@ -75,7 +86,7 @@ android {
 dependencies {
     implementation("androidx.compose.runtime:runtime:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    //implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
