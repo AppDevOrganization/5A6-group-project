@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 interface BankDestination {
     val route: String

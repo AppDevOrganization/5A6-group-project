@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import org.junit.Test
 

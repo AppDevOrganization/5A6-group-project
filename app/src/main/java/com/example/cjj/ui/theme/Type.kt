@@ -1,4 +1,4 @@
-package com.example.emptyactivity.ui.theme
+package com.example.cjj.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.example.emptyactivity.R
+import com.example.cjj.R
 
 val NotoSerif = FontFamily(
     Font(R.font.notoserifolduyghur_regular)

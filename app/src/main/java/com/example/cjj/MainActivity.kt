@@ -1,10 +1,12 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -77,15 +79,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.emptyactivity.components.Constants
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.AccountsRepository
-import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.home.OverviewScreen
-import com.example.emptyactivity.ui.theme.EmptyActivityTheme
-import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
-import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
+import com.example.cjj.components.Constants
+import com.example.cjj.data.Account
+import com.example.cjj.data.AccountType
+import com.example.cjj.data.AccountsRepository
+import com.example.cjj.data.UserPreferencesRepository
+import com.example.cjj.home.OverviewScreen
+import com.example.cjj.ui.theme.EmptyActivityTheme
+import com.example.cjj.ui.theme.md_theme_dark_onPrimary
+import com.example.cjj.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
@@ -104,6 +106,7 @@ class MainActivity : ComponentActivity() {
         }
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SuspiciousIndentation")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +144,7 @@ class MainActivity : ComponentActivity() {
  * @param drawerState The state of the navigation drawer, manages whether it is open or closed.
  * @param scope A [CoroutineScope] used to launch coroutines for asynchronous operations.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
@@ -207,6 +211,7 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -384,10 +389,11 @@ fun NavigationBar(
  * Displaying the account options in the dropdown menu.
  * https://www.geeksforgeeks.org/drop-down-menu-in-android-using-jetpack-compose/
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
-    viewModel:AccountsViewModel,
+    viewModel: AccountsViewModel,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -417,7 +423,7 @@ fun TransferScreen(
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        var options = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
+        var options = listOf(AccountType.CHEQUING, AccountType.SAVINGS, AccountType.CREDIT)
 
         // "From" account dropdown
         var fromAccount by remember { mutableStateOf(AccountType.NONE) }
@@ -434,16 +440,18 @@ fun TransferScreen(
         Column {
             OutlinedTextField(
                 value = fromSelectedText,
-                onValueChange = { fromSelectedText = it },
+                onValueChange = { /* Do nothing */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         fromTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp),
-                label = {Text("From Account")},
+                label = { Text("From Account") },
+                readOnly = true, // Set the field to be read-only
                 trailingIcon = {
-                    Icon(fromIcon,"contentDescription",
+                    Icon(
+                        fromIcon, "contentDescription",
                         Modifier.clickable { isFromExpanded = !isFromExpanded })
                 }
             )
@@ -484,16 +492,18 @@ fun TransferScreen(
         Column {
             OutlinedTextField(
                 value = toSelectedText,
-                onValueChange = { toSelectedText = it },
+                onValueChange = { /* Do nothing */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         toTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp),
-                label = {Text("To Account")},
+                label = { Text("To Account") },
+                readOnly = true, // Set the field to be read-only
                 trailingIcon = {
-                    Icon(toIcon,"contentDescription",
+                    Icon(
+                        toIcon, "contentDescription",
                         Modifier.clickable { isToExpanded = !isToExpanded })
                 }
             )
@@ -543,8 +553,8 @@ fun TransferScreen(
                 messageType = messageType,
                 transferMessage = transferMessage,
                 onDismissRequest = {
-                shouldShowMessage = false
-            })
+                    shouldShowMessage = false
+                })
         }
 
         // Transfer button
@@ -552,15 +562,27 @@ fun TransferScreen(
             onClick = {
                 // Implement transfer logic here
                 // validate input, perform the transfer, etc.
-                var account : Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+                var account: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
 
                 if (fromAccount == AccountType.CHEQUING) {
+                    account = viewModel.getAccountByType(AccountType.CHEQUING)
                     // for demo 4a
                     // to be replaced for final implementation 4b
                 } else if (fromAccount == AccountType.SAVINGS) {
                     account = viewModel.getAccountByType(AccountType.SAVINGS)
                 } else if (fromAccount == AccountType.CREDIT) {
-                   account = viewModel.getAccountByType(AccountType.CREDIT)
+                    account = viewModel.getAccountByType(AccountType.CREDIT)
+                }
+
+                var accountTransfer: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+
+                if (toAccount == AccountType.CHEQUING) {
+                    accountTransfer = viewModel.getAccountByType(AccountType.CHEQUING)
+
+                } else if (toAccount == AccountType.SAVINGS) {
+                    accountTransfer = viewModel.getAccountByType(AccountType.SAVINGS)
+                } else if (toAccount == AccountType.CREDIT) {
+                    accountTransfer= viewModel.getAccountByType(AccountType.CREDIT)
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
@@ -590,6 +612,10 @@ fun TransferScreen(
                         messageType = "Success"
                         transferMessage = "Successfully transferred funds."
                         shouldShowMessage = true
+
+                        if (accountTransfer != null) {
+                            viewModel.transferFunds(account,accountTransfer,transferAmountParsed)
+                        }
                     }
                 }
             },
@@ -601,6 +627,7 @@ fun TransferScreen(
         }
     }
 }
+
 
 @Composable
 fun TransferMessage(
@@ -672,6 +699,7 @@ fun TransferMessage(
  * All Nav-related functions and variables are based on the ones in the Rally app from the Navigation codelab.
  * https://developer.android.com/codelabs/jetpack-compose-navigation
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BankNavHost(
     navController: NavHostController,
