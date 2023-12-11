@@ -1,17 +1,17 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.emptyactivity.data.SortOrder
-import com.example.emptyactivity.data.UserPreferences
-import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountsRepository
+import com.example.cjj.data.SortOrder
+import com.example.cjj.data.UserPreferences
+import com.example.cjj.data.UserPreferencesRepository
+import com.example.cjj.data.Account
+import com.example.cjj.data.AccountsRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import androidx.lifecycle.viewModelScope
-import com.example.emptyactivity.data.AccountType
+import com.example.cjj.data.AccountType
 import kotlinx.coroutines.flow.launchIn
 
 

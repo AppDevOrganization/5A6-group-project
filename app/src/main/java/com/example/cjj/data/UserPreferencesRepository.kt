@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.emptyactivity.data
+package com.example.cjj.data
 
 import android.content.Context
 import androidx.core.content.edit

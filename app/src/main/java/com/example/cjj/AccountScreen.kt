@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -25,9 +25,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.Transaction
+import com.example.cjj.data.Account
+import com.example.cjj.data.AccountType
+import com.example.cjj.data.Transaction
 
 @Composable
 fun AccountScreen(

@@ -1,4 +1,4 @@
-package com.example.emptyactivity.data
+package com.example.cjj.data
 
 import kotlinx.coroutines.flow.flowOf
 

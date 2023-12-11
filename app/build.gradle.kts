@@ -5,12 +5,14 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val bundleId = "com.example.cjj"
+
 android {
-    namespace = "com.example.emptyactivity"
+    namespace = bundleId
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.emptyactivity"
+        applicationId = bundleId
         minSdk = 24
         targetSdk = 34
         versionCode = 1

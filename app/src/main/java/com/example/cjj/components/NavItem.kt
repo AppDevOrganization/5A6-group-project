@@ -1,4 +1,4 @@
-package com.example.emptyactivity.components
+package com.example.cjj.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalance
