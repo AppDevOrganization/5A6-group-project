@@ -1,5 +1,7 @@
 package com.example.cjj
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.cjj.data.SortOrder
@@ -15,6 +17,8 @@ import com.example.cjj.data.AccountType
 import com.example.cjj.data.Transaction
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 data class AccountsUiModel(
@@ -78,7 +82,11 @@ class AccountsViewModel(
             userPreferencesFlow
         ) { accounts: List<Account>, userPreferences: UserPreferences ->
             _accountsUiModelFlow.value = AccountsUiModel(
-                accounts = listOf(chequingAccount,savingsAccount,creditAccount),
+                accounts = filterSortAccounts(
+                    listOf(chequingAccount,savingsAccount,creditAccount),
+                    userPreferences.showCompleted,
+                    userPreferences.sortOrder
+                ),
                 showCompleted = userPreferences.showCompleted,
                 sortOrder = userPreferences.sortOrder
             )
@@ -91,43 +99,19 @@ class AccountsViewModel(
         return accountsUiModel.value?.accounts?.find { it.type == accountType }
     }
 
-    /*
-    fun fillAccounts() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun transferFunds(fromAccount:Account,
+                      toAccount: Account,
+                      amount:Double)
+    {
+        val currentDateTime = LocalDateTime.now()
+        val formattedDateTime = currentDateTime.format(DateTimeFormatter.ISO_DATE_TIME)
 
-        viewModelScope.launch {
-            val chequingAccount: Account? = getAccountByType(AccountType.CHEQUING)
-            _accountsUiModelFlow.value.accounts.get(AccountType.CREDIT)
-            if (chequingAccount != null) {
-                fillChequingTransactions(chequingAccount)
-            }
 
-            val savingsAccount: Account? = getAccountByType(AccountType.SAVINGS)
-
-            if (savingsAccount != null) {
-                fillSavingsTransactions(savingsAccount)
-            }
-
-            val creditAccount: Account? = getAccountByType(AccountType.CREDIT)
-
-            if (creditAccount != null) {
-                fillCreditTransactions(creditAccount)
-            }
-
-            // Update the accountsUiModel after filling transactions
-            _accountsUiModelFlow.value = AccountsUiModel(
-                accounts = filterSortAccounts(
-                    listOf(),  // use the repository accounts directly
-                    userPreferencesFlow.showCompleted,
-                    userPreferencesFlow.value.sortOrder
-                ),
-                showCompleted = userPreferencesFlow.value.showCompleted,
-                sortOrder = userPreferencesFlow.value.sortOrder
-            )
-        }
-
+        fromAccount.addTransaction(Transaction(formattedDateTime,-amount,"Transfer"))
+        toAccount.addTransaction(Transaction(formattedDateTime,amount,"Transfer"))
     }
 
-     */
 
     private fun filterSortAccounts(
         accounts: List<Account>,

@@ -2,9 +2,11 @@ package com.example.cjj
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -104,6 +106,7 @@ class MainActivity : ComponentActivity() {
         }
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SuspiciousIndentation")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -141,6 +144,7 @@ class MainActivity : ComponentActivity() {
  * @param drawerState The state of the navigation drawer, manages whether it is open or closed.
  * @param scope A [CoroutineScope] used to launch coroutines for asynchronous operations.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
@@ -207,6 +211,7 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -384,6 +389,7 @@ fun NavigationBar(
  * Displaying the account options in the dropdown menu.
  * https://www.geeksforgeeks.org/drop-down-menu-in-android-using-jetpack-compose/
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
@@ -559,12 +565,24 @@ fun TransferScreen(
                 var account: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
 
                 if (fromAccount == AccountType.CHEQUING) {
+                    account = viewModel.getAccountByType(AccountType.CHEQUING)
                     // for demo 4a
                     // to be replaced for final implementation 4b
                 } else if (fromAccount == AccountType.SAVINGS) {
                     account = viewModel.getAccountByType(AccountType.SAVINGS)
                 } else if (fromAccount == AccountType.CREDIT) {
                     account = viewModel.getAccountByType(AccountType.CREDIT)
+                }
+
+                var accountTransfer: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+
+                if (toAccount == AccountType.CHEQUING) {
+                    accountTransfer = viewModel.getAccountByType(AccountType.CHEQUING)
+
+                } else if (toAccount == AccountType.SAVINGS) {
+                    accountTransfer = viewModel.getAccountByType(AccountType.SAVINGS)
+                } else if (toAccount == AccountType.CREDIT) {
+                    accountTransfer= viewModel.getAccountByType(AccountType.CREDIT)
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
@@ -594,6 +612,10 @@ fun TransferScreen(
                         messageType = "Success"
                         transferMessage = "Successfully transferred funds."
                         shouldShowMessage = true
+
+                        if (accountTransfer != null) {
+                            viewModel.transferFunds(account,accountTransfer,transferAmountParsed)
+                        }
                     }
                 }
             },
@@ -677,6 +699,7 @@ fun TransferMessage(
  * All Nav-related functions and variables are based on the ones in the Rally app from the Navigation codelab.
  * https://developer.android.com/codelabs/jetpack-compose-navigation
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun BankNavHost(
     navController: NavHostController,
