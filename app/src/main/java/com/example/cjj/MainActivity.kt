@@ -387,7 +387,7 @@ fun NavigationBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransferScreen(
-    viewModel:AccountsViewModel,
+    viewModel: AccountsViewModel,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -417,7 +417,7 @@ fun TransferScreen(
             modifier = Modifier.padding(vertical = 16.dp)
         )
 
-        var options = listOf(AccountType.CHEQUING,AccountType.SAVINGS,AccountType.CREDIT)
+        var options = listOf(AccountType.CHEQUING, AccountType.SAVINGS, AccountType.CREDIT)
 
         // "From" account dropdown
         var fromAccount by remember { mutableStateOf(AccountType.NONE) }
@@ -434,16 +434,18 @@ fun TransferScreen(
         Column {
             OutlinedTextField(
                 value = fromSelectedText,
-                onValueChange = { fromSelectedText = it },
+                onValueChange = { /* Do nothing */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         fromTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp),
-                label = {Text("From Account")},
+                label = { Text("From Account") },
+                readOnly = true, // Set the field to be read-only
                 trailingIcon = {
-                    Icon(fromIcon,"contentDescription",
+                    Icon(
+                        fromIcon, "contentDescription",
                         Modifier.clickable { isFromExpanded = !isFromExpanded })
                 }
             )
@@ -484,16 +486,18 @@ fun TransferScreen(
         Column {
             OutlinedTextField(
                 value = toSelectedText,
-                onValueChange = { toSelectedText = it },
+                onValueChange = { /* Do nothing */ },
                 modifier = Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
                         toTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp),
-                label = {Text("To Account")},
+                label = { Text("To Account") },
+                readOnly = true, // Set the field to be read-only
                 trailingIcon = {
-                    Icon(toIcon,"contentDescription",
+                    Icon(
+                        toIcon, "contentDescription",
                         Modifier.clickable { isToExpanded = !isToExpanded })
                 }
             )
@@ -543,8 +547,8 @@ fun TransferScreen(
                 messageType = messageType,
                 transferMessage = transferMessage,
                 onDismissRequest = {
-                shouldShowMessage = false
-            })
+                    shouldShowMessage = false
+                })
         }
 
         // Transfer button
@@ -552,7 +556,7 @@ fun TransferScreen(
             onClick = {
                 // Implement transfer logic here
                 // validate input, perform the transfer, etc.
-                var account : Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+                var account: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
 
                 if (fromAccount == AccountType.CHEQUING) {
                     // for demo 4a
@@ -560,7 +564,7 @@ fun TransferScreen(
                 } else if (fromAccount == AccountType.SAVINGS) {
                     account = viewModel.getAccountByType(AccountType.SAVINGS)
                 } else if (fromAccount == AccountType.CREDIT) {
-                   account = viewModel.getAccountByType(AccountType.CREDIT)
+                    account = viewModel.getAccountByType(AccountType.CREDIT)
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
@@ -601,6 +605,7 @@ fun TransferScreen(
         }
     }
 }
+
 
 @Composable
 fun TransferMessage(
