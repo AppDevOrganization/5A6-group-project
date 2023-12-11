@@ -10,10 +10,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +24,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
+import com.example.emptyactivity.data.ResultAuth
 import com.google.android.play.integrity.internal.t
 
 
@@ -33,9 +36,11 @@ fun SignupPage(
     modifier: Modifier = Modifier
 ) {
     val userState = authViewModel.currentUser().collectAsState()
-    var emailText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
-    var passwordRepeatText by remember { mutableStateOf("") }
+    val signUpResult by authViewModel.signUpResult.collectAsState(ResultAuth.Inactive)
+
+    var emailText by rememberSaveable { mutableStateOf("") }
+    var passwordText by rememberSaveable { mutableStateOf("") }
+    var passwordRepeatText by rememberSaveable { mutableStateOf("") }
     val repeatPasswordField = @Composable { LoginSignupTextField(
         label = "Repeat Password",
         placeholder = "password",
@@ -44,6 +49,25 @@ fun SignupPage(
             it == passwordText
         }
     ) }
+
+    ///
+    LaunchedEffect(signUpResult) {
+        signUpResult?.let {
+            if (it is ResultAuth.Inactive) {
+                return@LaunchedEffect
+            }
+            if (it is ResultAuth.InProgress) {
+                // TODO: Add some kind of text or something that shows that it's in progress
+                return@LaunchedEffect
+            }
+            if (it is ResultAuth.Success && it.data) {
+
+            } else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
+
+            }
+        }
+    }
+
 
     Column(
         modifier = modifier.fillMaxSize(),
