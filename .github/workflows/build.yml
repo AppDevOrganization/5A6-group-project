@@ -10,7 +10,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  gradle:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -21,8 +24,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          cache: gradle
-
+          
       - name: Validate Gradle wrapper binaries
         uses: gradle/wrapper-validation-action@v1
 
