@@ -71,6 +71,7 @@ android {
             diktat()
         }
     }
+
 }
 
 
