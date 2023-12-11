@@ -21,14 +21,13 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.example.cjj.AccountsViewModel
 import com.example.cjj.R
 import com.example.cjj.data.AccountType
+import com.example.cjj.data.AccountsRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    viewModel: AccountsViewModel,
     onClickViewChequingAccount: () -> Unit = {},
     onClickViewSavingsAccount: () -> Unit = {},
     onClickViewCreditAccount: () -> Unit = {}
@@ -56,26 +55,22 @@ fun OverviewScreen(
             )
         }
         ChequingAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewChequingAccount
         )
         SavingsAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewSavingsAccount
         )
         CreditAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewCreditAccount
         )
     }
 }
 @Composable
 fun ChequingAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
 
-    val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
+    val chequingAccount= AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
     val balance = chequingAccount?.balance
 
     if (balance != null) {
@@ -85,10 +80,9 @@ fun ChequingAccountCard(
 
 @Composable
 fun SavingsAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
+    val savingsAccount = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
     val balance = savingsAccount?.balance
 
     if (balance != null) {
@@ -98,10 +92,9 @@ fun SavingsAccountCard(
 
 @Composable
 fun CreditAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
+    val creditAccount = AccountsRepository.accounts.find { it.type == AccountType.CREDIT }
     val balance = creditAccount?.balance
 
     if (balance != null) {
@@ -155,23 +148,3 @@ fun OverviewCard(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun OverviewScreenPreview()
-{
-   var viewModel :AccountsViewModel
-
-    OverviewScreen(viewModel)
-}
-
-@Preview
-@Composable
-fun OverviewScreenDarkModePreview() {
-    EmptyActivityTheme(useDarkTheme = true) {
-        OverviewScreen()
-    }
-}
-
- */

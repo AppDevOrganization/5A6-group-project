@@ -83,6 +83,7 @@ import com.example.cjj.components.Constants
 import com.example.cjj.data.Account
 import com.example.cjj.data.AccountType
 import com.example.cjj.data.AccountsRepository
+import com.example.cjj.data.TransactionsRepository
 import com.example.cjj.data.UserPreferencesRepository
 import com.example.cjj.home.OverviewScreen
 import com.example.cjj.ui.theme.EmptyActivityTheme
@@ -96,7 +97,8 @@ private const val USER_PREFERENCES_NAME = "user_preferences"
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
-    private lateinit var viewModel: AccountsViewModel
+    private lateinit var accountsViewModel: AccountsViewModel
+    private lateinit var transactionaViewModel: TransactionsViewModel
     private val Context.dataStore by preferencesDataStore(
         name = USER_PREFERENCES_NAME,
         produceMigrations = { context ->
@@ -112,7 +114,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-      viewModel = ViewModelProvider(
+        accountsViewModel = ViewModelProvider(
             this,
             AccountsViewModelFactory(
                 AccountsRepository,
@@ -120,7 +122,13 @@ class MainActivity : ComponentActivity() {
             )
         ).get(AccountsViewModel::class.java)
 
-
+        transactionaViewModel = ViewModelProvider(
+            this,
+            TransactionsViewModelFactory(
+                TransactionsRepository,
+                UserPreferencesRepository(dataStore, this)
+            )
+        ).get(TransactionsViewModel::class.java)
 
         setContent {
 
@@ -129,7 +137,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState,viewModel)
+                MainScreen(modifier = Modifier, isDarkModeState, accountsViewModel, transactionaViewModel)
             }
         }
     }
@@ -147,7 +155,7 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewModel: AccountsViewModel) {
+fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>, accountsViewModel: AccountsViewModel, transactionsViewModel: TransactionsViewModel) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -156,12 +164,13 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>,viewMo
     } else {
         val navController = rememberNavController()
 
-       CJJBankApp(
-           navController = navController,
-           isDarkModeState = isDarkModeState,
-           modifier = modifier,
-           viewModel=viewModel
-           )
+        CJJBankApp(
+            navController = navController,
+            isDarkModeState = isDarkModeState,
+            modifier = modifier,
+            accountsViewModel = accountsViewModel,
+            transactionsViewModel = transactionsViewModel
+        )
     }
 }
 
@@ -215,7 +224,7 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier,viewModel: AccountsViewModel) {
+fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier, accountsViewModel: AccountsViewModel, transactionsViewModel: TransactionsViewModel) {
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
@@ -244,7 +253,8 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                 BankNavHost(
                     navController = navController,
                     modifier = Modifier.padding(contentPadding),
-                    viewModel=viewModel
+                    accountsViewModel = accountsViewModel,
+                    transactionsViewModel = transactionsViewModel
                 )
             }
         }
@@ -562,27 +572,27 @@ fun TransferScreen(
             onClick = {
                 // Implement transfer logic here
                 // validate input, perform the transfer, etc.
-                var account: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+                var account : Account? = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
                 if (fromAccount == AccountType.CHEQUING) {
-                    account = viewModel.getAccountByType(AccountType.CHEQUING)
+                    //account = viewModel.getAccountByType(AccountType.CHEQUING)
                     // for demo 4a
                     // to be replaced for final implementation 4b
                 } else if (fromAccount == AccountType.SAVINGS) {
-                    account = viewModel.getAccountByType(AccountType.SAVINGS)
+                    account = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
                 } else if (fromAccount == AccountType.CREDIT) {
-                    account = viewModel.getAccountByType(AccountType.CREDIT)
+                    account = AccountsRepository.accounts.find { it.type == AccountType.CREDIT }
                 }
 
-                var accountTransfer: Account? = viewModel.getAccountByType(AccountType.CHEQUING)
+                var accountTransfer: Account? = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
                 if (toAccount == AccountType.CHEQUING) {
-                    accountTransfer = viewModel.getAccountByType(AccountType.CHEQUING)
+
 
                 } else if (toAccount == AccountType.SAVINGS) {
-                    accountTransfer = viewModel.getAccountByType(AccountType.SAVINGS)
+                    accountTransfer = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
                 } else if (toAccount == AccountType.CREDIT) {
-                    accountTransfer= viewModel.getAccountByType(AccountType.CREDIT)
+                    accountTransfer = AccountsRepository.accounts.find { it.type == AccountType.CREDIT }
                 }
 
                 var transferAmountParsed = transferAmount.toDoubleOrNull()
@@ -614,6 +624,7 @@ fun TransferScreen(
                         shouldShowMessage = true
 
                         if (accountTransfer != null) {
+
                             viewModel.transferFunds(account,accountTransfer,transferAmountParsed)
                         }
                     }
@@ -704,7 +715,8 @@ fun TransferMessage(
 fun BankNavHost(
     navController: NavHostController,
     modifier: Modifier,
-    viewModel: AccountsViewModel
+    accountsViewModel: AccountsViewModel,
+    transactionsViewModel: TransactionsViewModel
 ) {
     NavHost(
         navController = navController,
@@ -713,7 +725,6 @@ fun BankNavHost(
     ) {
         composable(route = Overview.route) {
             OverviewScreen(
-                viewModel,
                 onClickViewChequingAccount = {
                     navController.navigateSingleTopTo(Chequing.route)
                 },
@@ -746,23 +757,25 @@ fun BankNavHost(
             )
         }
         composable(route = Chequing.route) {
-            val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
+            val chequingAccount = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
             if (chequingAccount != null) {
-                    AccountScreen(
-                        account = chequingAccount,
-                        onClickTransferButton = {
-                            navController.navigateSingleTopTo(Transfer.route)
-                        }
-                    )
+                AccountScreen(
+                    account = chequingAccount,
+                    viewModel = transactionsViewModel,
+                    onClickTransferButton = {
+                        navController.navigateSingleTopTo(Transfer.route)
+                    }
+                )
 
             }
         }
         composable(route = Savings.route) {
-            val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
+            val savingsAccount = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
             if (savingsAccount != null) {
                 AccountScreen(
                     account = savingsAccount,
+                    viewModel = transactionsViewModel,
                     onClickTransferButton = {
                         navController.navigateSingleTopTo(Transfer.route)
                     }
@@ -770,10 +783,11 @@ fun BankNavHost(
             }
         }
         composable(route = Credit.route) {
-            val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
+            val creditAccount = AccountsRepository.accounts.find { it.type == AccountType.CREDIT }
             if (creditAccount != null) {
                 AccountScreen(
                     account = creditAccount,
+                    viewModel = transactionsViewModel,
                     onClickTransferButton = {
                         navController.navigateSingleTopTo(Transfer.route)
                     }
@@ -782,10 +796,11 @@ fun BankNavHost(
         }
 
         composable(route = Transfer.route) {
-            TransferScreen(viewModel=viewModel,
+            TransferScreen(
+                viewModel=accountsViewModel,
                 onBackClick = {
-                navController.navigateSingleTopTo(Overview.route)
-            })
+                    navController.navigateSingleTopTo(Overview.route)
+                })
         }
 
     }
@@ -806,20 +821,3 @@ fun isOnStandalonePage(navController: NavHostController): Boolean {
     val currentRoute = navController.currentDestination?.route
     return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route)
 }
-
-//@Preview
-//@Composable
-//fun CJJBankAppPreview() {
-//    val navController = rememberNavController()
-//    CJJBankApp(navController = navController, false)
-//}
-//
-//@Preview
-//@Composable
-//fun CJJBankAppDarkModePreview() {
-//    EmptyActivityTheme(useDarkTheme = true) {
-//
-//        val navController = rememberNavController()
-//        CJJBankApp(navController = navController, true)
-//    }
-//}
