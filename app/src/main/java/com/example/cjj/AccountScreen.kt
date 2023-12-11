@@ -1,10 +1,12 @@
-package com.example.emptyactivity
+package com.example.cjj
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,26 +20,45 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.Transaction
+import com.example.cjj.data.Account
+import com.example.cjj.data.AccountType
+import com.example.cjj.data.Transaction
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AccountScreen(
     account: Account,
+    viewModel: TransactionsViewModel,
     onClickTransferButton: () -> Unit = {}
 ) {
+    val balance = "$" + String.format("%.2f", account.balance)
+
+    var screenDescription = "${account.type} screen, balance of $balance"
+    var transactions = viewModel.chequingTransactions
+
+    if (account.type == AccountType.SAVINGS) {
+        transactions = viewModel.savingsTransactions
+    }
+
+    if (account.type == AccountType.CREDIT) {
+        screenDescription = "${account.type} screen, balance of $balance, due on ${account.dueDate}"
+        transactions = viewModel.creditTransactions
+    }
+
     Column(
         modifier = Modifier
             .padding(13.dp)
-            .semantics { contentDescription = "Account Screen" }
+            .semantics { contentDescription = screenDescription }
     ) {
         AccountTopCard(
             accountType = account.type,
@@ -51,25 +72,64 @@ fun AccountScreen(
                 style = MaterialTheme.typography.displaySmall
             )
         }
-        TransactionsLazyColumn(transactions = account.transactions)
+
+        TransactionsLazyColumn(accountType = account.type, viewModel = viewModel, transactions = transactions)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsLazyColumn(
-    transactions: MutableList<Transaction>
+    accountType: AccountType,
+    viewModel: TransactionsViewModel,
+    transactions: List<Transaction>?
 ) {
+    var shouldSortByDate by remember { mutableStateOf(false) }
+    var shouldSortAZ by remember { mutableStateOf(false) }
+
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .padding(2.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Button(
+            onClick = {
+                shouldSortByDate = shouldSortByDate == false
+                viewModel.enableSortByDate(shouldSortByDate, accountType)
+            }
+        ) {
+            Text(
+                text = "Sort by date",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+        Button(
+            onClick = {
+                shouldSortAZ = shouldSortAZ == false
+                viewModel.enableSortAlphabetically(shouldSortAZ, accountType)
+            }
+        ) {
+            Text(
+                text = "Sort A → Z",
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
+    }
+
     LazyColumn {
         item {
             TransactionsHeader()
         }
-        items(transactions) {
-            TransactionItem(
-                transaction = it,
-                modifier = Modifier.padding(2.dp)
-            )
+        if (transactions != null) {
+            items(transactions) {
+                TransactionItem(
+                    transaction = it,
+                    modifier = Modifier.padding(2.dp)
+                )
+            }
         }
+
     }
 }
 
@@ -112,11 +172,16 @@ fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier) {
+    val description = "${transaction.date}, ${transaction.amount} ${transaction.detail}, subtotal of ${transaction.subtotal}"
+
+    Card {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .height(24.dp),
+                .height(48.dp)
+                .semantics {
+                    contentDescription = description
+                },
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(7.dp)
 
@@ -124,7 +189,7 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = transaction.date
+                text = transaction.date.toString()
             )
             Text(
                 modifier = modifier.weight(1f),
@@ -138,11 +203,13 @@ fun TransactionItem(
             Text(
                 modifier = modifier.weight(1f),
                 style = MaterialTheme.typography.bodySmall,
-                text = "$" + transaction.subtotal.toString()
+                text = "$" + String.format("%.2f", transaction.subtotal)
             )
         }
     }
+    Spacer(modifier = modifier.size(1.dp))
 }
+
 
 @Composable
 fun AccountTopCard(
@@ -227,16 +294,3 @@ fun AccountTopCard(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun AccountScreenPreview()
-{
-    val chequingAccount: Account? = chequingAccounts.find { it.number == 12345 }
-    if (chequingAccount != null) {
-        AccountScreen(account = chequingAccount)
-    }
-}
-
- */

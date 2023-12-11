@@ -1,4 +1,4 @@
-package com.example.emptyactivity.home
+package com.example.cjj.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -20,23 +20,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.emptyactivity.AccountsViewModel
-import com.example.emptyactivity.AccountsViewModelFactory
-import com.example.emptyactivity.R
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.AccountsRepository
-import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.ui.theme.EmptyActivityTheme
+import com.example.cjj.R
+import com.example.cjj.data.AccountType
+import com.example.cjj.data.AccountsRepository
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
-    viewModel: AccountsViewModel,
     onClickViewChequingAccount: () -> Unit = {},
     onClickViewSavingsAccount: () -> Unit = {},
     onClickViewCreditAccount: () -> Unit = {}
@@ -64,27 +55,22 @@ fun OverviewScreen(
             )
         }
         ChequingAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewChequingAccount
         )
         SavingsAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewSavingsAccount
         )
         CreditAccountCard(
-            viewModel,
             onClickViewAccount = onClickViewCreditAccount
         )
     }
 }
-
 @Composable
 fun ChequingAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
 
-    val chequingAccount= viewModel.getAccountByType(AccountType.CHEQUING)
+    val chequingAccount= AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
     val balance = chequingAccount?.balance
 
     if (balance != null) {
@@ -94,10 +80,9 @@ fun ChequingAccountCard(
 
 @Composable
 fun SavingsAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val savingsAccount = viewModel.getAccountByType(AccountType.SAVINGS)
+    val savingsAccount = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
     val balance = savingsAccount?.balance
 
     if (balance != null) {
@@ -107,10 +92,9 @@ fun SavingsAccountCard(
 
 @Composable
 fun CreditAccountCard(
-    viewModel: AccountsViewModel,
     onClickViewAccount: () -> Unit
 ) {
-    val creditAccount = viewModel.getAccountByType(AccountType.CREDIT)
+    val creditAccount = AccountsRepository.accounts.find { it.type == AccountType.CREDIT }
     val balance = creditAccount?.balance
 
     if (balance != null) {
@@ -164,23 +148,3 @@ fun OverviewCard(
         }
     }
 }
-
-/*
-@Preview
-@Composable
-fun OverviewScreenPreview()
-{
-   var viewModel :AccountsViewModel
-
-    OverviewScreen(viewModel)
-}
-
-@Preview
-@Composable
-fun OverviewScreenDarkModePreview() {
-    EmptyActivityTheme(useDarkTheme = true) {
-        OverviewScreen()
-    }
-}
-
- */

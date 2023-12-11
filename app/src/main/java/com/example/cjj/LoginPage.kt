@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -6,67 +6,36 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
-import com.example.emptyactivity.data.ResultAuth
-import com.google.android.play.integrity.internal.t
-
 
 @Composable
-fun SignupPage(
+fun LoginPage(
     authViewModel: AuthViewModel,
     onSuccess: () -> Unit = {},
-    onClickLogin: () -> Unit = {},
+    onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val userState = authViewModel.currentUser().collectAsState()
-    val signUpResult by authViewModel.signUpResult.collectAsState(ResultAuth.Inactive)
-
-    var emailText by rememberSaveable { mutableStateOf("") }
-    var passwordText by rememberSaveable { mutableStateOf("") }
-    var passwordRepeatText by rememberSaveable { mutableStateOf("") }
-    val repeatPasswordField = @Composable { LoginSignupTextField(
-        label = "Repeat Password",
-        placeholder = "password",
-        onValueChange = { passwordRepeatText = it },
-        validate = {
-            it == passwordText
-        }
-    ) }
-
-    ///
-    LaunchedEffect(signUpResult) {
-        signUpResult?.let {
-            if (it is ResultAuth.Inactive) {
-                return@LaunchedEffect
-            }
-            if (it is ResultAuth.InProgress) {
-                // TODO: Add some kind of text or something that shows that it's in progress
-                return@LaunchedEffect
-            }
-            if (it is ResultAuth.Success && it.data) {
-
-            } else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
-
-            }
-        }
-    }
+    var emailText by remember { mutableStateOf("") }
+    var passwordText by remember { mutableStateOf("") }
 
 
     Column(
@@ -76,7 +45,7 @@ fun SignupPage(
     ) {
         if (userState.value == null) {
             Text(
-                text = "Create an Account",
+                text = "Log In",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
             )
@@ -84,45 +53,42 @@ fun SignupPage(
                 label = "Email",
                 placeholder = "example@email.com",
                 onValueChange = { emailText = it },
-                validate = { authViewModel.validateEmail(it) }
             )
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
                 onValueChange = { passwordText = it },
-                validate = { authViewModel.validatePassword(it) }
             )
-            repeatPasswordField()
             Button(
                 modifier = Modifier
                     .padding(10.dp)
                     .width(200.dp)
                     .height(50.dp)
                     .semantics {
-                        onClick(label = "sign up for an account", action = null)
+                        onClick(label = "log in to your account", action = null)
                     },
                 onClick = {
-                    authViewModel.signUp(emailText, passwordText)
+                    authViewModel.signIn(emailText, passwordText)
                 }
             ) {
                 Text(
-                    text = "Sign Up",
+                    text = "Log in",
                     style = MaterialTheme.typography.titleLarge
                 )
             }
             Button(
                 modifier = Modifier
                     .padding(10.dp)
-                    .width(300.dp)
+                    .width(240.dp)
                     .height(50.dp)
                     .semantics {
-                        onClick(label = "return to the log in screen", action = null)
+                        onClick(label = "create an account", action = null)
                     },
-                onClick = onClickLogin
+                onClick = onClickSignup
             ) {
                 Text(
-                    text = "Log in with an existing account",
-                    style = MaterialTheme.typography.titleMedium
+                    text = "Create an account",
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
         } else {
@@ -131,8 +97,57 @@ fun SignupPage(
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+        /**
+         * A text field for a user's email, password, etc. As the name implies, it should only be used for the
+         * login and signup pages.
+         * @param placeholder The text field's placeholder text.
+         * @param onValueChange The function that will be called with the new value passed in after
+         * the text field's value gets changed.
+         */
+fun LoginSignupTextField(
+    label: String,
+    placeholder: String,
+    onValueChange: (newValue: String) -> Unit,
+    modifier: Modifier = Modifier,
+    validate: ((String) -> Boolean)? = null,
+) {
+    var inputText by remember { mutableStateOf("") }
+    var isValid by remember { mutableStateOf(true) }
+
+    if (validate != null)
+        isValid = validate(inputText)
+
+    OutlinedTextField(
+        singleLine = true,
+        label = { Text(label) },
+        value = inputText,
+        onValueChange = {
+            inputText = it
+            onValueChange(inputText)
+             },
+        placeholder = @Composable {
+            Text(
+                text = placeholder
+            )
+        },
+        isError = inputText.isEmpty() || !isValid,
+        modifier = modifier
+            .width(300.dp)
+            .padding(5.dp)
+    )
+    if (!isValid) {
+        Text(
+            text = "Error!",
+            color = Color.Red,
+        )
+    }
+}
+
 //@Preview
 //@Composable
-//fun SignupPagePreview(modifier: Modifier = Modifier) {
-//    SignupPage(modifier = modifier)
+//fun LoginPagePreview(modifier: Modifier = Modifier) {
+//    LoginPage(modifier = modifier)
 //}
