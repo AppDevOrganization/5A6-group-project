@@ -10,10 +10,17 @@ enum class AccountType
 
 data class Account(
     val type : AccountType,
-    val balance: Double,
     var transactions: MutableList<Transaction>,
     var dueDate: String? = null
 )
+{
+    val balance: Double
+        get() = transactions.sumOf { it.amount }
+
+    fun addTransaction(transaction: Transaction) {
+        transactions.add(transaction)
+    }
+}
 data class Transaction(
     val date: String,
     val amount: Double,

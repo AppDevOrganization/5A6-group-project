@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.flowOf
 object AccountsRepository{
     val accounts = flowOf(
         listOf(
-                Account(type=AccountType.CHEQUING,  balance = 1364.00, transactions = mutableListOf(
+                Account(type=AccountType.CHEQUING,transactions = mutableListOf(
                         Transaction("2023-11-22", 100.00, "Transfer", 1364.00),
                         Transaction("2023-11-15", -13.00, "Boston Pizza", 1264.00),
                         Transaction("2023-11-08", -3.00, "Depanneur 123", 1277.00),
@@ -20,7 +20,7 @@ object AccountsRepository{
                 ),
 
 
-            Account(type=AccountType.SAVINGS,balance = 6719.00, transactions = mutableListOf(
+            Account(type=AccountType.SAVINGS, transactions = mutableListOf(
                     Transaction("2023-11-22", -100.00, "Transfer", 6719.00),
                     Transaction("2023-11-15", 20.00, "Interest", 6819.00),
                     Transaction("2023-11-08", 50.00, "Deposit", 6799.00),
@@ -33,7 +33,7 @@ object AccountsRepository{
                     Transaction("2023-09-20", 20.00, "Interest", 6419.00))
             ),
 
-            Account(type=AccountType.CREDIT, balance = 999.00, dueDate = "2023-11-24",
+            Account(type=AccountType.CREDIT, dueDate = "2023-11-24",
                 transactions = mutableListOf(
                     Transaction("2023-10-18", 549.00, "Rent", 999.00),
                     Transaction("2023-10-11", 50.00, "GazMetro", 450.00),
