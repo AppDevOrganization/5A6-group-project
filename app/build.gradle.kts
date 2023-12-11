@@ -3,8 +3,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.diffplug.spotless")
-
 }
 
 
@@ -57,18 +55,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    spotless {
-        kotlin {
-            ktfmt()
-            ktlint()
-            diktat()
-            prettier()
-        }
-        kotlinGradle {
-            ktlint()
-            diktat()
         }
     }
 }
