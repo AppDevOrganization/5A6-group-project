@@ -3,7 +3,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.diffplug.spotless") version "6.23.3"
+    id("com.diffplug.spotless")
 }
 
 
@@ -82,7 +82,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
-    //implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+//implementation("androidx.lifebcycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
