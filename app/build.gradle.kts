@@ -61,14 +61,12 @@ android {
     }
     spotless {
         kotlin {
-            target("**/*.kt", "**/*.kts")
             ktfmt()
             ktlint()
             diktat()
             prettier()
         }
         kotlinGradle {
-            target("**/*.gradle.kts") // Include Kotlin Gradle files
             ktlint()
             diktat()
         }
