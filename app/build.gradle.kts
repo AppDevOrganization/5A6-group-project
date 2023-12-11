@@ -1,16 +1,17 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-parcelize")
     id("com.diffplug.spotless") version "6.23.3"
 }
 
+val bundleId = "com.example.cjj"
+
 android {
-    namespace = "com.example.cjj"
+    namespace = bundleId
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.cjj"
+        applicationId = bundleId
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -28,7 +29,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
+                "proguard-rules.pro"
             )
         }
         getByName("debug") {
@@ -39,6 +40,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -67,8 +69,6 @@ android {
     }
 }
 
-
-
 dependencies {
     implementation("androidx.compose.runtime:runtime:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("androidx.core:core-ktx:1.9.0")
-//implementation("androidx.lifebcycle:lifecycle-runtime-ktx:2.6.2")
+    // implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
