@@ -3,7 +3,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.diffplug.spotless") version "6.23.3"
+    id("com.diffplug.spotless")
 }
 
 val bundleId = "com.example.cjj"
