@@ -1,4 +1,4 @@
-package com.example.emptyactivity.home
+package com.example.cjj.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -21,9 +21,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import com.example.emptyactivity.AccountsViewModel
-import com.example.emptyactivity.R
-import com.example.emptyactivity.data.AccountType
+import com.example.cjj.AccountsViewModel
+import com.example.cjj.R
+import com.example.cjj.data.AccountType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

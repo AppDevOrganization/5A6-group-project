@@ -1,4 +1,4 @@
-package com.example.emptyactivity.data
+package com.example.cjj.data
 
 enum class AccountType
 {

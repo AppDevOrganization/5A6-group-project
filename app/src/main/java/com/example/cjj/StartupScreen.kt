@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.emptyactivity
+package com.example.cjj
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

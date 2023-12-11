@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -77,15 +77,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.emptyactivity.components.Constants
-import com.example.emptyactivity.data.Account
-import com.example.emptyactivity.data.AccountType
-import com.example.emptyactivity.data.AccountsRepository
-import com.example.emptyactivity.data.UserPreferencesRepository
-import com.example.emptyactivity.home.OverviewScreen
-import com.example.emptyactivity.ui.theme.EmptyActivityTheme
-import com.example.emptyactivity.ui.theme.md_theme_dark_onPrimary
-import com.example.emptyactivity.ui.theme.md_theme_light_onPrimary
+import com.example.cjj.components.Constants
+import com.example.cjj.data.Account
+import com.example.cjj.data.AccountType
+import com.example.cjj.data.AccountsRepository
+import com.example.cjj.data.UserPreferencesRepository
+import com.example.cjj.home.OverviewScreen
+import com.example.cjj.ui.theme.EmptyActivityTheme
+import com.example.cjj.ui.theme.md_theme_dark_onPrimary
+import com.example.cjj.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
