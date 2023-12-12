@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,11 +22,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
+import com.example.emptyactivity.data.ResultAuth
 
 @Composable
 fun LoginPage(
@@ -34,9 +37,38 @@ fun LoginPage(
     onClickSignup: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val LOGIN_ERROR = stringResource(id = R.string.login_error)
+    val LOGIN_INTERNAL_ERROR = stringResource(id = R.string.signup_internal_error)
+    
     val userState = authViewModel.currentUser().collectAsState()
+    val logInResult by authViewModel.logInResult.collectAsState(ResultAuth.Inactive)
+
     var emailText by rememberSaveable { mutableStateOf("") }
     var passwordText by rememberSaveable { mutableStateOf("") }
+
+    var errorMessage by remember { mutableStateOf("") }
+    
+
+    LaunchedEffect(logInResult) {
+        logInResult?.let {
+            if (it is ResultAuth.Inactive) {
+                return@LaunchedEffect
+            }
+            if (it is ResultAuth.InProgress) {
+                return@LaunchedEffect
+            }
+            if (it is ResultAuth.Success && it.data) {
+
+            }
+            else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
+                if (it is ResultAuth.Failure)
+                    errorMessage = LOGIN_INTERNAL_ERROR
+                else if (it is ResultAuth.Success) {
+                    errorMessage = LOGIN_ERROR
+                }
+            }
+        }
+    }
 
 
     Column(
