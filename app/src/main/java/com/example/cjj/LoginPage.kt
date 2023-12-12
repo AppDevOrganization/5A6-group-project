@@ -131,6 +131,21 @@ fun LoginPage(
                     style = MaterialTheme.typography.titleLarge
                 )
             }
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(240.dp)
+                    .height(50.dp)
+                    .semantics {
+                        onClick(label = "create an account", action = null)
+                    },
+                onClick = { /* TODO: Add event here */ }
+            ) {
+                Text(
+                    text = "Forgot password?",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         } else {
             onSuccess()
         }
