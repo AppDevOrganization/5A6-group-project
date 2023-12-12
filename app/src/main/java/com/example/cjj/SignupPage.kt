@@ -95,8 +95,7 @@ fun SignupPage(
                 Text(
                     text = errorMessage,
                     color = Color.Red,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    style = MaterialTheme.typography.titleMedium
                 )
 
             LoginSignupTextField(
