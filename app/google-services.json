@@ -7,7 +7,7 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:329045748974:android:5fcf3e66c3424dc029d7ff",
+        "mobilesdk_app_id": "1:329045748974:android:6da0dcf30bc5189d29d7ff",
         "android_client_info": {
           "package_name": "com.example.cjj"
         }
@@ -23,7 +23,6 @@
           "other_platform_oauth_client": []
         }
       }
-    }
-  ],
+    },
   "configuration_version": "1"
 }
