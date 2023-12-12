@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
@@ -95,7 +96,8 @@ fun SignupPage(
                 Text(
                     text = errorMessage,
                     color = Color.Red,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
                 )
 
             LoginSignupTextField(
