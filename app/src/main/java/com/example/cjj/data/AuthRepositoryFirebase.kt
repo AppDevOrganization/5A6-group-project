@@ -45,7 +45,6 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
             return false
         }
     }
-
     /**
      * Signs in a user if the given email and password are correct.
      * @param email The email of the user.
@@ -97,6 +96,13 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         if (auth.currentUser != null) {
             auth.currentUser!!.delete()
         }
+    }
+
+    /**
+     * Sends an email to the current user to reset their password.
+     */
+    override suspend fun sendPasswordResetEmail() {
+        TODO("Not yet implemented")
     }
 
     // Convert from FirebaseUser to User
