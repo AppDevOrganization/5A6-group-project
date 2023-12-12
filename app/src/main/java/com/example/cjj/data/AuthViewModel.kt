@@ -79,8 +79,12 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
 
         viewModelScope.launch {
             try {
-                authRepository.sendPasswordResetEmail(email)
-                _resetPswdResult.value = ResultAuth.Success(true)
+                if (authRepository.isEmailValid(email)) {
+                    authRepository.sendPasswordResetEmail(email)
+                    _resetPswdResult.value = ResultAuth.Success(true)
+                }
+                else
+                    _resetPswdResult.value = ResultAuth.Success(false)
             }
             catch (e: Exception) {
                 _resetPswdResult.value = ResultAuth.Failure(e)
