@@ -1,4 +1,4 @@
-package com.example.emptyactivity
+package com.example.cjj
 
 import android.app.Application
 import com.example.emptyactivity.data.AppModule
