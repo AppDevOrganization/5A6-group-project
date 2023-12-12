@@ -21,13 +21,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
@@ -65,6 +68,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -74,6 +78,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -90,10 +95,9 @@ import com.example.cjj.home.OverviewScreen
 import com.example.cjj.ui.theme.EmptyActivityTheme
 import com.example.cjj.ui.theme.md_theme_dark_onPrimary
 import com.example.cjj.ui.theme.md_theme_light_onPrimary
-import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
+import kotlinx.coroutines.launch
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
@@ -323,6 +327,21 @@ fun CJJBankApp(
                             }
                         )
                         NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.AccountBox, contentDescription = "") },
+                            label = { Text("About Us") },
+                            selected = false,
+                            onClick = {
+                                navController.navigateSingleTopTo(AboutUs.route)
+                                scope.launch {
+                                    if (drawerState.isClosed) {
+                                        drawerState.open()
+                                    } else {
+                                        drawerState.close()
+                                    }
+                                }
+                            }
+                        )
+                        NavigationDrawerItem(
                             icon = { Icon(Icons.Filled.Send, contentDescription = "") },
                             label = { Text("Transfers") },
                             selected = false,
@@ -433,6 +452,72 @@ fun NavigationBar(
     }
 }
 
+
+@Composable
+fun AboutUsScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .semantics { contentDescription = "Overview Screen" }
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = "About Us",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
+        Text(
+            text = "Welcome to CJJ Bank, your trusted financial partner. We are committed to providing you with top-notch banking services and innovative solutions to meet your financial needs.",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        Text(
+            text = "The motivation for our bank mobile application is to make banking more efficient and secure for users. The ultimate goal is to enhance the overall banking experience and address the evolving needs and expectations of today's new generation. It provides access to account information, transactions, and various financial services 24/7, making banking more accessible and flexible for users.",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = "Contact Information:",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Text(
+            text = "Email: cjj@gmail.com",
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        Text(
+            text = "Phone: +1 (123) 456-7890",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        // Add more information as needed
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextButton(
+            onClick = {
+               navController.navigateSingleTopTo(Overview.route)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+        ) {
+            Text(text = "Back to Home")
+        }
+    }
+}
+
+
 /**
  * Date of retrieval: 2023/12/01
  * Displaying the account options in the dropdown menu.
@@ -462,14 +547,21 @@ fun TransferScreen(
                 tint = Color.Black,
                 modifier = Modifier
                     .padding(4.dp)
+                    .semantics {
+                        onClick(label = "return to the account screen", action = null)
+                    }
             )
         }
 
         // Transfer details
         Text(
+
             text = "Make a transfer",
             style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .semantics { contentDescription = "Make a transfer by fill out the fields below to transfer funds " +
+                        "between accounts." }
         )
 
         var options = listOf(AccountType.CHEQUING, AccountType.SAVINGS, AccountType.CREDIT)
@@ -495,13 +587,18 @@ fun TransferScreen(
                     .onGloballyPositioned { coordinates ->
                         fromTextFieldSize = coordinates.size.toSize()
                     }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = "Click the button on the right to select " +
+                                "an account to transfer" // avoid writing 'from', will already be spoken
+                    },
                 label = { Text("From Account") },
                 readOnly = true, // Set the field to be read-only
                 trailingIcon = {
                     Icon(
-                        fromIcon, "contentDescription",
-                        Modifier.clickable { isFromExpanded = !isFromExpanded })
+                        fromIcon, "from account",
+                        Modifier.clickable { isFromExpanded = !isFromExpanded }
+                            .semantics { onClick(label = "select an account to transfer from", action = null) })
                 }
             )
 
@@ -515,11 +612,17 @@ fun TransferScreen(
                     .padding(vertical = 8.dp)
             ) {
                 options.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        fromSelectedText = label.name
-                        fromAccount = label
-                        isFromExpanded = false
-                    }) {
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(label = "choose this account to transfer from", action = null)
+                            },
+                        onClick = {
+                            fromSelectedText = label.name
+                            fromAccount = label
+                            isFromExpanded = false
+                        }
+                    ) {
                         Text(text = label.name)
                     }
                 }
@@ -547,13 +650,19 @@ fun TransferScreen(
                     .onGloballyPositioned { coordinates ->
                         toTextFieldSize = coordinates.size.toSize()
                     }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = "Click the button on the right to select " +
+                                "an account to transfer"
+                    },
                 label = { Text("To Account") },
                 readOnly = true, // Set the field to be read-only
                 trailingIcon = {
                     Icon(
-                        toIcon, "contentDescription",
-                        Modifier.clickable { isToExpanded = !isToExpanded })
+                        fromIcon, "to account",
+                        Modifier
+                            .clickable { isFromExpanded = !isFromExpanded }
+                            .semantics { onClick(label = "select an account to transfer to", action = null) })
                 }
             )
 
@@ -567,10 +676,15 @@ fun TransferScreen(
                     .padding(vertical = 8.dp)
             ) {
                 options.forEach { account ->
-                    DropdownMenuItem(onClick = {
-                        toSelectedText = account.name
-                        isToExpanded = false
-                        toAccount = account
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(label = "choose this account to transfer to", action = null)
+                            },
+                        onClick = {
+                            toSelectedText = account.name
+                            isToExpanded = false
+                            toAccount = account
                     }) {
                         Text(text = account.name)
 
@@ -614,9 +728,7 @@ fun TransferScreen(
                 var account : Account? = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
                 if (fromAccount == AccountType.CHEQUING) {
-                    //account = viewModel.getAccountByType(AccountType.CHEQUING)
-                    // for demo 4a
-                    // to be replaced for final implementation 4b
+                    // already set above and working ;-)
                 } else if (fromAccount == AccountType.SAVINGS) {
                     account = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
                 } else if (fromAccount == AccountType.CREDIT) {
@@ -672,6 +784,9 @@ fun TransferScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
+                .semantics {
+                    onClick(label = "make a transfer between accounts", action = null)
+                }
         ) {
             Text(text = "Transfer")
         }
@@ -854,6 +969,14 @@ fun BankNavHost(
                 onBackClick = {
                     navController.navigateSingleTopTo(Overview.route)
                 })
+        }
+
+        composable(route=AboutUs.route)
+        {
+            AboutUsScreen(
+                modifier=modifier,
+                navController = navController
+            )
         }
 
     }

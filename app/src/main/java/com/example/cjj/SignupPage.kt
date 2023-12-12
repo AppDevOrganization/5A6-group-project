@@ -14,13 +14,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -28,7 +28,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
-import com.google.android.play.integrity.internal.t
 
 @Composable
 fun SignupPage(
@@ -88,6 +87,10 @@ fun SignupPage(
     ) {
         if (userState.value == null) {
             Text(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = "Fill out the email and password fields below to sign up, or click the login button at the bottom to sign in with an existing account."
+                    },
                 text = "Create an Account",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
