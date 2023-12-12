@@ -37,6 +37,7 @@ fun SignupPage(
     modifier: Modifier = Modifier
 ) {
     val SIGNUP_ERROR = stringResource(id = R.string.signup_error)
+    val SIGNUP_INTERNAL_ERROR = stringResource(id = R.string.signup_internal_error)
 
     val userState = authViewModel.currentUser().collectAsState()
     val signUpResult by authViewModel.signUpResult.collectAsState(ResultAuth.Inactive)
@@ -67,9 +68,13 @@ fun SignupPage(
                 return@LaunchedEffect
             }
             if (it is ResultAuth.Success && it.data) {
-
-            } else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
-                errorMessage = SIGNUP_ERROR
+                
+            }
+            else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
+                if (it is ResultAuth.Failure)
+                    errorMessage = SIGNUP_INTERNAL_ERROR
+                else if (it is ResultAuth.Success)
+                    errorMessage = SIGNUP_ERROR
             }
         }
     }
@@ -86,6 +91,13 @@ fun SignupPage(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
             )
+            if (errorMessage != "")
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
@@ -101,13 +113,6 @@ fun SignupPage(
                 validate = { authViewModel.validatePassword(it) }
             )
             repeatPasswordField()
-
-            if (errorMessage != "")
-                Text(
-                    text = errorMessage,
-                    color = Color.Red,
-                    style = MaterialTheme.typography.titleMedium
-                )
             Button(
                 modifier = Modifier
                     .padding(10.dp)
