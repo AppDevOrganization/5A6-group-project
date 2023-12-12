@@ -44,11 +44,10 @@ fun ResetPasswordPage(
 
     var emailText by rememberSaveable{ mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
-    var hasSentEmail by rememberSaveable { mutableStateOf(false) }
+    var hasSentEmail by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(resetPswdResult) {
-        m
         resetPswdResult?.let {
             if (it is ResultAuth.Inactive) {
                 return@LaunchedEffect
