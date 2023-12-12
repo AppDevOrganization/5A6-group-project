@@ -19,6 +19,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     private val _logInResult = MutableStateFlow<ResultAuth<Boolean>?>(ResultAuth.Inactive)
     val logInResult: StateFlow<ResultAuth<Boolean>?> = _logInResult
 
+    private val _resetPswdResult = MutableStateFlow<ResultAuth<Boolean>?>(ResultAuth.Inactive)
+    val resetPswdResult: StateFlow<ResultAuth<Boolean>?> = _resetPswdResult
+
     fun signUp(email: String, password: String) {
         _signUpResult.value = ResultAuth.InProgress
 
@@ -72,12 +75,15 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     }
 
     fun sendPasswordResetEmail(email: String) {
+        _resetPswdResult.value = ResultAuth.InProgress
+
         viewModelScope.launch {
             try {
                 authRepository.sendPasswordResetEmail(email)
+                _resetPswdResult.value = ResultAuth.Success(true)
             }
             catch (e: Exception) {
-
+                _resetPswdResult.value = ResultAuth.Failure(e)
             }
         }
     }
