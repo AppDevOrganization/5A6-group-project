@@ -19,6 +19,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -27,7 +29,6 @@ import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
 import com.google.android.play.integrity.internal.t
 
-
 @Composable
 fun SignupPage(
     authViewModel: AuthViewModel,
@@ -35,6 +36,8 @@ fun SignupPage(
     onClickLogin: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val SIGNUP_ERROR = stringResource(id = R.string.signup_error)
+
     val userState = authViewModel.currentUser().collectAsState()
     val signUpResult by authViewModel.signUpResult.collectAsState(ResultAuth.Inactive)
 
@@ -45,10 +48,13 @@ fun SignupPage(
         label = "Repeat Password",
         placeholder = "password",
         onValueChange = { passwordRepeatText = it },
+        errorMessage = stringResource(id = R.string.signup_repeat_pswd_error),
         validate = {
             it == passwordText
         }
     ) }
+
+    var errorMessage by remember { mutableStateOf("") }
 
     ///
     LaunchedEffect(signUpResult) {
@@ -63,7 +69,7 @@ fun SignupPage(
             if (it is ResultAuth.Success && it.data) {
 
             } else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
-
+                errorMessage = SIGNUP_ERROR
             }
         }
     }
@@ -83,16 +89,25 @@ fun SignupPage(
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
+                errorMessage = stringResource(id = R.string.signup_email_error),
                 onValueChange = { emailText = it },
                 validate = { authViewModel.validateEmail(it) }
             )
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
+                errorMessage = stringResource(id = R.string.signup_pswd_error),
                 onValueChange = { passwordText = it },
                 validate = { authViewModel.validatePassword(it) }
             )
             repeatPasswordField()
+
+            if (errorMessage != "")
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.titleMedium
+                )
             Button(
                 modifier = Modifier
                     .padding(10.dp)
