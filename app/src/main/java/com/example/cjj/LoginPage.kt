@@ -35,6 +35,7 @@ fun LoginPage(
     authViewModel: AuthViewModel,
     onSuccess: () -> Unit = {},
     onClickSignup: () -> Unit = {},
+    onClickResetPswd: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val LOGIN_ERROR = stringResource(id = R.string.login_error)
@@ -137,9 +138,9 @@ fun LoginPage(
                     .width(240.dp)
                     .height(50.dp)
                     .semantics {
-                        onClick(label = "create an account", action = null)
+                        onClick(label = "Reset password", action = null)
                     },
-                onClick = { /* TODO: Add event here */ }
+                onClick = onClickResetPswd
             ) {
                 Text(
                     text = "Forgot password?",
