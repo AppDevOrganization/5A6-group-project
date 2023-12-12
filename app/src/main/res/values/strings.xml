@@ -4,4 +4,5 @@
     <string name="signup_pswd_error">Must be at least 8 characters long</string>
     <string name="signup_repeat_pswd_error">Does not match the password</string>
     <string name="signup_error">An account with that email already exists</string>
+    <string name="signup_internal_error">Internal error occurred, try again</string>
 </resources>
