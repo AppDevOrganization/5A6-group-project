@@ -94,13 +94,16 @@ import com.example.cjj.ui.theme.EmptyActivityTheme
 import com.example.cjj.ui.theme.md_theme_dark_onPrimary
 import com.example.cjj.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.emptyactivity.data.AuthViewModel
+import com.example.emptyactivity.data.AuthViewModelFactory
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
 
-
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
+    private val authViewModelFactory = AuthViewModelFactory()
     private lateinit var accountsViewModel: AccountsViewModel
     private lateinit var transactionsViewModel: TransactionsViewModel
     private val Context.dataStore by preferencesDataStore(
@@ -122,7 +125,7 @@ class MainActivity : ComponentActivity() {
             this,
             AccountsViewModelFactory(
                 AccountsRepository,
-                UserPreferencesRepository(dataStore, this)
+                UserPreferencesRepository(dataStore = dataStore, context = this)
             )
         ).get(AccountsViewModel::class.java)
 
@@ -141,7 +144,13 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
             ) {
-                MainScreen(modifier = Modifier, isDarkModeState, accountsViewModel, transactionsViewModel)
+                MainScreen(
+                    modifier = Modifier, 
+                    isDarkModeState = isDarkModeState, 
+                    accountsViewModel = accountsViewModel, 
+                    transactionsViewModel = transactionsViewModel,
+                    authViewModelFactory = authViewModelFactory
+                )
             }
         }
     }
@@ -159,7 +168,13 @@ class MainActivity : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>, accountsViewModel: AccountsViewModel, transactionsViewModel: TransactionsViewModel) {
+fun MainScreen(
+    modifier: Modifier, 
+    isDarkModeState: MutableState<Boolean>, 
+    accountsViewModel: AccountsViewModel, 
+    transactionsViewModel: TransactionsViewModel,
+    authViewModelFactory: AuthViewModelFactory
+) {
 
 
     var showStartupScreen by remember { mutableStateOf(true) }
@@ -173,7 +188,8 @@ fun MainScreen(modifier: Modifier, isDarkModeState: MutableState<Boolean>, accou
             isDarkModeState = isDarkModeState,
             modifier = modifier,
             accountsViewModel = accountsViewModel,
-            transactionsViewModel = transactionsViewModel
+            transactionsViewModel = transactionsViewModel,
+            authViewModelFactory = authViewModelFactory
         )
     }
 }
@@ -228,7 +244,14 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<Boolean>, modifier: Modifier = Modifier, accountsViewModel: AccountsViewModel, transactionsViewModel: TransactionsViewModel) {
+fun CJJBankApp(
+    navController: NavHostController, 
+    isDarkModeState: MutableState<Boolean>, 
+    modifier: Modifier = Modifier, 
+    accountsViewModel: AccountsViewModel, 
+    transactionsViewModel: TransactionsViewModel,
+    authViewModelFactory: AuthViewModelFactory
+) {
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
@@ -239,6 +262,8 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
         val currentDestination = currentBackStack?.destination
         val currentScreen =
             bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
+        val authViewModel: AuthViewModel = viewModel(factory = authViewModelFactory)
+        val userState = authViewModel.currentUser().collectAsState()
 
         var useDarkMode: Color = if (!isDarkModeState.value) {
             md_theme_light_onPrimary
@@ -258,13 +283,18 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                     navController = navController,
                     modifier = Modifier.padding(contentPadding),
                     accountsViewModel = accountsViewModel,
-                    transactionsViewModel = transactionsViewModel
+                    transactionsViewModel = transactionsViewModel,
+                    authViewModel = authViewModel
                 )
             }
         }
 
 
         if (!isOnStandalonePage(navController)) {
+            if (userState.value == null) {
+                navController.navigateSingleTopTo(Login.route)
+            }
+
             ModalNavigationDrawer(
                 drawerState = drawerState,
                 modifier = Modifier,
@@ -345,7 +375,10 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                             icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "") },
                             label = { Text("Logout") },
                             selected = false,
-                            onClick = { navController.navigateSingleTopTo(Login.route) }
+                            onClick = {
+                                authViewModel.signOut()
+                                navController.navigateSingleTopTo(Login.route)
+                            }
                         )
                     }
                 }
@@ -801,7 +834,8 @@ fun BankNavHost(
     navController: NavHostController,
     modifier: Modifier,
     accountsViewModel: AccountsViewModel,
-    transactionsViewModel: TransactionsViewModel
+    transactionsViewModel: TransactionsViewModel,
+    authViewModel: AuthViewModel
 ) {
     NavHost(
         navController = navController,
@@ -823,6 +857,7 @@ fun BankNavHost(
         }
         composable(route = Login.route) {
             LoginPage(
+                authViewModel = authViewModel,
                 onClickSignup = {
                     navController.navigateSingleTopTo(Signup.route)
                 },
@@ -833,6 +868,7 @@ fun BankNavHost(
         }
         composable(route = Signup.route) {
             SignupPage(
+                authViewModel = authViewModel,
                 onClickLogin = {
                     navController.navigateSingleTopTo(Login.route)
                 },
