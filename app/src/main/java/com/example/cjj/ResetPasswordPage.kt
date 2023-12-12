@@ -13,10 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +34,7 @@ fun ResetPasswordPage(
 ) {
     val userState = authViewModel.currentUser().collectAsState()
     var emailText by rememberSaveable{ mutableStateOf("") }
+    var errorMessage by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier.fillMaxSize(),
@@ -49,6 +52,12 @@ fun ResetPasswordPage(
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center
             )
+            if (errorMessage != "")
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.titleMedium
+                )
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
