@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +46,10 @@ fun LoginPage(
     ) {
         if (userState.value == null) {
             Text(
+                modifier = Modifier
+                    .semantics {
+                        contentDescription = "Fill out the email and password fields below to login to your account, or click the create an account button to sign up."
+                    },
                 text = "Log In",
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,

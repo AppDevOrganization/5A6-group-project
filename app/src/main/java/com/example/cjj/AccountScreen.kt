@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.example.cjj.data.Account
@@ -94,6 +95,10 @@ fun TransactionsLazyColumn(
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
         Button(
+            modifier = Modifier
+                .semantics {
+                    onClick(label = "sort the list of transactions by date", action = null)
+                },
             onClick = {
                 shouldSortByDate = shouldSortByDate == false
                 viewModel.enableSortByDate(shouldSortByDate, accountType)
@@ -105,6 +110,10 @@ fun TransactionsLazyColumn(
             )
         }
         Button(
+            modifier = Modifier
+                .semantics {
+                    onClick(label = "sort the list of transactions in alphabetical order", action = null)
+                },
             onClick = {
                 shouldSortAZ = shouldSortAZ == false
                 viewModel.enableSortAlphabetically(shouldSortAZ, accountType)
@@ -217,6 +226,12 @@ fun AccountTopCard(
     balance: Double,
     onClickTransferButton: () -> Unit
 ) {
+    var topButtonDescription = "make a transfer between accounts"
+
+    if (accountType == AccountType.CREDIT) {
+        topButtonDescription = "make a payment on your credit card balance"
+    }
+
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -240,6 +255,10 @@ fun AccountTopCard(
                     style = MaterialTheme.typography.displayLarge
                 )
                 Button(
+                    modifier = Modifier
+                        .semantics {
+                            onClick(label = topButtonDescription, action = null)
+                        },
                     onClick = onClickTransferButton
                 ) {
                     if (accountType == AccountType.CREDIT) {

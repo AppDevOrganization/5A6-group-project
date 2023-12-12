@@ -77,6 +77,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -93,10 +94,9 @@ import com.example.cjj.home.OverviewScreen
 import com.example.cjj.ui.theme.EmptyActivityTheme
 import com.example.cjj.ui.theme.md_theme_dark_onPrimary
 import com.example.cjj.ui.theme.md_theme_light_onPrimary
-import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
+import kotlinx.coroutines.launch
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
@@ -541,14 +541,21 @@ fun TransferScreen(
                 tint = Color.Black,
                 modifier = Modifier
                     .padding(4.dp)
+                    .semantics {
+                        onClick(label = "return to the account screen", action = null)
+                    }
             )
         }
 
         // Transfer details
         Text(
+
             text = "Make a transfer",
             style = MaterialTheme.typography.headlineLarge,
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .semantics { contentDescription = "Make a transfer by fill out the fields below to transfer funds " +
+                        "between accounts." }
         )
 
         var options = listOf(AccountType.CHEQUING, AccountType.SAVINGS, AccountType.CREDIT)
@@ -574,13 +581,18 @@ fun TransferScreen(
                     .onGloballyPositioned { coordinates ->
                         fromTextFieldSize = coordinates.size.toSize()
                     }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = "Click the button on the right to select " +
+                                "an account to transfer" // avoid writing 'from', will already be spoken
+                    },
                 label = { Text("From Account") },
                 readOnly = true, // Set the field to be read-only
                 trailingIcon = {
                     Icon(
-                        fromIcon, "contentDescription",
-                        Modifier.clickable { isFromExpanded = !isFromExpanded })
+                        fromIcon, "from account",
+                        Modifier.clickable { isFromExpanded = !isFromExpanded }
+                            .semantics { onClick(label = "select an account to transfer from", action = null) })
                 }
             )
 
@@ -594,11 +606,17 @@ fun TransferScreen(
                     .padding(vertical = 8.dp)
             ) {
                 options.forEach { label ->
-                    DropdownMenuItem(onClick = {
-                        fromSelectedText = label.name
-                        fromAccount = label
-                        isFromExpanded = false
-                    }) {
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(label = "choose this account to transfer from", action = null)
+                            },
+                        onClick = {
+                            fromSelectedText = label.name
+                            fromAccount = label
+                            isFromExpanded = false
+                        }
+                    ) {
                         Text(text = label.name)
                     }
                 }
@@ -626,13 +644,19 @@ fun TransferScreen(
                     .onGloballyPositioned { coordinates ->
                         toTextFieldSize = coordinates.size.toSize()
                     }
-                    .padding(vertical = 8.dp),
+                    .padding(vertical = 8.dp)
+                    .semantics(mergeDescendants = true) {
+                        contentDescription = "Click the button on the right to select " +
+                                "an account to transfer"
+                    },
                 label = { Text("To Account") },
                 readOnly = true, // Set the field to be read-only
                 trailingIcon = {
                     Icon(
-                        toIcon, "contentDescription",
-                        Modifier.clickable { isToExpanded = !isToExpanded })
+                        fromIcon, "to account",
+                        Modifier
+                            .clickable { isFromExpanded = !isFromExpanded }
+                            .semantics { onClick(label = "select an account to transfer to", action = null) })
                 }
             )
 
@@ -646,10 +670,15 @@ fun TransferScreen(
                     .padding(vertical = 8.dp)
             ) {
                 options.forEach { account ->
-                    DropdownMenuItem(onClick = {
-                        toSelectedText = account.name
-                        isToExpanded = false
-                        toAccount = account
+                    DropdownMenuItem(
+                        modifier = Modifier
+                            .semantics {
+                                onClick(label = "choose this account to transfer to", action = null)
+                            },
+                        onClick = {
+                            toSelectedText = account.name
+                            isToExpanded = false
+                            toAccount = account
                     }) {
                         Text(text = account.name)
 
@@ -693,9 +722,7 @@ fun TransferScreen(
                 var account : Account? = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
                 if (fromAccount == AccountType.CHEQUING) {
-                    //account = viewModel.getAccountByType(AccountType.CHEQUING)
-                    // for demo 4a
-                    // to be replaced for final implementation 4b
+                    // already set above and working ;-)
                 } else if (fromAccount == AccountType.SAVINGS) {
                     account = AccountsRepository.accounts.find { it.type == AccountType.SAVINGS }
                 } else if (fromAccount == AccountType.CREDIT) {
@@ -751,6 +778,9 @@ fun TransferScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp)
+                .semantics {
+                    onClick(label = "make a transfer between accounts", action = null)
+                }
         ) {
             Text(text = "Transfer")
         }
