@@ -784,6 +784,9 @@ fun BankNavHost(
                 },
                 onSuccess = {
                     navController.navigateSingleTopTo(Overview.route)
+                },
+                onClickResetPswd = {
+                    navController.navigateSingleTopTo(ResetPswd.route)
                 }
             )
         }
