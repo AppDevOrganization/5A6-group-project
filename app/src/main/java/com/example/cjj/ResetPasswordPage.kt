@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 
@@ -45,7 +46,8 @@ fun ResetPasswordPage(
             )
             Text(
                 text = "Type in your email address and we'll send a password reset request to it.",
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                textAlign = TextAlign.Center
             )
             LoginSignupTextField(
                 label = "Email",
@@ -81,7 +83,7 @@ fun ResetPasswordPage(
             ) {
                 Text(
                     text = "Log in",
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
                 )
             }
         } else {
