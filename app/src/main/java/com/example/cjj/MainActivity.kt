@@ -798,6 +798,14 @@ fun BankNavHost(
                 }
             )
         }
+        composable(route = ResetPswd.route) {
+            ResetPasswordPage(
+                authViewModel = authViewModel,
+                goToLogin = {
+                    navController.navigateSingleTopTo(Login.route)
+                }
+            )
+        }
         composable(route = Chequing.route) {
             val chequingAccount = AccountsRepository.accounts.find { it.type == AccountType.CHEQUING }
 
