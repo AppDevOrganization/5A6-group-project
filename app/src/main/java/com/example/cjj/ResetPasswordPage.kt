@@ -136,7 +136,7 @@ fun ResetPasswordPage(
                     .semantics {
                         onClick(label = "Go back to login page.", action = null)
                     },
-                onClick = goToLogin
+                onClick = { goToLogin(); hasSentEmail = false }
             ) {
                 Text(
                     text = "Log in",
@@ -145,6 +145,7 @@ fun ResetPasswordPage(
             }
         } else {
             goToLogin()
+            hasSentEmail = false
         }
     }
 }
