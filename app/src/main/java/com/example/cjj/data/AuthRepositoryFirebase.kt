@@ -99,10 +99,11 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     }
 
     /**
-     * Sends an email to the current user to reset their password.
+     * Sends an email to the current user's email address to reset their password.
+     * @param email The email to send a password reset request to.
      */
-    override suspend fun sendPasswordResetEmail() {
-        TODO("Not yet implemented")
+    override suspend fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
     }
 
     // Convert from FirebaseUser to User
