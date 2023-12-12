@@ -64,7 +64,6 @@ fun SignupPage(
                 return@LaunchedEffect
             }
             if (it is ResultAuth.InProgress) {
-                // TODO: Add some kind of text or something that shows that it's in progress
                 return@LaunchedEffect
             }
             if (it is ResultAuth.Success && it.data) {
