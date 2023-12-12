@@ -113,6 +113,7 @@ fun LoginSignupTextField(
     onValueChange: (newValue: String) -> Unit,
     modifier: Modifier = Modifier,
     validate: ((String) -> Boolean)? = null,
+    errorMessage: String = "Error!"
 ) {
     var inputText by remember { mutableStateOf("") }
     var isValid by remember { mutableStateOf(true) }
@@ -140,7 +141,7 @@ fun LoginSignupTextField(
     )
     if (!isValid) {
         Text(
-            text = "Error!",
+            text = errorMessage,
             color = Color.Red,
         )
     }
