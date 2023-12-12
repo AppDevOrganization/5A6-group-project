@@ -82,6 +82,13 @@ fun LoginPage(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
             )
+            if (errorMessage != "")
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.titleMedium
+                )
+
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
