@@ -90,9 +90,7 @@ import com.example.cjj.ui.theme.EmptyActivityTheme
 import com.example.cjj.ui.theme.md_theme_dark_onPrimary
 import com.example.cjj.ui.theme.md_theme_light_onPrimary
 import kotlinx.coroutines.launch
-import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.emptyactivity.data.AccountType
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
 
