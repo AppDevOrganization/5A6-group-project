@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,8 +35,8 @@ fun LoginPage(
     modifier: Modifier = Modifier
 ) {
     val userState = authViewModel.currentUser().collectAsState()
-    var emailText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
+    var emailText by rememberSaveable { mutableStateOf("") }
+    var passwordText by rememberSaveable { mutableStateOf("") }
 
 
     Column(
@@ -115,8 +116,8 @@ fun LoginSignupTextField(
     validate: ((String) -> Boolean)? = null,
     errorMessage: String = "Error!"
 ) {
-    var inputText by remember { mutableStateOf("") }
-    var isValid by remember { mutableStateOf(true) }
+    var inputText by rememberSaveable { mutableStateOf("") }
+    var isValid by rememberSaveable { mutableStateOf(true) }
 
     if (validate != null)
         isValid = validate(inputText)
