@@ -872,5 +872,5 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 
 fun isOnStandalonePage(navController: NavHostController): Boolean {
     val currentRoute = navController.currentDestination?.route
-    return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route)
+    return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route || currentRoute == ResetPswd.route)
 }
