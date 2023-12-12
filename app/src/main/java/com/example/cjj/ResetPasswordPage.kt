@@ -10,6 +10,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -28,6 +29,7 @@ fun ResetPasswordPage(
     goToLogin: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val userState = authViewModel.currentUser().collectAsState()
     var emailText by rememberSaveable{ mutableStateOf("") }
 
     Column(
@@ -35,51 +37,55 @@ fun ResetPasswordPage(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Text(
-            text = "Reset Password",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-        )
-        Text(
-            text = "Type in your email address and we'll send a password reset request to it.",
-            style = MaterialTheme.typography.titleMedium
-        )
-        LoginSignupTextField(
-            label = "Email",
-            placeholder = "example@email.com",
-            onValueChange = { emailText = it },
-        )
-        Button(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(200.dp)
-                .height(50.dp)
-                .semantics {
-                    onClick(label = "Send password reset email.", action = null)
-                },
-            onClick = {
-                authViewModel.sendPasswordResetEmail(emailText)
+        if (userState.value == null) {
+            Text(
+                text = "Reset Password",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                text = "Type in your email address and we'll send a password reset request to it.",
+                style = MaterialTheme.typography.titleMedium
+            )
+            LoginSignupTextField(
+                label = "Email",
+                placeholder = "example@email.com",
+                onValueChange = { emailText = it },
+            )
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(200.dp)
+                    .height(50.dp)
+                    .semantics {
+                        onClick(label = "Send password reset email.", action = null)
+                    },
+                onClick = {
+                    authViewModel.sendPasswordResetEmail(emailText)
+                }
+            ) {
+                Text(
+                    text = "Send email",
+                    style = MaterialTheme.typography.titleLarge
+                )
             }
-        ) {
-            Text(
-                text = "Send email",
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
-        Button(
-            modifier = Modifier
-                .padding(10.dp)
-                .width(200.dp)
-                .height(50.dp)
-                .semantics {
-                    onClick(label = "Go back to login page.", action = null)
-                },
-            onClick = { goToLogin() }
-        ) {
-            Text(
-                text = "Log in",
-                style = MaterialTheme.typography.titleLarge
-            )
+            Button(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(200.dp)
+                    .height(50.dp)
+                    .semantics {
+                        onClick(label = "Go back to login page.", action = null)
+                    },
+                onClick = {}//goToLogin
+            ) {
+                Text(
+                    text = "Log in",
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        } else {
+            goToLogin()
         }
     }
 }
