@@ -73,7 +73,12 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
 
     fun sendPasswordResetEmail(email: String) {
         viewModelScope.launch {
-            authRepository.sendPasswordResetEmail(email)
+            try {
+                authRepository.sendPasswordResetEmail(email)
+            }
+            catch (e: Exception) {
+
+            }
         }
     }
 
