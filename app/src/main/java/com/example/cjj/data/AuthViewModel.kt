@@ -30,9 +30,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             catch(e: FirebaseAuthException) {
                 _signUpResult.value = ResultAuth.Failure(e)
             }
-            finally {
-                resetResultValues()
-            }
+//            finally {
+//                resetResultValues()
+//            }
         }
     }
 
@@ -47,9 +47,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
             catch(e: FirebaseAuthException) {
                 _logInResult.value = ResultAuth.Failure(e)
             }
-            finally {
-                resetResultValues()
-            }
+//            finally {
+//                resetResultValues()
+//            }
         }
     }
 
@@ -71,9 +71,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
         }
     }
 
-    private fun resetResultValues() {
-        _signUpResult.value = ResultAuth.Inactive
-        _logInResult.value = ResultAuth.Inactive
-    }
+//    private fun resetResultValues() {
+//        _signUpResult.value = ResultAuth.Inactive
+//        _logInResult.value = ResultAuth.Inactive
+//    }
 }
 
