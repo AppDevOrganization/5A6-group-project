@@ -68,13 +68,14 @@ fun SignupPage(
                 return@LaunchedEffect
             }
             if (it is ResultAuth.Success && it.data) {
-                
+
             }
             else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
                 if (it is ResultAuth.Failure)
                     errorMessage = SIGNUP_INTERNAL_ERROR
-                else if (it is ResultAuth.Success)
+                else if (it is ResultAuth.Success) {
                     errorMessage = SIGNUP_ERROR
+                }
             }
         }
     }
@@ -95,7 +96,8 @@ fun SignupPage(
                 Text(
                     text = errorMessage,
                     color = Color.Red,
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
             LoginSignupTextField(
