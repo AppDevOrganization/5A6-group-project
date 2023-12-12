@@ -153,7 +153,7 @@ class UserPreferencesRepository(
                     }
                 } else {
                     if (currentOrder == SortOrder.DATE_AND_ALPHABETICALLY) {
-                        SortOrder.ALPHABETICALLY
+                        SortOrder.DATE
                     } else {
                         SortOrder.NONE
                     }

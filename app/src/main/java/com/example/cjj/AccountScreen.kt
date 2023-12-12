@@ -22,7 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,8 +85,21 @@ fun TransactionsLazyColumn(
     viewModel: TransactionsViewModel,
     transactions: List<Transaction>?
 ) {
-    var shouldSortByDate by remember { mutableStateOf(false) }
-    var shouldSortAZ by remember { mutableStateOf(false) }
+    var sortByDate by rememberSaveable { mutableStateOf(false) }
+    var sortByDateText by rememberSaveable { mutableStateOf("Sort date") }
+    if (sortByDate) {
+        sortByDateText = "✅ Sort date"
+    } else {
+        sortByDateText = "Sort date"
+    }
+
+    var sortByAZ by rememberSaveable { mutableStateOf(false) }
+    var sortByAZText by rememberSaveable { mutableStateOf("Sort A→Z") }
+    if (sortByAZ) {
+        sortByAZText = "✅ Sort A→Z"
+    } else {
+        sortByAZText = "Sort A→Z"
+    }
 
     Row(
         Modifier
@@ -100,12 +113,12 @@ fun TransactionsLazyColumn(
                     onClick(label = "sort the list of transactions by date", action = null)
                 },
             onClick = {
-                shouldSortByDate = shouldSortByDate == false
-                viewModel.enableSortByDate(shouldSortByDate, accountType)
+                sortByDate = sortByDate == false
+                viewModel.enableSortByDate(sortByDate, accountType)
             }
         ) {
             Text(
-                text = "Sort by date",
+                text = sortByDateText,
                 style = MaterialTheme.typography.titleLarge
             )
         }
@@ -115,12 +128,12 @@ fun TransactionsLazyColumn(
                     onClick(label = "sort the list of transactions in alphabetical order", action = null)
                 },
             onClick = {
-                shouldSortAZ = shouldSortAZ == false
-                viewModel.enableSortAlphabetically(shouldSortAZ, accountType)
+                sortByAZ = sortByAZ == false
+                viewModel.enableSortAlphabetically(sortByAZ, accountType)
             }
         ) {
             Text(
-                text = "Sort A → Z",
+                text = sortByAZText,
                 style = MaterialTheme.typography.titleLarge
             )
         }

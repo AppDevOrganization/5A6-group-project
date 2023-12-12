@@ -1,10 +1,12 @@
 package com.example.cjj
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
@@ -28,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
-import com.google.android.play.integrity.internal.m
 
 @Composable
 fun ResetPasswordPage(
@@ -76,6 +78,17 @@ fun ResetPasswordPage(
     ) {
         if (userState.value == null) {
             if (!hasSentEmail) {
+                /**
+                 * Password icons created by kliwir art - Flaticon
+                 * https://www.flaticon.com/free-icons/password
+                 */
+                Image(
+                    painter = painterResource(id = R.drawable.reset_password),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(110.dp)
+                        .padding(8.dp)
+                )
                 Text(
                     text = "Reset Password",
                     style = MaterialTheme.typography.headlineMedium,

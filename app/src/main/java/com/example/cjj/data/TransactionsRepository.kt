@@ -5,9 +5,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 object TransactionsRepository {
     val chequingTransactions = MutableStateFlow(
         listOf(
-            Transaction("2023-11-22", 100.00, "Transfer", 1364.00),
+            Transaction("2023-11-22", -34.00, "Zara", 1320.00),
+            Transaction("2023-11-22", 100.00, "Transfer", 1354.00),
+            Transaction("2023-11-15", -10.00, "Wendy's", 1254.00),
             Transaction("2023-11-15", -13.00, "Boston Pizza", 1264.00),
             Transaction("2023-11-08", -3.00, "Depanneur 123", 1277.00),
+            Transaction("2023-11-08", +3.00, "Boni-Soir", 1277.00),
             Transaction("2023-11-01", -14.00, "Jean Coutu", 1280.00),
             Transaction("2023-10-25", 60.00, "Transfer", 1294.00),
             Transaction("2023-10-18", -23.00, "McDonald's", 1234.00),
@@ -33,9 +36,11 @@ object TransactionsRepository {
     )
     val creditTransactions = MutableStateFlow(
         listOf(
-            Transaction("2023-10-18", 549.00, "Rent", 999.00),
+            Transaction("2023-10-18", 449.00, "Rent", 999.00),
+            Transaction("2023-10-18", 100.00, "Ardene", 550.00),
             Transaction("2023-10-11", 50.00, "GazMetro", 450.00),
-            Transaction("2023-09-27", 400.00, "Tuition", 400.00)
+            Transaction("2023-09-27", 50.00, "Koodo", 400.00),
+            Transaction("2023-09-27", 350.00, "Tuition", 350.00)
         )
     )
 }
