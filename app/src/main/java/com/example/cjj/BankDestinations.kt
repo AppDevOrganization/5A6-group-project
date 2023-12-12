@@ -32,4 +32,8 @@ object Transfer : BankDestination {
     override val route = "transfer"
 }
 
-val bankTabRowScreens = listOf(Overview, Chequing, Savings, Credit)
+object AboutUs : BankDestination {
+    override val route = "aboutus"
+}
+
+val bankTabRowScreens = listOf(Overview, Chequing, Savings, Credit,AboutUs)

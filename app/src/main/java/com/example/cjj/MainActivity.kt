@@ -21,13 +21,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
@@ -64,6 +67,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -287,6 +291,21 @@ fun CJJBankApp(navController: NavHostController, isDarkModeState: MutableState<B
                             }
                         )
                         NavigationDrawerItem(
+                            icon = { Icon(Icons.Filled.AccountBox, contentDescription = "") },
+                            label = { Text("About Us") },
+                            selected = false,
+                            onClick = {
+                                navController.navigateSingleTopTo(AboutUs.route)
+                                scope.launch {
+                                    if (drawerState.isClosed) {
+                                        drawerState.open()
+                                    } else {
+                                        drawerState.close()
+                                    }
+                                }
+                            }
+                        )
+                        NavigationDrawerItem(
                             icon = { Icon(Icons.Filled.Send, contentDescription = "") },
                             label = { Text("Transfers") },
                             selected = false,
@@ -393,6 +412,72 @@ fun NavigationBar(
         }
     }
 }
+
+
+@Composable
+fun AboutUsScreen(
+    modifier: Modifier = Modifier,
+    navController: NavHostController
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .semantics { contentDescription = "Overview Screen" }
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = "About Us",
+            style = MaterialTheme.typography.headlineLarge,
+            modifier = Modifier.padding(vertical = 16.dp)
+        )
+
+        Text(
+            text = "Welcome to CJJ Bank, your trusted financial partner. We are committed to providing you with top-notch banking services and innovative solutions to meet your financial needs.",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+        Text(
+            text = "The motivation for our bank mobile application is to make banking more efficient and secure for users. The ultimate goal is to enhance the overall banking experience and address the evolving needs and expectations of today's new generation. It provides access to account information, transactions, and various financial services 24/7, making banking more accessible and flexible for users.",
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Text(
+            text = "Contact Information:",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+
+        Text(
+            text = "Email: cjj@gmail.com",
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        Text(
+            text = "Phone: +1 (123) 456-7890",
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+
+        // Add more information as needed
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        TextButton(
+            onClick = {
+               navController.navigateSingleTopTo(Overview.route)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+        ) {
+            Text(text = "Back to Home")
+        }
+    }
+}
+
 
 /**
  * Date of retrieval: 2023/12/01
@@ -801,6 +886,14 @@ fun BankNavHost(
                 onBackClick = {
                     navController.navigateSingleTopTo(Overview.route)
                 })
+        }
+
+        composable(route=AboutUs.route)
+        {
+            AboutUsScreen(
+                modifier=modifier,
+                navController = navController
+            )
         }
 
     }
