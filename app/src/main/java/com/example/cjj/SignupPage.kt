@@ -53,7 +53,8 @@ fun SignupPage(
         errorMessage = stringResource(id = R.string.signup_repeat_pswd_error),
         validate = {
             it == passwordText
-        }
+        },
+        isPassword = true
     ) }
 
     var errorMessage by remember { mutableStateOf("") }
@@ -116,7 +117,8 @@ fun SignupPage(
                 placeholder = "password",
                 errorMessage = stringResource(id = R.string.signup_pswd_error),
                 onValueChange = { passwordText = it },
-                validate = { authViewModel.validatePassword(it) }
+                validate = { authViewModel.validatePassword(it) },
+                isPassword = true
             )
             repeatPasswordField()
             Button(
