@@ -77,7 +77,7 @@ fun ResetPasswordPage(
                     .semantics {
                         onClick(label = "Go back to login page.", action = null)
                     },
-                onClick = {}//goToLogin
+                onClick = goToLogin
             ) {
                 Text(
                     text = "Log in",
