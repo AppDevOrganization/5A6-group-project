@@ -55,6 +55,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -95,7 +96,6 @@ import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.AuthViewModelFactory
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
-
 
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
@@ -251,7 +251,6 @@ fun CJJBankApp(
     EmptyActivityTheme(
         useDarkTheme = isDarkModeState.value
     ) {
-
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
         val currentBackStack by navController.currentBackStackEntryAsState()
@@ -260,6 +259,13 @@ fun CJJBankApp(
             bankTabRowScreens.find { it.route == currentDestination?.route } ?: Overview
         val authViewModel: AuthViewModel = viewModel(factory = authViewModelFactory)
         val userState = authViewModel.currentUser().collectAsState()
+        var isFirstOpen by rememberSaveable { mutableStateOf(true) }
+
+        if (isFirstOpen) {
+            isFirstOpen = false
+            authViewModel.signOut()
+        }
+
 
         var useDarkMode: Color = if (!isDarkModeState.value) {
             md_theme_light_onPrimary
