@@ -5,4 +5,5 @@
     <string name="signup_repeat_pswd_error">Does not match the password</string>
     <string name="signup_error">Credentials are invalid or an account with that email exists</string>
     <string name="signup_internal_error">Internal error occurred, try again</string>
+    <string name="login_error">Invalid credentials</string>
 </resources>
