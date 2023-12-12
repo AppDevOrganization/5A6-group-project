@@ -11,7 +11,7 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     //https://www.regexlib.com/Search.aspx?k=email&c=-1&m=-1&ps=20
     private val EMAIL_REGEX = Regex("^\\w+@[a-zA-Z_]+?\\.[a-zA-Z]{2,3}\$")
     //https://www.regexlib.com/Search.aspx?k=password&c=-1&m=-1&ps=20
-    private val PASSWORD_REGEX = Regex("^[a-zA-Z]\\w{3,14}\$")
+    private val PASSWORD_REGEX = Regex("^[a-zA-Z]\\w{${MIN_PSWD_LENGTH},${MIN_PSWD_LENGTH * 3}}\$")
     private val currentUserStateFlow = MutableStateFlow(auth.currentUser?.toUser())
 
     init {
@@ -45,7 +45,6 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
             return false
         }
     }
-
     /**
      * Signs in a user if the given email and password are correct.
      * @param email The email of the user.
@@ -97,6 +96,14 @@ class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
         if (auth.currentUser != null) {
             auth.currentUser!!.delete()
         }
+    }
+
+    /**
+     * Sends an email to the current user's email address to reset their password.
+     * @param email The email to send a password reset request to.
+     */
+    override suspend fun sendPasswordResetEmail(email: String) {
+        auth.sendPasswordResetEmail(email)
     }
 
     // Convert from FirebaseUser to User

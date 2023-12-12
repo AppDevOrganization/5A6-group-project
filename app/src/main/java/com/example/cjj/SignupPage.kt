@@ -14,18 +14,21 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
-
 
 @Composable
 fun SignupPage(
@@ -34,6 +37,9 @@ fun SignupPage(
     onClickLogin: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val SIGNUP_ERROR = stringResource(id = R.string.signup_error)
+    val SIGNUP_INTERNAL_ERROR = stringResource(id = R.string.signup_internal_error)
+
     val userState = authViewModel.currentUser().collectAsState()
     val signUpResult by authViewModel.signUpResult.collectAsState(ResultAuth.Inactive)
 
@@ -44,10 +50,14 @@ fun SignupPage(
         label = "Repeat Password",
         placeholder = "password",
         onValueChange = { passwordRepeatText = it },
+        errorMessage = stringResource(id = R.string.signup_repeat_pswd_error),
         validate = {
             it == passwordText
-        }
+        },
+        isPassword = true
     ) }
+
+    var errorMessage by remember { mutableStateOf("") }
 
     ///
     LaunchedEffect(signUpResult) {
@@ -56,13 +66,17 @@ fun SignupPage(
                 return@LaunchedEffect
             }
             if (it is ResultAuth.InProgress) {
-                // TODO: Add some kind of text or something that shows that it's in progress
                 return@LaunchedEffect
             }
             if (it is ResultAuth.Success && it.data) {
 
-            } else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
-
+            }
+            else if (it is ResultAuth.Failure || it is ResultAuth.Success) { // success(false) case
+                if (it is ResultAuth.Failure)
+                    errorMessage = SIGNUP_INTERNAL_ERROR
+                else if (it is ResultAuth.Success) {
+                    errorMessage = SIGNUP_ERROR
+                }
             }
         }
     }
@@ -83,17 +97,28 @@ fun SignupPage(
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
             )
+            if (errorMessage != "")
+                Text(
+                    text = errorMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.titleMedium,
+                    textAlign = TextAlign.Center
+                )
+
             LoginSignupTextField(
                 label = "Email",
                 placeholder = "example@email.com",
+                errorMessage = stringResource(id = R.string.signup_email_error),
                 onValueChange = { emailText = it },
                 validate = { authViewModel.validateEmail(it) }
             )
             LoginSignupTextField(
                 label = "Password",
                 placeholder = "password",
+                errorMessage = stringResource(id = R.string.signup_pswd_error),
                 onValueChange = { passwordText = it },
-                validate = { authViewModel.validatePassword(it) }
+                validate = { authViewModel.validatePassword(it) },
+                isPassword = true
             )
             repeatPasswordField()
             Button(

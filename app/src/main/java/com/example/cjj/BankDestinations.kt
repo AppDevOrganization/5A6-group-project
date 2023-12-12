@@ -16,6 +16,10 @@ object Signup : BankDestination {
     override val route = "signup"
 }
 
+object ResetPswd : BankDestination {
+    override val route = "resetpswd"
+}
+
 object Chequing : BankDestination {
     override val route = "chequing"
 }

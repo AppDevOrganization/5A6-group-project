@@ -10,4 +10,5 @@ interface AuthRepository {
     fun isEmailValid(email: String): Boolean
     fun isPasswordValid(password: String): Boolean
     suspend fun delete()
+    suspend fun sendPasswordResetEmail(email: String)
 }
