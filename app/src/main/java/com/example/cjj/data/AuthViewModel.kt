@@ -16,6 +16,9 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     private val _signUpResult = MutableStateFlow<ResultAuth<Boolean>?>(ResultAuth.Inactive)
     val signUpResult: StateFlow<ResultAuth<Boolean>?> = _signUpResult
 
+    private val _logInResult = MutableStateFlow<ResultAuth<Boolean>?>(ResultAuth.Inactive)
+    val logInResult: StateFlow<ResultAuth<Boolean>?> = _logInResult
+
     fun signUp(email: String, password: String) {
         _signUpResult.value = ResultAuth.InProgress
 
@@ -34,8 +37,19 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     }
 
     fun signIn(email: String, password: String) {
-        viewModelScope.launch {
-            authRepository.signIn(email, password)
+        _logInResult.value = ResultAuth.InProgress
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val success = authRepository.signIn(email, password)
+                _logInResult.value = ResultAuth.Success(success)
+            }
+            catch(e: FirebaseAuthException) {
+                _logInResult.value = ResultAuth.Failure(e)
+            }
+            finally {
+                resetResultValues()
+            }
         }
     }
 
@@ -58,7 +72,8 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     }
 
     private fun resetResultValues() {
-        // TODO: Implement
+        _signUpResult.value = ResultAuth.Inactive
+        _logInResult.value = ResultAuth.Inactive
     }
 }
 
