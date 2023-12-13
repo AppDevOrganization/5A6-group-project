@@ -530,28 +530,41 @@ fun TransferScreen(
     viewModel: AccountsViewModel,
     onBackClick: () -> Unit
 ) {
+    // Back button
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .clickable { onBackClick() }
+    ) {
+        Icon(
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "Back",
+            tint = Color.Black,
+            modifier = Modifier
+                .padding(4.dp)
+                .semantics {
+                    onClick(label = "return to the account screen", action = null)
+                }
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        // Back button
-        Box(
+        /**
+         * Transfer icons created by Freepik - Flaticon
+         * https://www.flaticon.com/free-icons/transfer
+         */
+        Image(
+            painter = painterResource(id = R.drawable.transfer),
+            contentDescription = null,
             modifier = Modifier
-                .padding(top = 16.dp)
-                .clickable { onBackClick() }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back",
-                tint = Color.Black,
-                modifier = Modifier
-                    .padding(4.dp)
-                    .semantics {
-                        onClick(label = "return to the account screen", action = null)
-                    }
-            )
-        }
+                .size(110.dp)
+                .padding(8.dp)
+        )
 
         // Transfer details
         Text(

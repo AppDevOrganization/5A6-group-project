@@ -1,5 +1,6 @@
 package com.example.cjj
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -85,6 +86,17 @@ fun LoginPage(
         verticalArrangement = Arrangement.Center,
     ) {
         if (userState.value == null) {
+            /**
+             * Login icons created by Uniconlabs - Flaticon
+             * https://www.flaticon.com/free-icons/login
+             */
+            Image(
+                painter = painterResource(id = R.drawable.login),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(110.dp)
+                    .padding(8.dp)
+            )
             Text(
                 modifier = Modifier
                     .semantics {
