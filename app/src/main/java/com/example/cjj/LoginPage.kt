@@ -1,9 +1,16 @@
 package com.example.cjj
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,6 +21,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,6 +46,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * The page where users log in.
@@ -63,7 +74,20 @@ fun LoginPage(
     var passwordText by rememberSaveable { mutableStateOf("") }
 
     var errorMessage by remember { mutableStateOf("") }
-    
+
+    var loginMessageShown by remember { mutableStateOf(false) }
+
+    suspend fun showLoginMessage() {
+        if (!loginMessageShown) {
+            loginMessageShown = true
+            delay(5000L)
+            loginMessageShown = false
+        }
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    LoginMessage(loginMessageShown)
 
     LaunchedEffect(logInResult) {
         logInResult?.let {
@@ -141,6 +165,9 @@ fun LoginPage(
                     },
                 onClick = {
                     authViewModel.signIn(emailText, passwordText)
+                    coroutineScope.launch {
+                        showLoginMessage()
+                    }
                 }
             ) {
                 Text(
@@ -251,6 +278,34 @@ fun LoginSignupTextField(
             text = errorMessage,
             color = Color.Red,
         )
+    }
+}
+
+@Composable
+fun LoginMessage(
+    visible: Boolean
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing),
+        )
+    ) {
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = MaterialTheme.colorScheme.tertiaryContainer,
+            shadowElevation = 3.dp
+        ) {
+            Text(
+                text = "Attempting to login to your account...",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
 }
 

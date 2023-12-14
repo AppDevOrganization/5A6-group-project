@@ -1,6 +1,7 @@
 package com.example.cjj
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.onClick
@@ -113,6 +116,16 @@ fun TransactionsLazyColumn(
         sortByAZText = "Sort A→Z"
     }
 
+    val buttonColorDate by animateColorAsState(
+        targetValue = if (sortByDate) Color.DarkGray else Color.Gray,
+        label = "date button color"
+    )
+
+    val buttonColorAZ by animateColorAsState(
+        targetValue = if (sortByAZ) Color.DarkGray else Color.Gray,
+        label = "AZ button color"
+    )
+
     Row(
         Modifier
             .fillMaxWidth()
@@ -127,7 +140,8 @@ fun TransactionsLazyColumn(
             onClick = {
                 sortByDate = sortByDate == false
                 viewModel.enableSortByDate(sortByDate, accountType)
-            }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = buttonColorDate)
         ) {
             Text(
                 text = sortByDateText,
@@ -142,7 +156,8 @@ fun TransactionsLazyColumn(
             onClick = {
                 sortByAZ = sortByAZ == false
                 viewModel.enableSortAlphabetically(sortByAZ, accountType)
-            }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = buttonColorAZ)
         ) {
             Text(
                 text = sortByAZText,
