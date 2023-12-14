@@ -33,6 +33,12 @@ import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
 
+/**
+ * The page where users create new accounts.
+ * @param authViewModel The ViewModel for user authentication.
+ * @param onSuccess The callback that is called when the user successfully creates a new account.
+ * @param onClickLogin The callback that takes the user to the login page.
+ */
 @Composable
 fun SignupPage(
     authViewModel: AuthViewModel,

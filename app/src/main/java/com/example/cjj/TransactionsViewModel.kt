@@ -16,11 +16,21 @@ import com.example.cjj.data.UserPreferencesRepository
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+/**
+ * Represents a model for transaction lists and how they are displayed.
+ * @param transactions The list of transactions.
+ * @param sortOrder The order by which the transaction list is sorted.
+ */
 data class TransactionsUiModel(
     val transactions: List<Transaction>,
     val sortOrder: SortOrder
 )
 
+/**
+ * The ViewModel for all the transactions.
+ * @param repository The repository for the transactions.
+ * @param userPreferencesRepository The repository for user preferences.
+ */
 class TransactionsViewModel(
     repository: TransactionsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
@@ -104,6 +114,7 @@ class TransactionsViewModel(
         }
     }
 
+
     private fun filterSortTransactions(
         transactions: List<Transaction>,
         sortOrder: SortOrder
@@ -120,12 +131,22 @@ class TransactionsViewModel(
         }
     }
 
+    /**
+     * Toggles whether the transaction list should be sorted by date.
+     * @param enable The "yes" or "no".
+     * @param accountType The type of account.
+     */
     fun enableSortByDate(enable: Boolean, accountType: AccountType) {
         viewModelScope.launch {
             userPreferencesRepository.enableSortByDate(enable, accountType)
         }
     }
 
+    /**
+     * Toggles whether the transaction list should be sorted alphabetically.
+     * @param enable The "yes" or "no".
+     * @param accountType The type of account.
+     */
     fun enableSortAlphabetically(enable: Boolean, accountType: AccountType) {
         viewModelScope.launch {
             userPreferencesRepository.enableSortAlphabetically(enable, accountType)
@@ -133,11 +154,22 @@ class TransactionsViewModel(
     }
 }
 
+/**
+ * The factory that produces TransactionsViewModels
+ * @param repository The repository for transactions.
+ * @param userPreferencesRepository The repository for user preferences.
+ */
 class TransactionsViewModelFactory(
     private val repository: TransactionsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Creates a new instance of TransactionsViewModel, set with an TransactionsRepository and UserPreferencesRepository.
+     * @param modelClass The class that will take in the TransactionsViewModel.
+     * @return A new instance of TransactionsViewModel.
+     * @throws IllegalArgumentException When the modelClass cannot take in the TransactionsViewModel.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TransactionsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")

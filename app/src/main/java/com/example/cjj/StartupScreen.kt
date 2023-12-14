@@ -30,6 +30,10 @@ import kotlinx.coroutines.delay
 
 private const val SplashWaitTime: Long = 1000
 
+/**
+ * The screen that first shows up when the user opens the app. Displays our glorious app logo.
+ * @param onTimeout The callback that is called when the landing screen's time is up.
+ */
 @Composable
 fun LandingScreen(onTimeout: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

@@ -44,6 +44,8 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
 
 /**
  * Class that handles saving and retrieving user preferences
+ * @param context The app's context.
+ * @param dataStore The data store to save the user preferences to.
  */
 class UserPreferencesRepository(
     context: Context,
@@ -66,6 +68,11 @@ class UserPreferencesRepository(
             val showCompleted = preferences[PreferencesKeys.SHOW_COMPLETED] ?: false
             UserPreferences(showCompleted, sortOrder)
         }
+
+    /**
+     * Updates the datastore to toggle if it should show what preferences are completed.
+     * @param showCompleted The "yes" or "no".
+     */
     suspend fun updateShowCompleted(showCompleted: Boolean) {
         dataStore.edit { preferences ->
             preferences[PreferencesKeys.SHOW_COMPLETED] = showCompleted
@@ -88,6 +95,10 @@ class UserPreferencesRepository(
             return SortOrder.valueOf(order ?: SortOrder.NONE.name)
         }
 
+    /**
+     * Toggles whether the repository should sort by deadline.
+     * @param enable The "yes" or "no".
+     */
     suspend fun enableSortByDeadline(enable: Boolean) {
         // edit handles data transactionally, ensuring that if the sort is updated at the same
         // time from another thread, we won't have conflicts
@@ -108,6 +119,10 @@ SortOrder.NONE
         }
     }
 
+    /**
+     * Toggles whether the repository should sort by priority.
+     * @param enable The "yes" or "no".
+     */
     suspend fun enableSortByPriority(enable: Boolean) {
         // edit handles data transactionally, ensuring that if the sort is updated at the same
         // time from another thread, we won't have conflicts
@@ -124,6 +139,10 @@ SortOrder.NONE
         }
     }
 
+    /**
+     * Updates the sort order.
+     * @param sortOrder The sort order.
+     */
     private fun updateSortOrder(sortOrder: SortOrder) {
         sharedPreferences.edit {
             putString(SORT_ORDER_KEY, sortOrder.name)
@@ -132,11 +151,17 @@ SortOrder.NONE
 
 }
 
+/**
+ * Preference keys
+ */
 private object PreferencesKeys {
     val SHOW_COMPLETED = booleanPreferencesKey("show_completed")
     val SORT_ORDER = stringPreferencesKey("sort_order")
 }
 
+/**
+ * User preferences in the app.
+ */
 data class UserPreferences(
     val showCompleted: Boolean,
     val sortOrder: SortOrder
