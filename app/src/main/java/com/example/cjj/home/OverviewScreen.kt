@@ -73,7 +73,8 @@ fun OverviewScreen(
 }
 
 /**
- * The summary of the chequing account.
+ * A card formatted summary of the chequing account.
+ * @param onClickViewAccount The callback that will be called when the user clicks on this card.
  */
 @Composable
 fun ChequingAccountCard(
@@ -89,7 +90,8 @@ fun ChequingAccountCard(
 }
 
 /**
- * The summary of the savings account.
+ * A card formatted summary of the savings account.
+ * @param onClickViewAccount The callback that will be called when the user clicks on this card.
  */
 @Composable
 fun SavingsAccountCard(
@@ -104,7 +106,8 @@ fun SavingsAccountCard(
 }
 
 /**
- * The summary of the credit account.
+ * A card formatted summary of the credit account.
+ * @param onClickViewAccount The callback that will be called when the user clicks on this card.
  */
 @Composable
 fun CreditAccountCard(
@@ -119,7 +122,10 @@ fun CreditAccountCard(
 }
 
 /**
- *
+ * A card template used for a summary/overview of a specific account
+ * @param accountType The type of account.
+ * @param onClickViewAccount The callback that will be called when the user clicks on this card.
+ * @param balance The balance of the account.
  */
 @Composable
 fun OverviewCard(
