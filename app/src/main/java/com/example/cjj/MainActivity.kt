@@ -624,7 +624,7 @@ fun TransferScreen(
                         fromTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp)
-                    .semantics(mergeDescendants = true) {
+                    .semantics {
                         contentDescription = "Click the button on the right to select " +
                                 "an account to transfer" // avoid writing 'from', will already be spoken
                     },
@@ -687,7 +687,7 @@ fun TransferScreen(
                         toTextFieldSize = coordinates.size.toSize()
                     }
                     .padding(vertical = 8.dp)
-                    .semantics(mergeDescendants = true) {
+                    .semantics {
                         contentDescription = "Click the button on the right to select " +
                                 "an account to transfer"
                     },
@@ -695,9 +695,9 @@ fun TransferScreen(
                 readOnly = true, // Set the field to be read-only
                 trailingIcon = {
                     Icon(
-                        fromIcon, "to account",
+                        toIcon, "to account",
                         Modifier
-                            .clickable { isFromExpanded = !isFromExpanded }
+                            .clickable { isToExpanded = !isToExpanded }
                             .semantics { onClick(label = "select an account to transfer to", action = null) })
                 }
             )
@@ -721,7 +721,7 @@ fun TransferScreen(
                             toSelectedText = account.name
                             isToExpanded = false
                             toAccount = account
-                    }) {
+                        }) {
                         Text(text = account.name)
 
                     }
