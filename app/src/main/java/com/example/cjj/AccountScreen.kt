@@ -35,6 +35,12 @@ import com.example.cjj.data.Account
 import com.example.cjj.data.AccountType
 import com.example.cjj.data.Transaction
 
+/**
+ * The screen that displays all the information about a specific account.
+ * @param account The account that needs to be displayed.
+ * @param viewModel The ViewModel for transactions.
+ * @param onClickTransferButton A callback that is called when the user wants to transfer money from this account.
+ */
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
 fun AccountScreen(
@@ -78,6 +84,12 @@ fun AccountScreen(
     }
 }
 
+/**
+ * A lazy column made to display all the transactions in an account.
+ * @param accountType The type of account.
+ * @param viewModel The ViewModel for transactions.
+ * @param transactions A list of transactions for this account.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionsLazyColumn(
@@ -155,6 +167,9 @@ fun TransactionsLazyColumn(
     }
 }
 
+/**
+ * The header for a list of transactions.
+ */
 @Composable
 fun TransactionsHeader()
 {
@@ -189,6 +204,10 @@ fun TransactionsHeader()
     }
 }
 
+/**
+ * An item in a list of transactions.
+ * @param transaction The individual transaction.
+ */
 @Composable
 fun TransactionItem(
     transaction: Transaction,
@@ -233,6 +252,12 @@ fun TransactionItem(
 }
 
 
+/**
+ * The card formatted display of an account's general information.
+ * @param accountType The type of account.
+ * @param balance The money balance in the account.
+ * @param onClickTransferButton The callback that will be called when the user wants to transfer money from this account.
+ */
 @Composable
 fun AccountTopCard(
     accountType: AccountType,

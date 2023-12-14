@@ -18,6 +18,9 @@ data class NavItem(
     val route: String
 )
 
+/**
+ * An object that contains a list of NavItems
+ */
 object Constants {
     val NavItems = listOf(
         NavItem(

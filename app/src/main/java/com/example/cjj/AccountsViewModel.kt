@@ -21,6 +21,11 @@ data class AccountsUiModel(
     val showCompleted: Boolean,
     val sortOrder: SortOrder
 )
+
+/**
+ * The ViewModel for accounts.
+ * @param userPreferencesRepository The user preferences repository.
+ */
 class AccountsViewModel(
     repository: AccountsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
@@ -94,6 +99,12 @@ class AccountsViewModel(
         return accountsUiModel.value?.accounts?.find { it.type == accountType }
     }
 
+    /**
+     * Transfers funds from one account to another.
+     * @param fromAccount The account to transfer from.
+     * @param toAccount The account to transfer to.
+     * @param amount The amount of money to transfer.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun transferFunds(fromAccount:Account,
                       toAccount: Account,
@@ -131,14 +142,22 @@ class AccountsViewModel(
 }
 
 
-
-
-
+/**
+ * The ViewModelProvider factory that creates AccountsViewModels.
+ * @param repository The repository for the accounts.
+ * @param userPreferencesRepository The repository for user preferences.
+ */
 class AccountsViewModelFactory(
     private val repository: AccountsRepository,
     private val userPreferencesRepository: UserPreferencesRepository
 ) : ViewModelProvider.Factory {
 
+    /**
+     * Creates a new instance of AccountsViewModel, set with an AccountsRepository and UserPreferencesRepository.
+     * @param modelClass The class that will take in the AccountsViewModel.
+     * @return A new instance of AccountsViewModel.
+     * @throws IllegalArgumentException When the modelClass cannot take in the AccountsViewModel.
+     */
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AccountsViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
