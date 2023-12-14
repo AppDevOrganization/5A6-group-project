@@ -6,6 +6,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.tasks.await
 
+/**
+ * The main authentication class, set with all the necessary tools from Firebase for authenticating users.
+ * @param auth The entry point of the Firebase SDK.
+ */
 class AuthRepositoryFirebase(private val auth: FirebaseAuth): AuthRepository {
     private val MIN_PSWD_LENGTH = 8
     //https://www.regexlib.com/Search.aspx?k=email&c=-1&m=-1&ps=20

@@ -2,6 +2,9 @@ package com.example.cjj.data
 
 import kotlinx.coroutines.flow.MutableStateFlow
 
+/**
+ * Represents all the transactions in each account.
+ */
 object TransactionsRepository {
     val chequingTransactions = MutableStateFlow(
         listOf(

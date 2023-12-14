@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
+    /**
+     * Returns a StateFlow of the current logged in user.
+     * @return A StateFlow of the current logged in user.
+     */
     fun currentUser(): StateFlow<User?> {
         return authRepository.currentUser()
     }
@@ -22,6 +26,11 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
     private val _resetPswdResult = MutableStateFlow<ResultAuth<Boolean>?>(ResultAuth.Inactive)
     val resetPswdResult: StateFlow<ResultAuth<Boolean>?> = _resetPswdResult
 
+    /**
+     * Creates a new user acount with a given email and password.
+     * @param email The email of the user.
+     * @param password The password of the user.
+     */
     fun signUp(email: String, password: String) {
         _signUpResult.value = ResultAuth.InProgress
 
@@ -39,6 +48,11 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
         }
     }
 
+    /**
+     * Signs in a user if the given email and password are correct.
+     * @param email The email of the user.
+     * @param password The password of the user.
+     */
     fun signIn(email: String, password: String) {
         _logInResult.value = ResultAuth.InProgress
 
@@ -56,24 +70,42 @@ class AuthViewModel(private val authRepository: AuthRepository): ViewModel() {
         }
     }
 
+    /**
+     * Signs out the current user.
+     */
     fun signOut() {
         authRepository.signOut()
     }
 
+    /**
+     * Validates a given email and returns whether it's valid AND an error message if any.
+     * @return Whether the email is valid AND an error message (could be null).
+     */
     fun validateEmail(email: String): Boolean {
         return authRepository.isEmailValid(email)
     }
 
+    /**
+     * Validates a given password and returns whether it's valid AND an error message if any.
+     * @return Whether the password is valid AND an error message (could be null).
+     */
     fun validatePassword(password: String): Boolean {
         return authRepository.isPasswordValid(password)
     }
 
+    /**
+     * Deletes the current user.
+     */
     fun delete() {
         viewModelScope.launch {
             authRepository.delete()
         }
     }
 
+    /**
+     * Sends an email to the current user's email address to reset their password.
+     * @param email The email to send a password reset request to.
+     */
     fun sendPasswordResetEmail(email: String) {
         _resetPswdResult.value = ResultAuth.InProgress
 

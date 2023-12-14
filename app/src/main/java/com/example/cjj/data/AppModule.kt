@@ -5,6 +5,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
+/**
+ * The class that initializes the repositories of the project.
+ * @param appContext The main context of the app.
+ */
 class AppModule(
     private val appContext: Context
 ) {

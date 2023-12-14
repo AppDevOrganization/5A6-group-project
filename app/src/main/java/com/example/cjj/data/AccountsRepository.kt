@@ -1,6 +1,9 @@
 package com.example.cjj.data
 
 
+/**
+ * Represents an object that contains every account type, as well as their balance and transactions.
+ */
 object AccountsRepository{
     val accounts = listOf(
         Account(
