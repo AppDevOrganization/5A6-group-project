@@ -32,6 +32,11 @@ import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
 
+/**
+ * The page where users send password reset requests to their emails.
+ * @param authViewModel The ViewModel for user authentication.
+ * @param goToLogin The callback that is called when the user wants to go to the login page.
+ */
 @Composable
 fun ResetPasswordPage(
     authViewModel: AuthViewModel,

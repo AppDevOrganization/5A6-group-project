@@ -101,6 +101,9 @@ import kotlinx.coroutines.launch
 
 private const val USER_PREFERENCES_NAME = "user_preferences"
 
+/**
+ * The entry point of the app.
+ */
 class MainActivity : ComponentActivity() {
     private val isDarkModeState = mutableStateOf(false)
     private val authViewModelFactory = AuthViewModelFactory()
@@ -194,6 +197,10 @@ fun MainScreen(
     }
 }
 
+/**
+ * The header of the side drawer
+ * @param isDarkMode Toggles the app's dark theme.
+ */
 @Composable
 fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 
@@ -240,6 +247,14 @@ fun DrawerHeader(modifier: Modifier, isDarkMode: Boolean) {
 }
 
 
+/**
+ * The main app component.
+ * @param navController The nav host controller to navigate the app.
+ * @param isDarkModeState Toggles the app's dark theme.
+ * @param accountsViewModel The ViewModel for accounts.
+ * @param transactionsViewModel The ViewModel for transactions.
+ * @param authViewModelFactory The factory for creating AuthViewModels.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -421,6 +436,8 @@ fun CJJBankApp(
  * Date of retrieval: 2023/11/22
  * This function is based on this GeeksForGeeks tutorial.
  * https://www.geeksforgeeks.org/bottom-navigation-bar-in-android-jetpack-compose/
+ *
+ * @param navController The nav host controller to navigate the app.
  */
 @Composable
 fun NavigationBar(
@@ -453,6 +470,10 @@ fun NavigationBar(
 }
 
 
+/**
+ * The screen that displays all the information about our app and company.
+ * @param navController The nav host controller to navigate the app.
+ */
 @Composable
 fun AboutUsScreen(
     modifier: Modifier = Modifier,
@@ -522,6 +543,8 @@ fun AboutUsScreen(
  * Date of retrieval: 2023/12/01
  * Displaying the account options in the dropdown menu.
  * https://www.geeksforgeeks.org/drop-down-menu-in-android-using-jetpack-compose/
+ *
+ * @param onBackClick The callback that is called when the user goes back.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -807,6 +830,11 @@ fun TransferScreen(
 }
 
 
+/**
+ * The message that appears when a transfer occurs. Can be successful or not.
+ * @param transferMessage The message to display.
+ * @param onDismissRequest The callback that is called when the dismiss button is clicked.
+ */
 @Composable
 fun TransferMessage(
     messageType: String,
@@ -873,9 +901,16 @@ fun TransferMessage(
 
 
 /**
+ * The navigation host that contains the information for all navigation routes and their associated composables.
+ *
  * Date of Retrieval: 2023/11/02
  * All Nav-related functions and variables are based on the ones in the Rally app from the Navigation codelab.
  * https://developer.android.com/codelabs/jetpack-compose-navigation
+ *
+ * @param navController The nav host controller to navigate the app.
+ * @param accountsViewModel The ViewModel for accounts.
+ * @param transactionsViewModel The ViewModel for transactions.
+ * @param authViewModel The ViewModel for user authentication.
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -995,6 +1030,10 @@ fun BankNavHost(
     }
 }
 
+/**
+ * An extension of NavHostController that navigates the user to a specified page.
+ * @param route The route of the destination page.
+ */
 fun NavHostController.navigateSingleTopTo(route: String) =
     this.navigate(route) {
         popUpTo(
@@ -1006,6 +1045,11 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         restoreState = true
     }
 
+/**
+ * Returns whether the user is on a page where they are not logged in.
+ * @param navController The nav host controller to navigate the app.
+ * @return Whether the user is on a page where they are not logged in.
+ */
 fun isOnStandalonePage(navController: NavHostController): Boolean {
     val currentRoute = navController.currentDestination?.route
     return currentRoute == null || (currentRoute == Login.route || currentRoute == Signup.route || currentRoute == ResetPswd.route)

@@ -38,6 +38,13 @@ import androidx.compose.ui.unit.dp
 import com.example.emptyactivity.data.AuthViewModel
 import com.example.emptyactivity.data.ResultAuth
 
+/**
+ * The page where users log in.
+ * @param authViewModel The AuthViewModel to authenticate the user's log in.
+ * @param onSuccess The callback that gets called when the user has successfully logged in.
+ * @param onClickSignup The callback that is supposed to take the user to the Sign Up page.
+ * @param onClickResetPswd The callback that is supposed to take the user to the Reset Password page.
+ */
 @Composable
 fun LoginPage(
     authViewModel: AuthViewModel,
@@ -183,9 +190,13 @@ fun LoginPage(
         /**
          * A text field for a user's email, password, etc. As the name implies, it should only be used for the
          * login and signup pages.
+         * @param label The name of the field that appears on top of it.
          * @param placeholder The text field's placeholder text.
          * @param onValueChange The function that will be called with the new value passed in after
          * the text field's value gets changed.
+         * @param validate The optional function that is supposed to validate the text field's value.
+         * @param errorMessage The error message to display if the text field is invalid.
+         * @param isPassword Whether the field is a password field or not. If true, the text field's value will be hidden, but there'll be a button to show it.
          */
 fun LoginSignupTextField(
     label: String,
