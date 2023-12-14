@@ -25,6 +25,12 @@ import com.example.cjj.R
 import com.example.cjj.data.AccountType
 import com.example.cjj.data.AccountsRepository
 
+/**
+ * The screen where all accounts are listed in summary format.
+ * @param onClickViewChequingAccount The callback that will be called when the user wants to view the chequing page.
+ * @param onClickViewSavingsAccount The callback that will be called when the user wants to view the savings page.
+ * @param onClickViewCreditAccount The callback that will be called when the user wants to view the credit page.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
@@ -65,6 +71,10 @@ fun OverviewScreen(
         )
     }
 }
+
+/**
+ * The summary of the chequing account.
+ */
 @Composable
 fun ChequingAccountCard(
     onClickViewAccount: () -> Unit
@@ -78,6 +88,9 @@ fun ChequingAccountCard(
     }
 }
 
+/**
+ * The summary of the savings account.
+ */
 @Composable
 fun SavingsAccountCard(
     onClickViewAccount: () -> Unit
@@ -90,6 +103,9 @@ fun SavingsAccountCard(
     }
 }
 
+/**
+ * The summary of the credit account.
+ */
 @Composable
 fun CreditAccountCard(
     onClickViewAccount: () -> Unit
@@ -102,6 +118,9 @@ fun CreditAccountCard(
     }
 }
 
+/**
+ *
+ */
 @Composable
 fun OverviewCard(
     accountType: String,

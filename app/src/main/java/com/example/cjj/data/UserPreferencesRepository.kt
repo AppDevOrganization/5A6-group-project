@@ -32,6 +32,9 @@ import java.io.IOException
 private const val USER_PREFERENCES_NAME = "user_preferences"
 private const val SORT_ORDER_KEY = "sort_order"
 
+/**
+ * The order by which the transactions are sorted.
+ */
 enum class SortOrder {
     NONE,
     DATE,
@@ -39,6 +42,9 @@ enum class SortOrder {
     DATE_AND_ALPHABETICALLY
 }
 
+/**
+ * Represents the stored data of how the user likes their transactions sorted in each account.
+ */
 data class UserPreferences(
     val chequingSortOrder: SortOrder,
     val savingsSortOrder: SortOrder,
@@ -46,7 +52,9 @@ data class UserPreferences(
 )
 
 /**
- * Class that handles saving and retrieving user preferences
+ * Class that handles saving and retrieving user preferences.
+ * @param dataStore The preferences datastore.
+ * @param context The app's context.
  */
 class UserPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
@@ -58,6 +66,9 @@ class UserPreferencesRepository(
         val CREDIT_SORT_ORDER = stringPreferencesKey("credit_sort_order")
     }
 
+    /**
+     * The flow of the user's preferred way of sorting each account.
+     */
     val userPreferencesFlow: Flow<UserPreferences> = dataStore.data
         .catch { exception ->
             if (exception is IOException) {
@@ -81,6 +92,11 @@ class UserPreferencesRepository(
             UserPreferences(chequingSortOrder, savingsSortOrder, creditSortOrder)
         }
 
+    /**
+     * Toggles whether an account is sorted by date or not.
+     * @param enable The "yes" or "no".
+     * @param accountType The type of account whose sorting method needs changing.
+     */
     suspend fun enableSortByDate(enable: Boolean, accountType: AccountType) {
         var preferencesKeysType = PreferencesKeys.CHEQUING_SORT_ORDER
         if (accountType == AccountType.SAVINGS) {
@@ -128,6 +144,11 @@ class UserPreferencesRepository(
             return SortOrder.valueOf(order ?: SortOrder.NONE.name)
         }
 
+    /**
+     * Toggles whether an account is sorted alphabetically or not.
+     * @param enable The "yes" or "no".
+     * @param accountType The type of account whose sorting method needs changing.
+     */
     suspend fun enableSortAlphabetically(enable: Boolean, accountType: AccountType) {
         var preferencesKeysType = PreferencesKeys.CHEQUING_SORT_ORDER
         if (accountType == AccountType.SAVINGS) {
