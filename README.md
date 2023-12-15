@@ -1,5 +1,5 @@
 # CJJ Bank
-CJJ Bank is a bank application with accessibility and security as priorities. 
+CJJ Bank is a bank application with accessibility and security as priorities. Built with a commitment to inclusivity, our platform ensures that users of all abilities can seamlessly navigate and interact with the banking services. The user interface is designed with accessibility standards in mind, making it intuitive and user-friendly for individuals with diverse needs. Security is at the forefront of our development, implementing robust encryption protocols and multi-factor authentication to safeguard sensitive financial information. Explore our documentation and contribute to the open-source community driving innovation in financial technology.
 ## Quick-start
 ### Prerequesites
 Have Android Studio Hedgehog installed with Jetpack Compose.
