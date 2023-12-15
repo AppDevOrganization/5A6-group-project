@@ -141,6 +141,12 @@ fun OverviewCard(
     balance: Double
 ) {
     var wasClicked by remember { mutableStateOf(false) }
+
+    /**
+     * Date of retrieval: 2023/12/14
+     * Animating padding size as part of our advanced feature.
+     * https://developer.android.com/jetpack/compose/animation/quick-guide#animate-padding
+     */
     val animatedPadding by animateDpAsState(
         if (wasClicked) {
             0.dp

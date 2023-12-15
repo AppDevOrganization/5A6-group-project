@@ -1,6 +1,5 @@
 package com.example.cjj.data
 
-import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 
 /**
@@ -36,10 +35,8 @@ data class Account(
         balance+=transaction.amount
         transaction.subtotal = balance
         var list = transactions.value.toMutableList()
-        list.add(transaction)
+        list.add(0, transaction)
         transactions.value = list
-
-        Log.d("TAG", "test: ${transactions.value.get(transactions.value.size - 1).amount}")
     }
 }
 

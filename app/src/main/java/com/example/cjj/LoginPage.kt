@@ -281,6 +281,11 @@ fun LoginSignupTextField(
     }
 }
 
+/**
+ * Date of retrieval: 2023/12/14
+ * Animating a login message as part of our advanced feature.
+ * https://developer.android.com/codelabs/jetpack-compose-animation?hl=en#3
+ */
 @Composable
 fun LoginMessage(
     visible: Boolean

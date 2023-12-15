@@ -116,6 +116,11 @@ fun TransactionsLazyColumn(
         sortByAZText = "Sort A→Z"
     }
 
+    /**
+     * Date of retrieval: 2023/12/14
+     * Animating color change as part of our advanced feature.
+     * https://developer.android.com/codelabs/jetpack-compose-animation?hl=en#2
+     */
     val buttonColorDate by animateColorAsState(
         targetValue = if (sortByDate) Color.DarkGray else Color.Gray,
         label = "date button color"
