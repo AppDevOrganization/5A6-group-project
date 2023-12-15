@@ -8,7 +8,8 @@ Have Android Studio Hedgehog installed with Jetpack Compose.
 2) Press 'Download ZIP', and afterwards unzip wherever you wish (but remember where).
 3) Open Android Studio, then File > Open, and select the app 5A6-group-project.
 4) Add in the dependencies and plugins listed in [Design Documentation](https://github.com/AppDevOrganization/5A6-group-project/wiki/Design-Documentation).
-## Screenshots of application
+[Github Actions](https://github.com/AppDevOrganization/5A6-group-project/actions) handles the building, linting, and testing, as well as deploying to Firebase.
+## Application Display
 ![image](https://github.com/AppDevOrganization/5A6-group-project/assets/98402030/103bc7af-d210-401f-a277-56b41c2f8886)
 ![image](https://github.com/AppDevOrganization/5A6-group-project/assets/98402030/14ad90e5-c1ce-4118-a10b-fb1094211989)
 ![image](https://github.com/AppDevOrganization/5A6-group-project/assets/98402030/a9d39e30-6705-46c5-942e-5ec2ffc0412e)
